@@ -8,6 +8,8 @@ import { provideRouter } from '@angular/router';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
 import { productsReducer } from './features/products/store/products.reducer';
@@ -22,6 +24,14 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: false,
+        },
+      },
+    }),
     provideStore({
       products: productsReducer,
       warehouses: warehousesReducer,

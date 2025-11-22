@@ -1,0 +1,53 @@
+// PrimeNG Theme Configuration - StockFlow
+// PrimeNG v20 uses programmatic theming with design tokens
+
+// Import PrimeIcons
+@import 'primeicons/primeicons.css';
+
+// Override design tokens with project colors
+:root {
+  // Primary colors - Purple/Indigo
+  --p-primary-50: #eef2ff;
+  --p-primary-100: #e0e7ff;
+  --p-primary-200: #c7d2fe;
+  --p-primary-300: #a5b4fc;
+  --p-primary-400: #818cf8;
+  --p-primary-500: #6366f1;
+  --p-primary-600: #4f46e5;
+  --p-primary-700: #4338ca;
+  --p-primary-800: #3730a3;
+  --p-primary-900: #312e81;
+  --p-primary-950: #1e1b4b;
+  
+  // Surface colors - Grays
+  --p-surface-0: #ffffff;
+  --p-surface-50: #f8fafc;
+  --p-surface-100: #f1f5f9;
+  --p-surface-200: #e2e8f0;
+  --p-surface-300: #cbd5e1;
+  --p-surface-400: #94a3b8;
+  --p-surface-500: #64748b;
+  --p-surface-600: #475569;
+  --p-surface-700: #334155;
+  --p-surface-800: #1e293b;
+  --p-surface-900: #0f172a;
+  --p-surface-950: #020617;
+  
+  // Text colors
+  --p-text-color: #1e293b;
+  --p-text-muted-color: #64748b;
+  --p-text-hover-muted-color: #475569;
+  
+  // Border
+  --p-content-border-color: #e2e8f0;
+  --p-content-border-radius: 10px;
+  
+  // Focus
+  --p-focus-ring-color: rgba(99, 102, 241, 0.2);
+  --p-focus-ring-width: 3px;
+  
+  // Highlight
+  --p-highlight-background: rgba(99, 102, 241, 0.1);
+  --p-highlight-color: #6366f1;
+  --p-highlight-focus-background: rgba(99, 102, 241, 0.15);
+}
