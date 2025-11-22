@@ -1,0 +1,28 @@
+<header class="app-header">
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="search-box">
+      <lucide-icon [img]="Search" [size]="18" class="search-icon"></lucide-icon>
+      <input 
+        type="text" 
+        placeholder="Search here..." 
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="header-actions">
+    <!-- Date Display -->
+    <div class="date-display">
+      <span class="date-text">{{ formattedDate }}</span>
+    </div>
+
+    <!-- Notifications Button -->
+    <button class="header-btn" (click)="openNotifications()" title="Notifications">
+      <lucide-icon [img]="Bell" [size]="20"></lucide-icon>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,73 @@
+<div class="product-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Product' : 'Create New Product' }}</h1>
+  </div>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+    <div class="form-group">
+      <label for="name">Product Name *</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Enter product name"
+        [class.invalid]="isFieldInvalid('name')"
+      />
+      <span class="error-message" *ngIf="isFieldInvalid('name')">
+        {{ getErrorMessage('name') }}
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="sku">SKU *</label>
+      <input
+        id="sku"
+        type="text"
+        formControlName="sku"
+        placeholder="e.g., PROD-001"
+        [class.invalid]="isFieldInvalid('sku')"
+      />
+      <span class="help-text">Use uppercase letters, numbers, and hyphens only</span>
+      <span class="error-message" *ngIf="isFieldInvalid('sku')">
+        {{ getErrorMessage('sku') }}
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category *</label>
+      <input
+        id="category"
+        type="text"
+        formControlName="category"
+        placeholder="Enter product category"
+        [class.invalid]="isFieldInvalid('category')"
+      />
+      <span class="error-message" *ngIf="isFieldInvalid('category')">
+        {{ getErrorMessage('category') }}
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Enter product description"
+        rows="4"
+        [class.invalid]="isFieldInvalid('description')"
+      ></textarea>
+      <span class="error-message" *ngIf="isFieldInvalid('description')">
+        {{ getErrorMessage('description') }}
+      </span>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="onCancel()">
+        Cancel
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="productForm.invalid">
+        {{ isEditMode ? 'Update Product' : 'Create Product' }}
+      </button>
+    </div>
+  </form>
+</div>

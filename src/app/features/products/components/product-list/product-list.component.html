@@ -1,0 +1,68 @@
+<div class="product-list-container">
+  <div class="header">
+    <h1>Products</h1>
+    <button class="btn-primary" (click)="navigateToCreate()">
+      <span class="icon">+</span> Add Product
+    </button>
+  </div>
+
+  <div *ngIf="loading$ | async" class="loading">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+
+  <div *ngIf="error$ | async as error" class="error-message">
+    <p>Error loading products: {{ error.message || error }}</p>
+  </div>
+
+  <div *ngIf="!(loading$ | async) && !(error$ | async)" class="products-grid">
+    <div *ngIf="(products$ | async)?.length === 0" class="empty-state">
+      <p>No products found</p>
+      <button class="btn-secondary" (click)="navigateToCreate()">Create your first product</button>
+    </div>
+
+    <table *ngIf="(products$ | async)?.length! > 0" class="products-table">
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let product of products$ | async; trackBy: trackByProductId"
+          class="product-row"
+        >
+          <td class="sku">{{ product.sku }}</td>
+          <td class="name">
+            <a [routerLink]="['/products', product.id]">{{ product.name }}</a>
+          </td>
+          <td class="category">{{ product.category }}</td>
+          <td class="description">{{ product.description }}</td>
+          <td class="date">{{ product.createdAt | date: 'short' }}</td>
+          <td class="actions">
+            <button 
+              class="btn-icon" 
+              (click)="navigateToDetail(product.id)"
+              title="View Details"
+            >
+              👁️
+            </button>
+            <button 
+              class="btn-icon" 
+              (click)="navigateToEdit(product.id)"
+              title="Edit"
+            >
+              ✏️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

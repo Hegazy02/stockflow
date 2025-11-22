@@ -1,0 +1,52 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for modern look - Primary Purple -->
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#818cf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle with subtle gradient -->
+  <circle cx="200" cy="200" r="185" fill="url(#grad1)" opacity="0.08"/>
+  
+  <!-- Central icon: S-shaped flow integrated with boxes -->
+  <g transform="translate(200, 200)">
+    <!-- S-curve representing flow -->
+    <path d="M -90 -80 Q -50 -80 -30 -55 Q 0 -30 0 0 Q 0 30 30 55 Q 50 80 90 80" 
+          stroke="url(#grad1)" 
+          stroke-width="28" 
+          fill="none" 
+          stroke-linecap="round"
+          opacity="0.3"/>
+    
+    <!-- Geometric boxes integrated into the flow -->
+    <!-- Top left box - Primary Purple -->
+    <rect x="-110" y="-100" width="50" height="50" fill="url(#grad1)" rx="8" transform="rotate(-15 -85 -75)"/>
+    <rect x="-106" y="-96" width="42" height="18" fill="#6366f1" opacity="0.4" rx="4" transform="rotate(-15 -85 -75)"/>
+    
+    <!-- Middle box - Primary Purple -->
+    <circle cx="0" cy="0" r="42" fill="url(#grad3)"/>
+    <circle cx="0" cy="0" r="30" fill="#4f46e5" opacity="0.3"/>
+    <circle cx="0" cy="-8" r="18" fill="#6366f1" opacity="0.5"/>
+    
+    <!-- Bottom right box - Primary Purple Light -->
+    <rect x="60" y="50" width="50" height="50" fill="url(#grad2)" rx="8" transform="rotate(15 85 75)"/>
+    <rect x="64" y="54" width="42" height="18" fill="#818cf8" opacity="0.4" rx="4" transform="rotate(15 85 75)"/>
+    
+    <!-- Flow particles/dots -->
+    <circle cx="-60" cy="-70" r="8" fill="#6366f1" opacity="0.6"/>
+    <circle cx="-15" cy="-35" r="6" fill="#818cf8" opacity="0.7"/>
+    <circle cx="15" cy="35" r="6" fill="#6366f1" opacity="0.7"/>
+    <circle cx="60" cy="70" r="8" fill="#4f46e5" opacity="0.6"/>
+  </g>
+
+</svg>

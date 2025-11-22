@@ -1,0 +1,169 @@
+/* Global Styles - Quantora Dashboard Design System */
+
+// Import color palette and variables
+@import 'styles/variables.scss';
+
+// Global Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Button Styles
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.btn-secondary {
+  background-color: var(--color-gray-lightest);
+  color: var(--color-text-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-gray-lighter);
+  }
+}
+
+.btn-success {
+  background-color: var(--color-accent-green);
+  color: var(--color-text-on-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-green-dark);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.btn-danger {
+  background-color: var(--color-accent-coral);
+  color: var(--color-text-on-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-coral-dark);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.btn-warning {
+  background-color: var(--color-accent-orange);
+  color: var(--color-text-on-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-orange-dark);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// Card Styles
+.card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-xl);
+  transition: box-shadow var(--transition-base);
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// Input Styles
+input, select, textarea {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border-medium);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  background-color: var(--color-white);
+  color: var(--color-text-primary);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-badge-info-bg);
+  }
+  
+  &::placeholder {
+    color: var(--color-text-tertiary);
+  }
+}
+
+// Badge Styles
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  
+  &.badge-success {
+    background-color: var(--color-badge-success-bg);
+    color: var(--color-badge-success-text);
+  }
+  
+  &.badge-warning {
+    background-color: var(--color-badge-warning-bg);
+    color: var(--color-badge-warning-text);
+  }
+  
+  &.badge-danger {
+    background-color: var(--color-badge-danger-bg);
+    color: var(--color-badge-danger-text);
+  }
+  
+  &.badge-info {
+    background-color: var(--color-badge-info-bg);
+    color: var(--color-badge-info-text);
+  }
+}
+
+// Utility Classes
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+
+.bg-primary { background-color: var(--color-bg-primary); }
+.bg-secondary { background-color: var(--color-bg-secondary); }
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }

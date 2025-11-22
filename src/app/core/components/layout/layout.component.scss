@@ -1,0 +1,26 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.content-wrapper {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  overflow-x: hidden;
+  
+  @media (max-width: 768px) {
+    padding: var(--spacing-md);
+  }
+}
