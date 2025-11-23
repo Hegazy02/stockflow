@@ -1,14 +1,17 @@
-<div class="product-detail-container" *ngIf="product$ | async as product">
+<div *ngIf="product$ | async as product">
   <div class="header">
     <button class="btn-back" (click)="navigateToList()">
-      ← Back to Products
+      <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
+      <span>Back to Products</span>
     </button>
     <div class="actions">
       <button class="btn-secondary" (click)="navigateToEdit()">
-        ✏️ Edit
+        <lucide-icon [img]="Edit" [size]="18"></lucide-icon>
+        <span>Edit</span>
       </button>
       <button class="btn-danger" (click)="confirmDelete()">
-        🗑️ Delete
+        <lucide-icon [img]="Trash2" [size]="18"></lucide-icon>
+        <span>Delete</span>
       </button>
     </div>
   </div>
@@ -33,11 +36,11 @@
           </div>
           <div class="detail-item">
             <span class="label">Created:</span>
-            <span class="value">{{ product.createdAt | date: 'medium' }}</span>
+            <span class="value">{{ product.createdAt | date : 'medium' }}</span>
           </div>
           <div class="detail-item">
             <span class="label">Last Updated:</span>
-            <span class="value">{{ product.updatedAt | date: 'medium' }}</span>
+            <span class="value">{{ product.updatedAt | date : 'medium' }}</span>
           </div>
         </div>
       </div>
@@ -49,15 +52,15 @@
 
       <div class="detail-section">
         <h2>Stock Levels</h2>
-        
+
         <!-- Display when stock data is available -->
-        <ng-container *ngIf="(stockLevels$ | async) as stockLevels">
+        <ng-container *ngIf="stockLevels$ | async as stockLevels">
           <div *ngIf="stockLevels.length > 0; else noStock" class="stock-container">
             <div class="total-stock">
               <span class="total-label">Total Stock:</span>
               <span class="total-value">{{ totalStock$ | async }} units</span>
             </div>
-            
+
             <div class="stock-table">
               <table>
                 <thead>
@@ -82,22 +85,21 @@
                       </span>
                     </td>
                     <td class="last-updated">
-                      {{ stock.lastUpdated | date: 'short' }}
+                      {{ stock.lastUpdated | date : 'short' }}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          
+
           <ng-template #noStock>
             <div class="stock-info empty">
-              <p class="info-message">
-                📦 No stock available for this product yet.
-              </p>
-              <p class="placeholder-text">
-                Add stock to warehouses to see inventory levels here.
-              </p>
+              <div class="empty-icon">
+                <lucide-icon [img]="Package" [size]="48"></lucide-icon>
+              </div>
+              <p class="info-message">No stock available for this product yet.</p>
+              <p class="placeholder-text">Add stock to warehouses to see inventory levels here.</p>
             </div>
           </ng-template>
         </ng-container>
@@ -105,18 +107,18 @@
     </div>
   </div>
 
-  <!-- Delete Confirmation Modal -->
-  <div class="modal-overlay" *ngIf="showDeleteConfirm" (click)="cancelDelete()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Confirm Delete</h2>
-      <p>Are you sure you want to delete <strong>{{ product.name }}</strong>?</p>
-      <p class="warning">This action cannot be undone.</p>
-      <div class="modal-actions">
-        <button class="btn-secondary" (click)="cancelDelete()">Cancel</button>
-        <button class="btn-danger" (click)="deleteProduct()">Delete</button>
-      </div>
-    </div>
-  </div>
+  <!-- Delete Confirmation Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showDeleteConfirm"
+    title="Delete Product"
+    [message]="'Are you sure you want to delete ' + productName + '?'"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteProduct()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
 </div>
 
 <div class="not-found" *ngIf="!(product$ | async)">

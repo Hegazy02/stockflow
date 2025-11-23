@@ -1,14 +1,48 @@
+.products-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .products-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-xl);
+  flex-shrink: 0;
 
   h1 {
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
     margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+
+    button:disabled {
+      cursor: default;
+    }
+  }
+}
+
+.products-table {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  app-data-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    ::ng-deep .table-container {
+      height: 100%;
+    }
   }
 }
 

@@ -1,7 +1,21 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { LucideAngularModule, LayoutDashboard, Package, TrendingUp, ShoppingCart, FileText, Bell, Mail, Plus, Settings, LogOut, ChevronRight } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  LayoutDashboard,
+  Package,
+  TrendingUp,
+  Warehouse,
+  ArrowLeftRight,
+  FileText,
+  Bell,
+  Mail,
+  Plus,
+  Settings,
+  LogOut,
+  ChevronRight,
+} from 'lucide-angular';
 
 interface MenuItem {
   label: string;
@@ -15,7 +29,7 @@ interface MenuItem {
   standalone: true,
   imports: [CommonModule, RouterModule, LucideAngularModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
   userName = 'Jane Cooper';
@@ -26,7 +40,8 @@ export class SidebarComponent {
   readonly LayoutDashboard = LayoutDashboard;
   readonly Package = Package;
   readonly TrendingUp = TrendingUp;
-  readonly ShoppingCart = ShoppingCart;
+  readonly Warehouse = Warehouse;
+  readonly ArrowLeftRight = ArrowLeftRight;
   readonly FileText = FileText;
   readonly Bell = Bell;
   readonly Mail = Mail;
@@ -38,15 +53,16 @@ export class SidebarComponent {
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: true },
     { label: 'Products', icon: Package, route: '/products', active: false },
-    { label: 'Stock Levels', icon: TrendingUp, route: '/stock', active: false },
-    { label: 'Orders', icon: ShoppingCart, route: '/orders', active: false },
-    { label: 'Reports', icon: FileText, route: '/reports', active: false }
+    { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
+    { label: 'Stock Levels', icon: TrendingUp, route: '/stock-levels', active: false },
+    { label: 'Stock Transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
+    { label: 'Reports', icon: FileText, route: '/reports', active: false },
   ];
 
   constructor(private router: Router) {}
 
   navigateTo(route: string): void {
-    this.menuItems.forEach(item => item.active = item.route === route);
+    this.menuItems.forEach((item) => (item.active = item.route === route));
     this.router.navigate([route]);
   }
 

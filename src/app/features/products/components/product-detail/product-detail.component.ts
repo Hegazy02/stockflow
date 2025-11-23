@@ -11,6 +11,8 @@ import { StockLevel } from '../../../stock/models/stock-level.model';
 import { Warehouse } from '../../../warehouses/models/warehouse.model';
 import { selectStockByProduct } from '../../../stock/store/stock.selectors';
 import { selectAllWarehouses } from '../../../warehouses/store/warehouses.selectors';
+import { LucideAngularModule, ArrowLeft, Edit, Trash2, Package } from 'lucide-angular';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 export interface StockLevelWithWarehouse extends StockLevel {
   warehouse?: Warehouse;
@@ -19,7 +21,7 @@ export interface StockLevelWithWarehouse extends StockLevel {
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,7 +32,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   totalStock$: Observable<number>;
   productId: string | null = null;
   showDeleteConfirm = false;
+  productName: string = '';
   private destroy$ = new Subject<void>();
+
+  // Lucide icons
+  readonly ArrowLeft = ArrowLeft;
+  readonly Edit = Edit;
+  readonly Trash2 = Trash2;
+  readonly Package = Package;
 
   constructor(
     private store: Store,
@@ -47,6 +56,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     
     if (this.productId) {
       this.product$ = this.store.select(selectProductById(this.productId));
+      
+      // Store product name for dialog
+      this.product$.pipe(takeUntil(this.destroy$)).subscribe(product => {
+        if (product) {
+          this.productName = product.name;
+        }
+      });
       
       // Get stock levels for this product across all warehouses
       const stockLevels$ = this.store.select(selectStockByProduct(this.productId));

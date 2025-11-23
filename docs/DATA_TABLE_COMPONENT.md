@@ -99,6 +99,9 @@ export class MyComponent {
 | `selectionMode` | `'single'\|'multiple'\|null` | `null` | Enable row selection |
 | `dataKey` | `string` | `'id'` | Unique identifier field |
 | `globalFilterFields` | `string[]` | `[]` | Fields for global search |
+| `minHeight` | `string` | `'auto'` | Minimum height of table container (e.g., '400px', '50vh') |
+| `height` | `string` | `'auto'` | Fixed height of table container (e.g., '600px', '80vh') |
+| `showFilters` | `boolean` | `false` | Show filter inputs below column headers |
 
 ### Outputs
 
@@ -106,6 +109,7 @@ export class MyComponent {
 |-------|------|-------------|
 | `rowSelect` | `EventEmitter<any>` | Emitted when row is selected |
 | `rowUnselect` | `EventEmitter<any>` | Emitted when row is unselected |
+| `filterChange` | `EventEmitter<{field: string, value: string, filters: object}>` | Emitted when filter value changes |
 
 ### Interfaces
 
@@ -117,8 +121,7 @@ type ColumnType = 'text' | 'date' | 'datetime' | 'number' | 'currency' | 'boolea
 interface TableColumn {
   field: string;        // Data field name
   header: string;       // Column header text
-  sortable?: boolean;   // Enable sorting
-  filterable?: boolean; // Enable filtering
+  filterable?: boolean; // Enable filtering (requires showFilters=true)
   width?: string;       // Column width (e.g., '25%', '200px')
   type?: ColumnType;    // Column data type for formatting
   dateFormat?: string;  // Date format (e.g., 'short', 'medium', 'dd/MM/yyyy')
@@ -267,6 +270,73 @@ columns: TableColumn[] = [
 ></app-data-table>
 ```
 
+### With Popup Filters
+
+```html
+<!-- Enable popup filters for filterable columns -->
+<app-data-table
+  [data]="data"
+  [columns]="columns"
+  [showFilters]="true"
+></app-data-table>
+```
+
+```typescript
+// Define which columns are filterable
+columns: TableColumn[] = [
+  { field: 'name', header: 'Name', filterable: true },
+  { field: 'sku', header: 'SKU', filterable: true },
+  { field: 'category', header: 'Category', filterable: true },
+  { field: 'price', header: 'Price', type: 'currency', filterable: false }
+];
+```
+
+**Features:**
+- Click filter icon in column header to open popup
+- Real-time filtering as you type
+- Active filter indicator (blue icon)
+- Clear button to reset filter
+- Popup closes automatically
+
+### With Height Control
+
+```html
+<!-- Fixed height (table will scroll if content exceeds) -->
+<app-data-table
+  [data]="data"
+  [columns]="columns"
+  [height]="'600px'"
+></app-data-table>
+
+<!-- Viewport-based height -->
+<app-data-table
+  [data]="data"
+  [columns]="columns"
+  [height]="'80vh'"
+></app-data-table>
+
+<!-- Minimum height (grows with content, but never smaller) -->
+<app-data-table
+  [data]="data"
+  [columns]="columns"
+  [minHeight]="'400px'"
+></app-data-table>
+
+<!-- Both min and max height -->
+<app-data-table
+  [data]="data"
+  [columns]="columns"
+  [minHeight]="'300px'"
+  [height]="'600px'"
+></app-data-table>
+
+<!-- Auto-fill remaining space (default behavior) -->
+<app-data-table
+  [data]="data"
+  [columns]="columns"
+></app-data-table>
+```
+
 ### With Loading State
 
 ```typescript
@@ -320,8 +390,7 @@ Common Lucide icons for actions:
 ## Tips
 
 1. **Performance**: Use `dataKey` for better performance with large datasets
-2. **Sorting**: Set `sortable: true` on columns you want sortable
-3. **Width**: Set column widths to prevent layout shifts
+2. **Width**: Set column widths to prevent layout shifts
 4. **Actions**: Keep actions to 3-4 buttons for better UX
 5. **Loading**: Always show loading state during data fetch
 6. **Dates**: Always specify `type: 'date'` or `type: 'datetime'` for date columns
@@ -329,6 +398,15 @@ Common Lucide icons for actions:
 8. **Null Values**: Null/undefined values display as '-'
 9. **Currency**: Currency type automatically formats with $ and 2 decimals
 10. **Boolean**: Boolean type shows checkmark (✓) or cross (✗)
+11. **Min Height**: Use `minHeight` to prevent layout shifts during loading or with dynamic data
+12. **Fixed Height**: Use `height` to set a specific table height with scrolling
+13. **Auto-fill**: Leave both `height` and `minHeight` as default to auto-fill parent container
+14. **Height Units**: Supports any CSS unit - px, vh, rem, etc.
+15. **Popup Filters**: Set `showFilters="true"` and mark columns as `filterable: true` to enable popup filters
+16. **Filter Icon**: Click the filter icon in column headers to open filter popup
+17. **Active Filters**: Filter icon turns blue when a filter is active
+18. **Filter Behavior**: Filters use "contains" matching and work in real-time
+19. **No Sorting**: Sorting has been removed - data displays in the order provided
 
 ## Troubleshooting
 

@@ -1,0 +1,31 @@
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onOverlayClick()">
+    <div class="modal-content" (click)="onContentClick($event)">
+      <div class="modal-header">
+        <div class="header-icon">
+          <lucide-icon [img]="AlertTriangle" [size]="24"></lucide-icon>
+        </div>
+        <h2>{{ title }}</h2>
+        <button type="button" class="close-btn" (click)="onCancel()">
+          <lucide-icon [img]="X" [size]="20"></lucide-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="message">{{ message }}</p>
+        @if (warningMessage) {
+          <p class="warning">{{ warningMessage }}</p>
+        }
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          {{ cancelText }}
+        </button>
+        <button type="button" [class]="'btn ' + confirmButtonClass" (click)="onConfirm()">
+          {{ confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

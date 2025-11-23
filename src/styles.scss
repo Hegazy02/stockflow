@@ -48,11 +48,6 @@ body {
   &:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
     box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-  }
-  
-  &:active:not(:disabled) {
-    transform: translateY(0);
   }
 }
 

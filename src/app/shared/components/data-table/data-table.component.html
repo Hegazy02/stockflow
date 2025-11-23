@@ -1,5 +1,11 @@
-<div class="table-container">
+<div
+  class="table-container"
+  [class.fixed-height]="height !== 'auto'"
+  [style.min-height]="minHeight"
+  [style.height]="height"
+>
   <p-table
+    #dt
     [value]="data"
     [columns]="columns"
     [paginator]="paginator"
@@ -14,6 +20,7 @@
     (onRowUnselect)="onRowUnselect($event)"
     styleClass="p-datatable-sm"
     [tableStyle]="{ 'min-width': '50rem' }"
+    paginatorPosition="bottom"
   >
     <!-- Table Header -->
     <ng-template pTemplate="header">
@@ -26,12 +33,49 @@
         }
 
         <!-- Data Columns -->
-        @for (col of columns; track col.field) {
-        <th [pSortableColumn]="col.sortable ? col.field : undefined" [style.width]="col.width">
-          {{ col.header }}
-          @if (col.sortable) {
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-          }
+        @for (col of columns; track col.field; let i = $index) {
+        <th [style.width]="col.width">
+          <div class="header-content">
+            <span>{{ col.header }}</span>
+            @if (showFilters && col.filterable) {
+            <div class="header-icons">
+              <button
+                type="button"
+                class="filter-icon-btn"
+                [class.active]="hasActiveFilter(col.field)"
+                (click)="toggleFilterPopover($event, col.field)"
+                [title]="'Filter ' + col.header"
+              >
+                <lucide-icon [img]="Filter" [size]="14"></lucide-icon>
+              </button>
+              <p-popover [attr.data-field]="col.field">
+                <div class="filter-popup">
+                  <div class="filter-header">
+                    <span>Filter {{ col.header }}</span>
+                    <button type="button" class="close-btn" (click)="hideFilterPopover(col.field)">
+                      <lucide-icon [img]="X" [size]="16"></lucide-icon>
+                    </button>
+                  </div>
+                  <div class="filter-body">
+                    <input
+                      pInputText
+                      type="text"
+                      [placeholder]="'Search ' + col.header"
+                      [(ngModel)]="filterValues[col.field]"
+                      (input)="applyFilter(dt, col.field, filterValues[col.field])"
+                      class="filter-input-popup"
+                    />
+                  </div>
+                  <div class="filter-footer">
+                    <button type="button" class="btn-clear" (click)="clearFilter(dt, col.field)">
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              </p-popover>
+            </div>
+            }
+          </div>
         </th>
         }
 

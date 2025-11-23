@@ -1,18 +1,64 @@
-<div class="products-header">
-  <h1>Products</h1>
-  <button class="btn btn-primary" (click)="navigateToCreate()">
-    <span>+ Add Product</span>
-  </button>
-</div>
+<div class="products-container">
+  <div class="products-header">
+    <h1>Products</h1>
+    <div class="header-actions">
+      <button
+        class="btn btn-danger"
+        (click)="confirmBulkDelete()"
+        [disabled]="selectedProducts.length === 0"
+      >
+        <span
+          >Delete Selected @if (selectedProducts.length > 0) {({{ selectedProducts.length }})}</span
+        >
+      </button>
+      <button class="btn btn-primary" (click)="navigateToCreate()">
+        <span>+ Add Product</span>
+      </button>
+    </div>
+  </div>
 
-<app-data-table
-  [data]="products"
-  [columns]="columns"
-  [actions]="actions"
-  [loading]="loading"
-  [paginator]="true"
-  [rows]="10"
-  [rowsPerPageOptions]="[5, 10, 20, 50]"
-  [showActions]="true"
-  [globalFilterFields]="['name', 'sku', 'category', 'description']"
-></app-data-table>
+  <div class="products-table">
+    <app-data-table
+      [data]="products"
+      [columns]="columns"
+      [actions]="actions"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [showActions]="true"
+      [globalFilterFields]="['name', 'sku', 'category', 'description']"
+      [selectionMode]="'multiple'"
+      [showFilters]="true"
+      (filterChange)="onFilterChange($event)"
+      (rowSelect)="onRowSelect($event)"
+      (rowUnselect)="onRowSelect($event)"
+    ></app-data-table>
+  </div>
+
+  <!-- Single Product Delete Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Product"
+    [message]="productToDelete ? 'Are you sure you want to delete ' + productToDelete.name + '?' : ''"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteProduct()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+
+  <!-- Bulk Delete Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showBulkDeleteDialog"
+    title="Delete Multiple Products"
+    [message]="'Are you sure you want to delete ' + selectedProducts.length + ' product' + (selectedProducts.length > 1 ? 's' : '') + '?'"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete All"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="bulkDeleteProducts()"
+    (cancel)="cancelBulkDelete()"
+  ></app-confirm-dialog>
+</div>

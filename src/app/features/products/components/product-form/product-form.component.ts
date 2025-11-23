@@ -7,11 +7,13 @@ import { Subject, takeUntil, filter } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { selectProductById } from '../../store/products.selectors';
 import { createProduct, updateProduct } from '../../store/products.actions';
+import { LucideAngularModule, ArrowLeft, Save, X } from 'lucide-angular';
+import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, FormInputComponent],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })
@@ -20,6 +22,11 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   isEditMode = false;
   productId: string | null = null;
   private destroy$ = new Subject<void>();
+
+  // Lucide icons
+  readonly ArrowLeft = ArrowLeft;
+  readonly Save = Save;
+  readonly X = X;
 
   constructor(
     private fb: FormBuilder,
