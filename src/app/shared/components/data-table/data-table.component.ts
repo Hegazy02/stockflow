@@ -13,6 +13,7 @@ import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { Popover } from 'primeng/popover';
 import { ButtonModule } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
 import { LucideAngularModule, Eye, Edit, Trash2, MoreVertical, Filter, X } from 'lucide-angular';
 export interface FilterChange {
   field: string;
@@ -21,6 +22,13 @@ export interface FilterChange {
     [key: string]: string;
   };
 }
+
+export interface PageChangeEvent {
+  page: number;
+  pageSize: number;
+  first: number;
+}
+
 export type ColumnType = 'text' | 'date' | 'datetime' | 'number' | 'currency' | 'boolean';
 
 export interface TableColumn {
@@ -48,6 +56,7 @@ export interface TableAction {
     InputTextModule,
     Popover,
     ButtonModule,
+    PaginatorModule,
     LucideAngularModule,
     DatePipe,
   ],
@@ -69,9 +78,13 @@ export class DataTableComponent implements AfterViewInit {
   @Input() minHeight: string = 'auto';
   @Input() height: string = 'auto';
   @Input() showFilters: boolean = false;
+  @Input() totalRecords: number = 0;
+  @Input() currentPage: number = 1;
+  @Input() pageSize: number = 10;
 
   @Output() rowSelect = new EventEmitter<any>();
   @Output() filterChange = new EventEmitter<FilterChange>();
+  @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
   selectedRows: any[] = [];
   filterValues: { [key: string]: string } = {};
@@ -90,6 +103,23 @@ export class DataTableComponent implements AfterViewInit {
     console.log('Popovers loaded:', this.popovers?.length);
   }
 
+  get first(): number {
+    return (this.currentPage - 1) * this.pageSize;
+  }
+
+  get last(): number {
+    return Math.min(this.first + this.pageSize, this.totalRecords);
+  }
+
+  onPageChange(event: any): void {
+    const page = Math.floor(event.first / event.rows) + 1;
+    this.pageChange.emit({
+      page,
+      pageSize: event.rows,
+      first: event.first,
+    });
+  }
+
   onRowSelect(event: any): void {
     this.rowSelect.emit(this.selectedRows);
   }
@@ -97,7 +127,14 @@ export class DataTableComponent implements AfterViewInit {
   onRowUnselect(event: any): void {
     this.rowSelect.emit(this.selectedRows);
   }
-
+  onHeaderCheckboxToggle(event: any): void {
+    if (event.checked) {
+      this.selectedRows = [...this.data];
+    } else {
+      this.selectedRows = [];
+    }
+    this.rowSelect.emit(this.selectedRows);
+  }
   executeAction(action: TableAction, rowData: any): void {
     action.command(rowData);
   }
@@ -127,6 +164,7 @@ export class DataTableComponent implements AfterViewInit {
 
   applyFilter(table: any, field: string, value: string): void {
     this.filterValues[field] = value;
+    table.filter(value, field, 'contains');
 
     // Emit filter change event
     this.filterChange.emit({
@@ -156,7 +194,10 @@ export class DataTableComponent implements AfterViewInit {
   /**
    * Format cell value based on column type
    */
-  formatCellValue(value: any, column: TableColumn): any {
+  formatCellValue(rowData: any, column: TableColumn): any {
+    const value = this.getNestedValue(rowData, column.field);
+    console.log('value', value);
+
     if (value === null || value === undefined) {
       return '-';
     }
@@ -179,6 +220,12 @@ export class DataTableComponent implements AfterViewInit {
       default:
         return value;
     }
+  }
+  /**
+   * Get nested property value using dot notation
+   */
+  private getNestedValue(obj: any, path: string): any {
+    return path.split('.').reduce((current, prop) => current?.[prop], obj);
   }
 
   /**

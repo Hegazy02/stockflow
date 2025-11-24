@@ -1,168 +1,146 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Product } from '../models/product.model';
+import { ApiResponse } from '../../../core/models/api-response';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private products: Product[] = [];
-  private nextId = 1;
+  private readonly apiUrl = `${environment.apiUrl}/products`;
 
-  constructor() {
-    // Initialize with some mock data for development
-    this.products = [
-      {
-        id: '1',
-        name: 'Laptop',
-        sku: 'LAP-001',
-        description: 'High-performance laptop',
-        category: 'Electronics',
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01'),
-      },
-      {
-        id: '2',
-        name: 'Office Chair',
-        sku: 'CHR-001',
-        description: 'Ergonomic office chair',
-        category: 'Furniture',
-        createdAt: new Date('2024-01-02'),
-        updatedAt: new Date('2024-01-02'),
-      },
-    ];
-    this.nextId = 3;
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Get all products
+   * GET /api/products
+   * @param page - Page number (default: 1)
+   * @param limit - Number of records per page (default: 10)
+   */
+  getAll(page: number = 1, limit: number = 10): Observable<ApiResponse<Product>> {
+    const params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
+
+    return this.http.get<ApiResponse<Product>>(this.apiUrl, { params });
   }
 
-  getAll(): Observable<Product[]> {
-    try {
-      return of([...this.products]).pipe(delay(100));
-    } catch (error) {
-      return throwError(() => ({
-        code: 'FETCH_ERROR',
-        message: 'Failed to retrieve products',
-        originalError: error,
-      }));
-    }
-  }
-
+  /**
+   * Get product by ID
+   * GET /api/products/:id
+   */
   getById(id: string): Observable<Product> {
-    try {
-      const product = this.products.find((p) => p.id === id);
-
-      if (!product) {
-        return throwError(() => ({
-          code: 'NOT_FOUND',
-          message: `Product with id ${id} not found`,
-        }));
-      }
-
-      return of({ ...product }).pipe(delay(100));
-    } catch (error) {
-      return throwError(() => ({
-        code: 'FETCH_ERROR',
-        message: 'Failed to retrieve product',
-        originalError: error,
-      }));
-    }
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  create(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Observable<Product> {
-    try {
-      // Validate required fields
-      if (!product.name || !product.sku) {
-        return throwError(() => ({
-          code: 'VALIDATION_ERROR',
-          message: 'Product name and SKU are required',
-        }));
-      }
-
-      // Check for duplicate SKU
-      const existingSku = this.products.find((p) => p.sku === product.sku);
-      if (existingSku) {
-        return throwError(() => ({
-          code: 'DUPLICATE_SKU',
-          message: `Product with SKU ${product.sku} already exists`,
-        }));
-      }
-
-      const now = new Date();
-      const newProduct: Product = {
-        ...product,
-        id: String(this.nextId++),
-        createdAt: now,
-        updatedAt: now,
-      };
-
-      this.products.push(newProduct);
-      return of({ ...newProduct }).pipe(delay(100));
-    } catch (error) {
-      return throwError(() => ({
-        code: 'CREATE_ERROR',
-        message: 'Failed to create product',
-        originalError: error,
-      }));
-    }
+  /**
+   * Create a new product
+   * POST /api/products
+   */
+  create(product: Omit<Product, '_id' | 'createdAt' | 'updatedAt'>): Observable<Product> {
+    return this.http.post<any>(this.apiUrl, product);
   }
 
+  /**
+   * Update an existing product
+   * PUT /api/products/:id
+   */
   update(product: Product): Observable<Product> {
-    try {
-      const index = this.products.findIndex((p) => p.id === product.id);
+    return this.http.put<any>(`${this.apiUrl}/${product._id}`, product);
+  }
 
-      if (index === -1) {
-        return throwError(() => ({
-          code: 'NOT_FOUND',
-          message: `Product with id ${product.id} not found`,
-        }));
-      }
-
-      // Validate required fields
-      if (!product.name || !product.sku) {
-        return throwError(() => ({
-          code: 'VALIDATION_ERROR',
-          message: 'Product name and SKU are required',
-        }));
-      }
-
-      // Check for duplicate SKU (excluding current product)
-      const existingSku = this.products.find((p) => p.sku === product.sku && p.id !== product.id);
-      if (existingSku) {
-        return throwError(() => ({
-          code: 'DUPLICATE_SKU',
-          message: `Product with SKU ${product.sku} already exists`,
-        }));
-      }
-
-      const updatedProduct: Product = {
-        ...product,
-        updatedAt: new Date(),
-      };
-
-      this.products[index] = updatedProduct;
-      return of({ ...updatedProduct }).pipe(delay(100));
-    } catch (error) {
+  /**
+   * Delete product(s)
+   * DELETE /api/products/:id (single)
+   * POST /api/products/bulk-delete (multiple)
+   */
+  delete(ids: string[]): Observable<{ ids: string[] }> {
+    if (ids.length === 0) {
       return throwError(() => ({
-        code: 'UPDATE_ERROR',
-        message: 'Failed to update product',
-        originalError: error,
+        code: 'VALIDATION_ERROR',
+        message: 'No product IDs provided for deletion',
       }));
+    }
+
+    if (ids.length === 1) {
+      // Single delete: DELETE /api/products/:id
+      return this.http.delete<void>(`${this.apiUrl}/${ids[0]}`).pipe(
+        map(() => ({ ids })),
+        catchError(this.handleError)
+      );
+    } else {
+      // Bulk delete: POST /api/products/bulk-delete
+      return this.http
+        .post<{
+          success: boolean;
+          message: string;
+          data: {
+            deletedCount: number;
+            requestedCount: number;
+          };
+        }>(`${this.apiUrl}/bulk-delete`, { ids })
+        .pipe(
+          map((response) => {
+            // Return the IDs that were successfully deleted
+            if (response.success) {
+              return { ids };
+            } else {
+              throw new Error(response.message || 'Bulk delete failed');
+            }
+          }),
+          catchError(this.handleError)
+        );
     }
   }
 
-  delete(ids: string[]): Observable<{ ids: string[] }> {
-    try {
-      // Simulate delay for async behavior
-      return of(ids).pipe(
-        delay(100),
-        map((deletedIds) => ({ ids: deletedIds }))
-      );
-    } catch (error) {
-      return throwError(() => ({
-        code: 'DELETE_ERROR',
-        message: 'Failed to delete product',
-        originalError: error,
-      }));
+  /**
+   * Transform API response to Product model
+   * Handles both _id and id formats, and converts date strings to Date objects
+   */
+
+  /**
+   * Handle HTTP errors
+   */
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unknown error occurred';
+    let errorCode = 'UNKNOWN_ERROR';
+
+    if (error.error instanceof ErrorEvent) {
+      // Client-side error
+      errorMessage = error.error.message;
+      errorCode = 'CLIENT_ERROR';
+    } else {
+      // Server-side error
+      errorCode = `HTTP_${error.status}`;
+      errorMessage =
+        error.error?.message || error.message || `Server returned code ${error.status}`;
+
+      // Map common HTTP status codes
+      switch (error.status) {
+        case 404:
+          errorCode = 'NOT_FOUND';
+          errorMessage = 'Resource not found';
+          break;
+        case 400:
+          errorCode = 'VALIDATION_ERROR';
+          errorMessage = error.error?.message || 'Invalid request';
+          break;
+        case 409:
+          errorCode = 'DUPLICATE_SKU';
+          errorMessage = error.error?.message || 'Duplicate resource';
+          break;
+        case 500:
+          errorCode = 'SERVER_ERROR';
+          errorMessage = 'Internal server error';
+          break;
+      }
     }
+
+    return throwError(() => ({
+      code: errorCode,
+      message: errorMessage,
+      originalError: error,
+    }));
   }
 }

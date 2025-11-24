@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Product } from '../models/product.model';
+import { Pagination } from '../../../core/models/api-response';
 import * as ProductsActions from './products.actions';
 
 // Model == Entity
@@ -10,11 +11,12 @@ export interface ProductsState extends EntityState<Product> {
   selectedProductId: string | null;
   loading: boolean;
   error: any;
+  pagination: Pagination;
 }
 
 // Entity Adapter (Model Adapter)
 export const productsAdapter: EntityAdapter<Product> = createEntityAdapter<Product>({
-  selectId: (product: Product) => product.id,
+  selectId: (product: Product) => product._id,
   sortComparer: false,
 });
 
@@ -23,6 +25,12 @@ export const initialState: ProductsState = productsAdapter.getInitialState({
   selectedProductId: null,
   loading: false,
   error: null,
+  pagination: {
+    total: 0,
+    page: 1,
+    limit: 10,
+    pages: 0,
+  },
 });
 
 // Reducers
@@ -34,11 +42,12 @@ export const productsReducer = createReducer(
     loading: true,
     error: null,
   })),
-  on(ProductsActions.loadProductsSuccess, (state, { products }) =>
+  on(ProductsActions.loadProductsSuccess, (state, { products, pagination }) =>
     productsAdapter.setAll(products, {
       ...state,
       loading: false,
       error: null,
+      pagination,
     })
   ),
   on(ProductsActions.loadProductsFailure, (state, { error }) => ({
@@ -67,7 +76,7 @@ export const productsReducer = createReducer(
   on(ProductsActions.updateProductSuccess, (state, { product }) =>
     productsAdapter.updateOne(
       {
-        id: product.id,
+        id: product._id,
         changes: product,
       },
       {

@@ -1,9 +1,13 @@
 export interface Product {
-  id: string;
+  _id: string;
   name: string;
   sku: string;
+  category: ProductCategory;
   description: string;
-  category: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface ProductCategory {
+  _id: string;
+  name: string;
 }

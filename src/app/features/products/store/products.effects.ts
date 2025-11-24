@@ -8,6 +8,7 @@ import * as ProductsActions from './products.actions';
 @Injectable()
 export class ProductsEffects {
   LoadProducts$;
+  ChangePage$;
   CreateProduct$;
   UpdateProduct$;
   DeleteProducts$;
@@ -16,12 +17,28 @@ export class ProductsEffects {
     this.LoadProducts$ = createEffect(() =>
       this.actions$.pipe(
         ofType(ProductsActions.loadProducts),
-        exhaustMap(() =>
-          this.productsService.getAll().pipe(
-            map((products) => ProductsActions.loadProductsSuccess({ products })),
+        exhaustMap((action) => {
+          const page = action.page ?? 1;
+          const limit = action.limit ?? 10;
+          
+          return this.productsService.getAll(page, limit).pipe(
+            map((response) => 
+              ProductsActions.loadProductsSuccess({ 
+                products: response.data,
+                pagination: response.pagination 
+              })
+            ),
             catchError((error) => of(ProductsActions.loadProductsFailure({ error })))
-          )
-        )
+          );
+        })
+      )
+    );
+
+    // Change Page
+    this.ChangePage$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(ProductsActions.changePage),
+        map((action) => ProductsActions.loadProducts({ page: action.page, limit: action.limit }))
       )
     );
 

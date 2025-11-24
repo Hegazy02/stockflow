@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Product } from '../models/product.model';
+import { Pagination } from '../../../core/models/api-response';
 
 // // Load Products
 // export const loadProducts = createAction('[Products] Load Products');
@@ -60,20 +61,29 @@ import { Product } from '../models/product.model';
 // );
 
 // Load Products
-export const loadProducts = createAction('[Products] Load Products');
+export const loadProducts = createAction(
+  '[Products] Load Products',
+  props<{ page?: number; limit?: number }>()
+);
 export const loadProductsSuccess = createAction(
   '[Products] Load Products Success',
-  props<{ products: Product[] }>()
+  props<{ products: Product[]; pagination: Pagination }>()
 );
 export const loadProductsFailure = createAction(
   '[Products] Load Products Failure',
   props<{ error: any }>()
 );
 
+// Change Page
+export const changePage = createAction(
+  '[Products] Change Page',
+  props<{ page: number; limit: number }>()
+);
+
 // Create Product
 export const createProduct = createAction(
   '[Products] Create Product',
-  props<{ product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'> }>()
+  props<{ product: Omit<Product, '_id' | 'createdAt' | 'updatedAt'> }>()
 );
 export const createProductSuccess = createAction(
   '[Products] Create Product Success',

@@ -17,6 +17,19 @@
     </div>
   </div>
 
+  <!-- Error Message -->
+  @if (error$ | async; as error) {
+  <div class="error-container">
+    <div class="error-message">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{ error.message || 'Failed to load products. Please try again.' }}</span>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadProducts()">
+        Retry
+      </button>
+    </div>
+  </div>
+  }
+
   <div class="products-table">
     <app-data-table
       [data]="products"
@@ -24,13 +37,17 @@
       [actions]="actions"
       [loading]="loading"
       [paginator]="true"
-      [rows]="10"
+      [rows]="(pageSize$ | async) || 10"
       [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [totalRecords]="(totalRecords$ | async) || 0"
+      [currentPage]="(currentPage$ | async) || 1"
+      [pageSize]="(pageSize$ | async) || 10"
       [showActions]="true"
-      [globalFilterFields]="['name', 'sku', 'category', 'description']"
+      [globalFilterFields]="['name', 'sku', 'category.name', 'description']"
       [selectionMode]="'multiple'"
       [showFilters]="true"
       (filterChange)="onFilterChange($event)"
+      (pageChange)="onPageChange($event)"
       (rowSelect)="onRowSelect($event)"
       (rowUnselect)="onRowSelect($event)"
     ></app-data-table>

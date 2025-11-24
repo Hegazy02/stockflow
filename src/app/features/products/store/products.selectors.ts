@@ -47,3 +47,28 @@ export const selectSelectedProductId = createSelector(
   selectProductsState,
   (state) => state.selectedProductId
 );
+
+export const selectProductsPagination = createSelector(
+  selectProductsState,
+  (state) => state.pagination
+);
+
+export const selectCurrentPage = createSelector(
+  selectProductsPagination,
+  (pagination) => pagination.page
+);
+
+export const selectPageSize = createSelector(
+  selectProductsPagination,
+  (pagination) => pagination.limit
+);
+
+export const selectTotalRecords = createSelector(
+  selectProductsPagination,
+  (pagination) => pagination.total
+);
+
+export const selectTotalPages = createSelector(
+  selectProductsPagination,
+  (pagination) => pagination.pages
+);

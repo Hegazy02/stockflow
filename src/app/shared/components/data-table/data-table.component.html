@@ -8,9 +8,7 @@
     #dt
     [value]="data"
     [columns]="columns"
-    [paginator]="paginator"
-    [rows]="rows"
-    [rowsPerPageOptions]="rowsPerPageOptions"
+    [paginator]="false"
     [loading]="loading"
     [globalFilterFields]="globalFilterFields"
     [dataKey]="dataKey"
@@ -18,9 +16,9 @@
     [(selection)]="selectedRows"
     (onRowSelect)="onRowSelect($event)"
     (onRowUnselect)="onRowUnselect($event)"
+    (onHeaderCheckboxToggle)="onHeaderCheckboxToggle($event)"
     styleClass="p-datatable-sm"
     [tableStyle]="{ 'min-width': '50rem' }"
-    paginatorPosition="bottom"
   >
     <!-- Table Header -->
     <ng-template pTemplate="header">
@@ -99,7 +97,7 @@
         <!-- Data Columns -->
         @for (col of columns; track col.field) {
         <td>
-          {{ formatCellValue(rowData[col.field], col) }}
+          {{ formatCellValue(rowData, col) }}
         </td>
         }
 
@@ -153,4 +151,20 @@
       </tr>
     </ng-template>
   </p-table>
+
+  @if (paginator && totalRecords > 0) {
+  <div class="pagination-container" [class.disabled]="loading">
+    <div class="pagination-info">
+      Showing {{ first + 1 }}-{{ last }} of {{ totalRecords }}
+    </div>
+
+    <p-paginator
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [first]="first"
+      (onPageChange)="onPageChange($event)"
+    ></p-paginator>
+  </div>
+  }
 </div>
