@@ -30,8 +30,8 @@ export class ProductService {
    * Get product by ID
    * GET /api/products/:id
    */
-  getById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<ApiResponse<Product>> {
+    return this.http.get<ApiResponse<Product>>(`${this.apiUrl}/${id}`);
   }
 
   /**

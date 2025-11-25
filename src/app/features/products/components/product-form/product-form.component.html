@@ -25,20 +25,37 @@
       [errorMessage]="isFieldInvalid('sku') ? getErrorMessage('sku') : ''"
     ></app-form-input>
 
-    <app-form-input
-      label="Category"
-      placeholder="Enter product category"
-      formControlName="category"
-      [required]="true"
-      [errorMessage]="isFieldInvalid('category') ? getErrorMessage('category') : ''"
-    ></app-form-input>
+    <div class="form-field">
+      <label for="category">
+        Category <span class="required">*</span>
+      </label>
+      
+      <app-dropdown
+        id="category"
+        formControlName="categoryId"
+        [options]="(categories$ | async) || []"
+        optionLabel="name"
+        optionValue="_id"
+        placeholder="Select a category"
+        [filter]="true"
+        [loading]="(categoriesLoading$ | async) || false"
+        [class.invalid]="isFieldInvalid('category')"
+      ></app-dropdown>
+
+      @if (isFieldInvalid('category')) {
+        <small class="error-message">{{ getErrorMessage('category') }}</small>
+      }
+      
+      @if (categoriesError$ | async; as error) {
+        <small class="error-message">{{ error.message }}</small>
+      }
+    </div>
 
     <app-form-input
       label="Description"
       placeholder="Enter product description"
       type="textarea"
       formControlName="description"
-      [required]="true"
       [rows]="4"
       [errorMessage]="isFieldInvalid('description') ? getErrorMessage('description') : ''"
     ></app-form-input>

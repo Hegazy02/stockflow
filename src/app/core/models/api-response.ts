@@ -7,6 +7,6 @@ export interface Pagination {
 
 export interface ApiResponse<T> {
   success: boolean;
-  data: T[];
+  data: T | T[];
   pagination: Pagination;
 }

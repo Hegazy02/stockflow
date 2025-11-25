@@ -108,8 +108,25 @@ export const updateProductFailure = createAction(
   props<{ error: any }>()
 );
 
+// Get Product By ID
+export const getProductById = createAction(
+  '[Products] Get Product By ID',
+  props<{ id: string }>()
+);
+export const getProductByIdSuccess = createAction(
+  '[Products] Get Product By ID Success',
+  props<{ product: Product }>()
+);
+export const getProductByIdFailure = createAction(
+  '[Products] Get Product By ID Failure',
+  props<{ error: any }>()
+);
+
 // Delete Product
-export const deleteProducts = createAction('[Products] Delete Products', props<{ ids: string[] }>());
+export const deleteProducts = createAction(
+  '[Products] Delete Products',
+  props<{ ids: string[] }>()
+);
 export const deleteProductsSuccess = createAction(
   '[Products] Delete Products Success',
   props<{ ids: string[] }>()

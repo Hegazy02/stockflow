@@ -5,8 +5,10 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
+import { MessageService } from 'primeng/api';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { providePrimeNG } from 'primeng/config';
@@ -19,15 +21,18 @@ import { warehousesReducer } from './features/warehouses/store/warehouses.reduce
 import { stockReducer } from './features/stock/store/stock.reducer';
 import { transfersReducer } from './features/transfers/store/transfers.reducer';
 import { stockHistoryReducer } from './features/stock-history/store/stock-history.reducer';
+import { categoriesReducer } from './features/categories/store/categories.reducer';
 import { ProductsEffects } from './features/products/store/products.effects';
+import { CategoriesEffects } from './features/categories/store/categories.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([errorInterceptor])),
     provideAnimationsAsync(),
+    MessageService,
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -42,8 +47,9 @@ export const appConfig: ApplicationConfig = {
       stock: stockReducer,
       transfers: transfersReducer,
       stockHistory: stockHistoryReducer,
+      categories: categoriesReducer,
     }),
-    provideEffects([ProductsEffects]),
+    provideEffects([ProductsEffects, CategoriesEffects]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

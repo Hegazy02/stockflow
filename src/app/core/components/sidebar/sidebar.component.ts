@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { Subject, takeUntil, filter } from 'rxjs';
 import {
   LucideAngularModule,
   LayoutDashboard,
@@ -31,10 +32,11 @@ interface MenuItem {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy {
   userName = 'Jane Cooper';
   userLocation = 'New York, NY';
   lastUpdate = '8 Apr 2025';
+  private destroy$ = new Subject<void>();
 
   // Lucide icons
   readonly LayoutDashboard = LayoutDashboard;
@@ -51,7 +53,7 @@ export class SidebarComponent {
   readonly ChevronRight = ChevronRight;
 
   menuItems: MenuItem[] = [
-    { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: true },
+    { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: false },
     { label: 'Products', icon: Package, route: '/products', active: false },
     { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
     { label: 'Stock Levels', icon: TrendingUp, route: '/stock-levels', active: false },
@@ -61,8 +63,36 @@ export class SidebarComponent {
 
   constructor(private router: Router) {}
 
+  ngOnInit(): void {
+    // Set initial active state based on current route
+    this.updateActiveMenuItem(this.router.url);
+
+    // Listen to route changes
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((event: NavigationEnd) => {
+        console.log('redirect url', this.router.url);
+
+        this.updateActiveMenuItem(event.urlAfterRedirects);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private updateActiveMenuItem(url: string): void {
+    this.menuItems.forEach((item) => {
+      // Check if the current URL starts with the menu item route
+      item.active = url.startsWith(item.route);
+    });
+  }
+
   navigateTo(route: string): void {
-    this.menuItems.forEach((item) => (item.active = item.route === route));
     this.router.navigate([route]);
   }
 

@@ -63,7 +63,7 @@ export interface TableAction {
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
 })
-export class DataTableComponent implements AfterViewInit {
+export class DataTableComponent {
   @Input() data: any[] = [];
   @Input() columns: TableColumn[] = [];
   @Input() actions: TableAction[] = [];
@@ -98,10 +98,6 @@ export class DataTableComponent implements AfterViewInit {
   readonly MoreVertical = MoreVertical;
   readonly Filter = Filter;
   readonly X = X;
-
-  ngAfterViewInit(): void {
-    console.log('Popovers loaded:', this.popovers?.length);
-  }
 
   get first(): number {
     return (this.currentPage - 1) * this.pageSize;
@@ -196,7 +192,6 @@ export class DataTableComponent implements AfterViewInit {
    */
   formatCellValue(rowData: any, column: TableColumn): any {
     const value = this.getNestedValue(rowData, column.field);
-    console.log('value', value);
 
     if (value === null || value === undefined) {
       return '-';

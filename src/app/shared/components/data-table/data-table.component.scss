@@ -37,6 +37,44 @@
       margin-top: auto;
       flex-shrink: 0;
     }
+
+    // Hide PrimeNG loading overlay - all variations
+    .p-datatable-loading-overlay {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      background: transparent !important;
+    }
+
+
+    .p-component-overlay {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      background: transparent !important;
+    }
+
+    // Hide mask overlay
+    .p-datatable-mask {
+      display: none !important;
+    }
+  }
+
+  // Also hide at root level
+  ::ng-deep .p-component-overlay {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    background: transparent !important;
+  }
+
+  ::ng-deep .p-datatable-loading-overlay {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    background: transparent !important;
+  }
+
+  ::ng-deep .p-datatable-mask {
+    display: none !important;
   }
 }
 

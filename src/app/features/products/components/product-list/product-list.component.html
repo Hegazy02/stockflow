@@ -45,6 +45,7 @@
       [showActions]="true"
       [globalFilterFields]="['name', 'sku', 'category.name', 'description']"
       [selectionMode]="'multiple'"
+      [dataKey]="'_id'"
       [showFilters]="true"
       (filterChange)="onFilterChange($event)"
       (pageChange)="onPageChange($event)"

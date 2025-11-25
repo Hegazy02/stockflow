@@ -71,6 +71,25 @@ export const productsReducer = createReducer(
     error,
   })),
 
+  // Get Product By ID
+  on(ProductsActions.getProductById, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(ProductsActions.getProductByIdSuccess, (state, { product }) =>
+    productsAdapter.upsertOne(product, {
+      ...state,
+      loading: false,
+      error: null,
+    })
+  ),
+  on(ProductsActions.getProductByIdFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
   // Update Product
   on(ProductsActions.updateProduct, (state) => ({ ...state, loading: true, error: null })),
   on(ProductsActions.updateProductSuccess, (state, { product }) =>

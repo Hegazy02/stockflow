@@ -4,11 +4,13 @@ import { of } from 'rxjs';
 import { map, catchError, exhaustMap } from 'rxjs/operators';
 import { ProductService } from '../services/product.service';
 import * as ProductsActions from './products.actions';
+import { Product } from '../models/product.model';
 
 @Injectable()
 export class ProductsEffects {
   LoadProducts$;
   ChangePage$;
+  GetProductById$;
   CreateProduct$;
   UpdateProduct$;
   DeleteProducts$;
@@ -20,12 +22,12 @@ export class ProductsEffects {
         exhaustMap((action) => {
           const page = action.page ?? 1;
           const limit = action.limit ?? 10;
-          
+
           return this.productsService.getAll(page, limit).pipe(
-            map((response) => 
-              ProductsActions.loadProductsSuccess({ 
-                products: response.data,
-                pagination: response.pagination 
+            map((response) =>
+              ProductsActions.loadProductsSuccess({
+                products: response.data as Product[],
+                pagination: response.pagination,
               })
             ),
             catchError((error) => of(ProductsActions.loadProductsFailure({ error })))
@@ -39,6 +41,21 @@ export class ProductsEffects {
       this.actions$.pipe(
         ofType(ProductsActions.changePage),
         map((action) => ProductsActions.loadProducts({ page: action.page, limit: action.limit }))
+      )
+    );
+
+    // Get Product By ID
+    this.GetProductById$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(ProductsActions.getProductById),
+        exhaustMap((action) =>
+          this.productsService.getById(action.id).pipe(
+            map((response) =>
+              ProductsActions.getProductByIdSuccess({ product: response.data as Product })
+            ),
+            catchError((error) => of(ProductsActions.getProductByIdFailure({ error })))
+          )
+        )
       )
     );
 

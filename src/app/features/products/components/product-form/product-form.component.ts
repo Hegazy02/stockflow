@@ -3,17 +3,38 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil, filter } from 'rxjs';
+import { Actions, ofType } from '@ngrx/effects';
+import { Subject, takeUntil, filter, Observable, take, map } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { selectProductById } from '../../store/products.selectors';
-import { createProduct, updateProduct } from '../../store/products.actions';
+import {
+  createProduct,
+  getProductById,
+  updateProduct,
+  updateProductSuccess,
+  createProductSuccess,
+} from '../../store/products.actions';
 import { LucideAngularModule, ArrowLeft, Save, X } from 'lucide-angular';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
+import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
+import { Category } from '../../../categories/models/category.model';
+import { loadCategories } from '../../../categories/store/categories.actions';
+import {
+  selectAllCategories,
+  selectCategoriesLoading,
+  selectCategoriesError,
+} from '../../../categories/store/categories.selectors';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, FormInputComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    LucideAngularModule,
+    FormInputComponent,
+    DropdownComponent,
+  ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],
 })
@@ -22,6 +43,12 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   isEditMode = false;
   productId: string | null = null;
   private destroy$ = new Subject<void>();
+
+  // Category observables
+  categories$: Observable<Category[]>;
+  categoriesLoading$: Observable<boolean>;
+  categoriesError$: Observable<any>;
+  product$ = new Observable<Product | undefined>();
 
   // Lucide icons
   readonly ArrowLeft = ArrowLeft;
@@ -32,22 +59,33 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private actions$: Actions
   ) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      sku: ['', [Validators.required, Validators.pattern(/^[A-Z0-9-]+$/)]],
-      description: ['', [Validators.required, Validators.minLength(10)]],
-      category: ['', [Validators.required]],
+      sku: ['', [Validators.required]],
+      description: [null],
+      categoryId: [null, [Validators.required]],
     });
+
+    // Initialize category observables
+    this.categories$ = this.store.select(selectAllCategories);
+    this.categoriesLoading$ = this.store.select(selectCategoriesLoading);
+    this.categoriesError$ = this.store.select(selectCategoriesError);
   }
 
   ngOnInit(): void {
+    // Load categories
+    this.store.dispatch(loadCategories());
     this.productId = this.route.snapshot.paramMap.get('id');
 
     if (this.productId) {
       this.isEditMode = true;
-      this.loadProduct(this.productId);
+      this.store.dispatch(getProductById({ id: this.productId }));
+      this.product$ = this.store.select(selectProductById(this.productId));
+
+      this.patchForm();
     }
   }
 
@@ -56,19 +94,18 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private loadProduct(id: string): void {
-    this.store
-      .select(selectProductById(id))
+  private patchForm(): void {
+    this.product$
       .pipe(
-        takeUntil(this.destroy$),
-        filter((product): product is Product => product !== undefined)
+        filter((product): product is Product => product !== undefined),
+        take(1)
       )
-      .subscribe((product) => {
+      .subscribe((product: Product) => {
         this.productForm.patchValue({
           name: product.name,
           sku: product.sku,
           description: product.description,
-          category: product.category,
+          categoryId: product.category._id,
         });
       });
   }
@@ -81,25 +118,46 @@ export class ProductFormComponent implements OnInit, OnDestroy {
 
     const formValue = this.productForm.value;
 
+    // Ensure category is sent as string ID (not object)
+    const productPayload = {
+      name: formValue.name,
+      sku: formValue.sku,
+      description: formValue.description,
+      categoryId: formValue.categoryId, // This is already a string ID from the dropdown
+    };
+
     if (this.isEditMode && this.productId) {
       this.store
         .select(selectProductById(this.productId))
         .pipe(
-          takeUntil(this.destroy$),
-          filter((product): product is Product => product !== undefined)
+          filter((product): product is Product => product !== undefined),
+          take(1) // Take only the first emission to avoid multiple dispatches
         )
-        .subscribe((product) => {
-          const updatedProduct: Product = {
-            ...product,
-            ...formValue,
-            updatedAt: new Date(),
-          };
-          this.store.dispatch(updateProduct({ product: updatedProduct }));
-          this.navigateToList();
+        .subscribe({
+          next: (product) => {
+            const updatedProduct: Product = {
+              ...product,
+              ...productPayload,
+              updatedAt: new Date().toISOString(),
+            };
+            this.store.dispatch(updateProduct({ product: updatedProduct }));
+
+            // Wait for update success before navigating
+            this.actions$.pipe(ofType(updateProductSuccess)).subscribe(() => {
+              this.navigateToList();
+            });
+          },
+          error: (err) => {
+            console.error('Error loading product for update:', err);
+          },
         });
     } else {
-      this.store.dispatch(createProduct({ product: formValue }));
-      this.navigateToList();
+      this.store.dispatch(createProduct({ product: productPayload as any }));
+
+      // Wait for create success before navigating
+      this.actions$.pipe(ofType(createProductSuccess)).subscribe(() => {
+        this.navigateToList();
+      });
     }
   }
 
