@@ -1,8 +1,4 @@
-<div
-  class="table-container"
-  [class.scrollable]="scrollable"
-  [style.max-height]="height"
->
+<div class="table-container" [class.scrollable]="scrollable" [style.max-height]="height">
   <p-table
     #dt
     [value]="data"
@@ -154,15 +150,16 @@
 
   @if (paginator && totalRecords > 0) {
   <div class="pagination-container" [class.disabled]="loading">
-    <div class="pagination-info">
-      Showing {{ first + 1 }}-{{ last }} of {{ totalRecords }}
-    </div>
+    <div class="pagination-info">Showing {{ first + 1 }}-{{ last }} of {{ totalRecords }}</div>
 
     <p-paginator
+      [appendTo]="'body'"
       [rows]="pageSize"
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       [first]="first"
+      [showJumpToPageDropdown]="false"
+      [showPageLinks]="true"
       (onPageChange)="onPageChange($event)"
     ></p-paginator>
   </div>

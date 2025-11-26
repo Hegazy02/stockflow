@@ -21,7 +21,7 @@ const MyPreset = definePreset(Aura, {
     },
 
     // ==========================================
-    // COLOR SCHEME - Light & Dark Mode Tokens
+    // COLOR SCHEME - Light Mode Tokens
     // ==========================================
     colorScheme: {
       light: {

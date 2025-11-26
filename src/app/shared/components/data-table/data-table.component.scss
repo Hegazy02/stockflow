@@ -337,10 +337,18 @@
       margin-left: var(--spacing-md);
       border-radius: var(--radius-md);
       border-color: var(--color-border-medium);
+      display: inline-flex !important;
+      visibility: visible !important;
 
       &:hover {
         border-color: var(--color-primary);
       }
+    }
+
+    .p-paginator-rpp-options {
+      display: inline-flex !important;
+      visibility: visible !important;
+      margin-left: var(--spacing-md);
     }
   }
 }
