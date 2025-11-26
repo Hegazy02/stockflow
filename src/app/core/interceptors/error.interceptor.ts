@@ -25,8 +25,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Handle validation errors with field-specific messages
         if (errorResponse.errors && Array.isArray(errorResponse.errors)) {
           const errorDetails = errorResponse.errors
-            .map((validationError: ValidationError) => 
-              `• ${validationError.field}: ${validationError.message}`
+            .map(
+              (validationError: ValidationError) =>
+                `• ${validationError.field}: ${validationError.message}`
             )
             .join('\n');
 

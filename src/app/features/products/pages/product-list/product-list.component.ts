@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { Pagination } from '../../../../core/models/api-response';
 import {
@@ -24,6 +24,7 @@ import {
 } from '../../../../shared/components/data-table/data-table.component';
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-list',
@@ -33,6 +34,8 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+
   products$: Observable<Product[]>;
   loading$: Observable<boolean>;
   error$: Observable<any>;
@@ -42,7 +45,6 @@ export class ProductListComponent implements OnInit {
   pageSize$: Observable<number>;
 
   products: Product[] = [];
-  loading: boolean = false;
   selectedProducts: Product[] = [];
 
   // Dialog state
@@ -86,11 +88,7 @@ export class ProductListComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private store: Store,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  constructor(private store: Store, private router: Router, private route: ActivatedRoute) {
     this.products$ = this.store.select(selectAllProducts);
     this.loading$ = this.store.select(selectProductsLoading);
     this.error$ = this.store.select(selectProductsError);
@@ -102,23 +100,29 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     // Read pagination from URL query params
-    this.route.queryParams.subscribe((params) => {
+    this.loadProductsUsingURLParams();
+
+    // Subscribe to products
+    this.products$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((products) => (this.products = products));
+  }
+  private loadProductsUsingURLParams() {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const page = parseInt(params['page']) || 1;
       const limit = parseInt(params['limit']) || 10;
 
       this.store.dispatch(loadProducts({ page, limit }));
     });
-
-    // Subscribe to products and loading state
-    this.products$.subscribe((products) => (this.products = products));
-    this.loading$.subscribe((loading) => (this.loading = loading));
   }
+
   onFilterChange(filterChange: FilterChange) {
     console.log('filter', filterChange);
 
     // Get current page size from store
     let currentLimit = 10; // default
-    this.pageSize$.subscribe(limit => currentLimit = limit).unsubscribe();
+    // ✔ take(1) — auto-unsubscribe after first emission
+    this.pageSize$.pipe(take(1)).subscribe((limit) => (currentLimit = limit));
 
     // Update URL to reset page to 1
     this.router.navigate([], {
@@ -200,10 +204,10 @@ export class ProductListComponent implements OnInit {
     // Get current page and limit from store
     let currentPage = 1;
     let currentLimit = 10;
-    
-    this.currentPage$.subscribe(page => currentPage = page).unsubscribe();
-    this.pageSize$.subscribe(limit => currentLimit = limit).unsubscribe();
-    
+
+    this.currentPage$.pipe(take(1)).subscribe((page) => (currentPage = page));
+    this.pageSize$.pipe(take(1)).subscribe((limit) => (currentLimit = limit));
+
     // Re-dispatch loadProducts with current page and limit
     this.store.dispatch(loadProducts({ page: currentPage, limit: currentLimit }));
   }

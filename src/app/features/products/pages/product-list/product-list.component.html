@@ -22,10 +22,10 @@
   <div class="error-container">
     <div class="error-message">
       <span class="error-icon">⚠️</span>
-      <span class="error-text">{{ error.message || 'Failed to load products. Please try again.' }}</span>
-      <button class="btn btn-secondary btn-retry" (click)="retryLoadProducts()">
-        Retry
-      </button>
+      <span class="error-text">{{
+        error.message || 'Failed to load products. Please try again.'
+      }}</span>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadProducts()">Retry</button>
     </div>
   </div>
   }
@@ -35,7 +35,7 @@
       [data]="products"
       [columns]="columns"
       [actions]="actions"
-      [loading]="loading"
+      [loading]="(loading$ | async)!"
       [paginator]="true"
       [rows]="(pageSize$ | async) || 10"
       [rowsPerPageOptions]="[5, 10, 20, 50]"
@@ -58,7 +58,9 @@
   <app-confirm-dialog
     [isOpen]="showDeleteDialog"
     title="Delete Product"
-    [message]="productToDelete ? 'Are you sure you want to delete ' + productToDelete.name + '?' : ''"
+    [message]="
+      productToDelete ? 'Are you sure you want to delete ' + productToDelete.name + '?' : ''
+    "
     warningMessage="This action cannot be undone."
     confirmText="Delete"
     cancelText="Cancel"
@@ -71,7 +73,13 @@
   <app-confirm-dialog
     [isOpen]="showBulkDeleteDialog"
     title="Delete Multiple Products"
-    [message]="'Are you sure you want to delete ' + selectedProducts.length + ' product' + (selectedProducts.length > 1 ? 's' : '') + '?'"
+    [message]="
+      'Are you sure you want to delete ' +
+      selectedProducts.length +
+      ' product' +
+      (selectedProducts.length > 1 ? 's' : '') +
+      '?'
+    "
     warningMessage="This action cannot be undone."
     confirmText="Delete All"
     cancelText="Cancel"

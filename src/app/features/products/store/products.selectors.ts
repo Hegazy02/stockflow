@@ -43,11 +43,6 @@ export const selectProductsError = createSelector(
   (state) => state.error
 );
 
-export const selectSelectedProductId = createSelector(
-  selectProductsState,
-  (state) => state.selectedProductId
-);
-
 export const selectProductsPagination = createSelector(
   selectProductsState,
   (state) => state.pagination

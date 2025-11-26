@@ -19,6 +19,7 @@ export class ProductsEffects {
     this.LoadProducts$ = createEffect(() =>
       this.actions$.pipe(
         ofType(ProductsActions.loadProducts),
+        // exhaustMap cancel new request if the old one didn't finish yet
         exhaustMap((action) => {
           const page = action.page ?? 1;
           const limit = action.limit ?? 10;

@@ -38,7 +38,7 @@
     <span class="help-text">{{ helpText }}</span>
   }
 
-  @if (showError) {
+  @if (showError && errorMessage) {
     <span class="error-message">
       <lucide-icon [img]="AlertCircle" [size]="14"></lucide-icon>
       <span>{{ errorMessage }}</span>

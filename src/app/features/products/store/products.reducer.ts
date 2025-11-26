@@ -3,12 +3,25 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Product } from '../models/product.model';
 import { Pagination } from '../../../core/models/api-response';
 import * as ProductsActions from './products.actions';
+/* We use productsAdapter because:
+
+It reduces boilerplate
+
+It gives powerful helper functions
+
+It automatically normalizes your data
+
+It generates selectors for you
+
+It prevents bugs and state mutation
+
+It’s the recommended way to manage lists in NgRx.
+ */
 
 // Model == Entity
 
 // Entity State (Model State)
 export interface ProductsState extends EntityState<Product> {
-  selectedProductId: string | null;
   loading: boolean;
   error: any;
   pagination: Pagination;
@@ -19,10 +32,11 @@ export const productsAdapter: EntityAdapter<Product> = createEntityAdapter<Produ
   selectId: (product: Product) => product._id,
   sortComparer: false,
 });
+/* You need selectId to tell NgRx Entity which property is the unique ID for your products.
+Without it, your adapter wouldn’t know how to track, update, or delete items correctly. */
 
 // Entity Initial State (Model Initial State)
 export const initialState: ProductsState = productsAdapter.getInitialState({
-  selectedProductId: null,
   loading: false,
   error: null,
   pagination: {

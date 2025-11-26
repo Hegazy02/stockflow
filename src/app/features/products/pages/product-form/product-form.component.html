@@ -13,7 +13,7 @@
       placeholder="Enter product name"
       formControlName="name"
       [required]="true"
-      [errorMessage]="isFieldInvalid('name') ? getErrorMessage('name') : ''"
+      [minLength]="2"
     ></app-form-input>
 
     <app-form-input
@@ -22,7 +22,6 @@
       formControlName="sku"
       [required]="true"
       helpText="Use uppercase letters, numbers, and hyphens only"
-      [errorMessage]="isFieldInvalid('sku') ? getErrorMessage('sku') : ''"
     ></app-form-input>
 
     <div class="form-field">
@@ -57,7 +56,6 @@
       type="textarea"
       formControlName="description"
       [rows]="4"
-      [errorMessage]="isFieldInvalid('description') ? getErrorMessage('description') : ''"
     ></app-form-input>
 
     <div class="form-actions">

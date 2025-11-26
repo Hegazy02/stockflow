@@ -1,6 +1,12 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, Injector, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+  NgControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { LucideAngularModule, AlertCircle } from 'lucide-angular';
 
 @Component({
@@ -17,23 +23,32 @@ import { LucideAngularModule, AlertCircle } from 'lucide-angular';
     },
   ],
 })
-export class FormInputComponent implements ControlValueAccessor {
+export class FormInputComponent implements ControlValueAccessor, OnInit {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: 'text' | 'email' | 'password' | 'number' | 'textarea' = 'text';
-  @Input() errorMessage: string = '';
   @Input() helpText: string = '';
   @Input() required: boolean = false;
   @Input() rows: number = 4;
+  @Input() minLength?: number;
+  @Input() maxLength?: number;
+  @Input() pattern?: string;
 
   readonly AlertCircle = AlertCircle;
 
   value: string = '';
   disabled: boolean = false;
-  touched: boolean = false;
+  ngControl?: NgControl;
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
+
+  constructor(private injector: Injector) {}
+
+  ngOnInit(): void {
+    // Get NgControl after initialization to avoid circular dependency
+    this.ngControl = this.injector.get(NgControl, null) || undefined;
+  }
 
   writeValue(value: string): void {
     this.value = value || '';
@@ -58,11 +73,59 @@ export class FormInputComponent implements ControlValueAccessor {
   }
 
   onBlur(): void {
-    this.touched = true;
     this.onTouched();
   }
 
   get showError(): boolean {
-    return this.touched && !!this.errorMessage;
+    return !!(
+      this.ngControl &&
+      this.ngControl.invalid &&
+      (this.ngControl.touched || this.ngControl.dirty)
+    );
+  }
+
+  get errorMessage(): string {
+    if (!this.ngControl || !this.ngControl.errors) {
+      return '';
+    }
+
+    const errors: ValidationErrors = this.ngControl.errors;
+    const fieldLabel = this.label || 'This field';
+
+    if (errors['required']) {
+      return `${fieldLabel} is required`;
+    }
+
+    if (errors['minlength']) {
+      const minLength = errors['minlength'].requiredLength;
+      return `${fieldLabel} must be at least ${minLength} characters`;
+    }
+
+    if (errors['maxlength']) {
+      const maxLength = errors['maxlength'].requiredLength;
+      return `${fieldLabel} must not exceed ${maxLength} characters`;
+    }
+
+    if (errors['email']) {
+      return 'Please enter a valid email address';
+    }
+
+    if (errors['pattern']) {
+      if (this.type === 'email') {
+        return 'Please enter a valid email address';
+      }
+      return `${fieldLabel} format is invalid`;
+    }
+
+    if (errors['min']) {
+      return `${fieldLabel} must be at least ${errors['min'].min}`;
+    }
+
+    if (errors['max']) {
+      return `${fieldLabel} must not exceed ${errors['max'].max}`;
+    }
+
+    // Return first error key if no specific message
+    return `${fieldLabel} is invalid`;
   }
 }
