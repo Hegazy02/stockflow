@@ -8,11 +8,12 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { LucideAngularModule, AlertCircle } from 'lucide-angular';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 @Component({
   selector: 'app-form-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, ErrorMessageComponent],
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   providers: [

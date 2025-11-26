@@ -1,47 +1,39 @@
 <div class="form-input-wrapper">
   @if (label) {
-    <label [for]="label" class="form-label">
-      {{ label }}
-      @if (required) {
-        <span class="required">*</span>
-      }
-    </label>
-  }
-
-  @if (type === 'textarea') {
-    <textarea
-      [id]="label"
-      [placeholder]="placeholder"
-      [value]="value"
-      [disabled]="disabled"
-      [rows]="rows"
-      [class.invalid]="showError"
-      (input)="onInput($event)"
-      (blur)="onBlur()"
-      class="form-control"
-    ></textarea>
+  <label [for]="label" class="form-label">
+    {{ label }}
+    @if (required) {
+    <span class="required">*</span>
+    }
+  </label>
+  } @if (type === 'textarea') {
+  <textarea
+    [id]="label"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [rows]="rows"
+    [class.invalid]="showError"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="form-control"
+  ></textarea>
   } @else {
-    <input
-      [id]="label"
-      [type]="type"
-      [placeholder]="placeholder"
-      [value]="value"
-      [disabled]="disabled"
-      [class.invalid]="showError"
-      (input)="onInput($event)"
-      (blur)="onBlur()"
-      class="form-control"
-    />
-  }
+  <input
+    [id]="label"
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [class.invalid]="showError"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    class="form-control"
+  />
+  } @if (helpText && !showError) {
+  <span class="help-text">{{ helpText }}</span>
+  } @if (showError && errorMessage) {
+  <app-error-message [message]="errorMessage"></app-error-message>
 
-  @if (helpText && !showError) {
-    <span class="help-text">{{ helpText }}</span>
-  }
-
-  @if (showError && errorMessage) {
-    <span class="error-message">
-      <lucide-icon [img]="AlertCircle" [size]="14"></lucide-icon>
-      <span>{{ errorMessage }}</span>
-    </span>
   }
 </div>

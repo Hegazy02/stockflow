@@ -1,0 +1,14 @@
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent-coral);
+  font-weight: var(--font-weight-medium);
+
+  lucide-icon {
+    display: flex;
+    flex-shrink: 0;
+  }
+}

@@ -57,11 +57,11 @@ export class ProductListComponent implements OnInit {
     { field: 'name', header: 'Product Name', width: '25%', filterable: true },
     { field: 'sku', header: 'SKU', width: '10%' },
     { field: 'category.name', header: 'Category', width: '20%', filterable: true },
-    { field: 'description', header: 'Description', width: '30%' },
+    { field: 'description', header: 'Description', width: '25%' },
     {
       field: 'createdAt',
       header: 'Created',
-      width: '15%',
+      width: '20%',
       type: 'date',
       dateFormat: 'short',
     },

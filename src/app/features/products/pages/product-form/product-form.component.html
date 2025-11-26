@@ -1,4 +1,4 @@
-<div >
+<div>
   <div class="form-header">
     <button type="button" class="btn-back" (click)="onCancel()">
       <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
@@ -24,31 +24,20 @@
       helpText="Use uppercase letters, numbers, and hyphens only"
     ></app-form-input>
 
-    <div class="form-field">
-      <label for="category">
-        Category <span class="required">*</span>
-      </label>
-      
-      <app-dropdown
-        id="category"
-        formControlName="categoryId"
-        [options]="(categories$ | async) || []"
-        optionLabel="name"
-        optionValue="_id"
-        placeholder="Select a category"
-        [filter]="true"
-        [loading]="(categoriesLoading$ | async) || false"
-        [class.invalid]="isFieldInvalid('category')"
-      ></app-dropdown>
+    <app-dropdown
+      label="Category"
+      formControlName="categoryId"
+      [options]="(categories$ | async) || []"
+      optionLabel="name"
+      optionValue="_id"
+      placeholder="Select a category"
+      [filter]="true"
+      [loading]="(categoriesLoading$ | async) || false"
+    ></app-dropdown>
 
-      @if (isFieldInvalid('category')) {
-        <small class="error-message">{{ getErrorMessage('category') }}</small>
-      }
-      
-      @if (categoriesError$ | async; as error) {
-        <small class="error-message">{{ error.message }}</small>
-      }
-    </div>
+    @if (categoriesError$ | async; as error) {
+    <small class="error-message">{{ error.message }}</small>
+    }
 
     <app-form-input
       label="Description"
@@ -59,7 +48,7 @@
     ></app-form-input>
 
     <div class="form-actions">
-      <button type="button" class=" btn-secondary" (click)="onCancel()">
+      <button type="button" class="btn-secondary" (click)="onCancel()">
         <lucide-icon [img]="X" [size]="18"></lucide-icon>
         <span>Cancel</span>
       </button>

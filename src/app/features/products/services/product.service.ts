@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Product } from '../models/product.model';
+import { Product, ProductFormBody } from '../models/product.model';
 import { ApiResponse } from '../../../core/models/api-response';
 import { environment } from '../../../../environments/environment';
 
@@ -38,7 +38,7 @@ export class ProductService {
    * Create a new product
    * POST /api/products
    */
-  create(product: Omit<Product, '_id' | 'createdAt' | 'updatedAt'>): Observable<Product> {
+  create(product: ProductFormBody): Observable<Product> {
     return this.http.post<any>(this.apiUrl, product);
   }
 
@@ -46,7 +46,7 @@ export class ProductService {
    * Update an existing product
    * PUT /api/products/:id
    */
-  update(product: Product): Observable<Product> {
+  update(product: ProductFormBody): Observable<Product> {
     return this.http.put<any>(`${this.apiUrl}/${product._id}`, product);
   }
 

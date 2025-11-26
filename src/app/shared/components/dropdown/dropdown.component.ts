@@ -1,7 +1,26 @@
-import { Component, Input, Output, EventEmitter, forwardRef, HostListener, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  forwardRef,
+  HostListener,
+  ElementRef,
+  ViewChild,
+  AfterViewChecked,
+  Injector,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  FormsModule,
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { LucideAngularModule, ChevronDown, Loader2 } from 'lucide-angular';
+import { ErrorMessageComponent } from "../error-message/error-message.component";
 
 export interface DropdownOption {
   [key: string]: any;
@@ -10,7 +29,7 @@ export interface DropdownOption {
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ErrorMessageComponent],
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
   providers: [
@@ -21,7 +40,7 @@ export interface DropdownOption {
     },
   ],
 })
-export class DropdownComponent implements ControlValueAccessor, AfterViewChecked {
+export class DropdownComponent implements ControlValueAccessor, AfterViewChecked, OnInit {
   @Input() options: DropdownOption[] = [];
   @Input() optionLabel: string = 'label';
   @Input() optionValue: string = 'value';
@@ -31,6 +50,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   @Input() disabled: boolean = false;
   @Input() emptyMessage: string = 'No options available';
   @Input() noResultsMessage: string = 'No results found';
+  @Input() label: string = '';
 
   @Output() onChange = new EventEmitter<any>();
 
@@ -40,6 +60,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   filterText: string = '';
   selectedValue: any = null;
   highlightedIndex: number = -1;
+  ngControl?: NgControl;
 
   readonly ChevronDown = ChevronDown;
   readonly Loader2 = Loader2;
@@ -48,7 +69,12 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   private onTouchedFn: () => void = () => {};
   private shouldFocusFilter: boolean = false;
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef, private injector: Injector) {}
+
+  ngOnInit(): void {
+    // Get NgControl after initialization to avoid circular dependency
+    this.ngControl = this.injector.get(NgControl, null) || undefined;
+  }
 
   ngAfterViewChecked(): void {
     // Auto-focus filter input when dropdown opens
@@ -79,11 +105,18 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
 
   toggleDropdown(): void {
     if (this.disabled) return;
+
+    const wasOpen = this.isOpen;
     this.isOpen = !this.isOpen;
+
     if (this.isOpen) {
       this.filterText = '';
       this.highlightedIndex = -1;
       this.shouldFocusFilter = true;
+    } else if (wasOpen) {
+      // Mark as touched when closing dropdown without selection
+      this.onTouchedFn();
+      this.ngControl?.control?.markAsTouched();
     }
   }
 
@@ -96,7 +129,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
     if (this.selectedValue === null || this.selectedValue === undefined) {
       return this.placeholder;
     }
-    const selectedOption = this.options.find(opt => opt[this.optionValue] === this.selectedValue);
+    const selectedOption = this.options.find((opt) => opt[this.optionValue] === this.selectedValue);
     return selectedOption ? selectedOption[this.optionLabel] : this.placeholder;
   }
 
@@ -105,7 +138,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
       return this.options;
     }
     const filterLower = this.filterText.toLowerCase();
-    return this.options.filter(option => 
+    return this.options.filter((option) =>
       option[this.optionLabel]?.toString().toLowerCase().includes(filterLower)
     );
   }
@@ -135,6 +168,11 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
         break;
       case 'Escape':
         event.preventDefault();
+        if (this.isOpen) {
+          // Mark as touched when pressing Escape
+          this.onTouchedFn();
+          this.ngControl?.control?.markAsTouched();
+        }
         this.isOpen = false;
         this.filterText = '';
         this.highlightedIndex = -1;
@@ -159,9 +197,38 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
+      if (this.isOpen) {
+        // Mark as touched when clicking outside
+        this.onTouchedFn();
+        this.ngControl?.control?.markAsTouched();
+      }
       this.isOpen = false;
       this.filterText = '';
       this.highlightedIndex = -1;
     }
+  }
+
+  get showError(): boolean {
+    return !!(
+      this.ngControl &&
+      this.ngControl.invalid &&
+      (this.ngControl.touched || this.ngControl.dirty)
+    );
+  }
+
+  get errorMessage(): string {
+    if (!this.ngControl || !this.ngControl.errors) {
+      return '';
+    }
+
+    const errors: ValidationErrors = this.ngControl.errors;
+    const fieldLabel = this.label || 'This field';
+
+    if (errors['required']) {
+      return `${fieldLabel} is required`;
+    }
+
+    // Return first error key if no specific message
+    return `${fieldLabel} is invalid`;
   }
 }

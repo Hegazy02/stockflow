@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChildren,
-  QueryList,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -58,7 +50,6 @@ export interface TableAction {
     ButtonModule,
     PaginatorModule,
     LucideAngularModule,
-    DatePipe,
   ],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
@@ -75,12 +66,12 @@ export class DataTableComponent {
   @Input() showActions: boolean = true;
   @Input() selectionMode: 'single' | 'multiple' | null = null;
   @Input() dataKey: string = 'id';
-  @Input() minHeight: string = 'auto';
-  @Input() height: string = 'auto';
   @Input() showFilters: boolean = false;
   @Input() totalRecords: number = 0;
   @Input() currentPage: number = 1;
   @Input() pageSize: number = 10;
+  @Input() scrollable: boolean = true; // Enable fixed height with scrolling
+  @Input() height: string = 'calc(100vh - 100px)'; // Default scroll height
 
   @Output() rowSelect = new EventEmitter<any>();
   @Output() filterChange = new EventEmitter<FilterChange>();

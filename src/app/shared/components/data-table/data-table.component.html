@@ -1,8 +1,7 @@
 <div
   class="table-container"
-  [class.fixed-height]="height !== 'auto'"
-  [style.min-height]="minHeight"
-  [style.height]="height"
+  [class.scrollable]="scrollable"
+  [style.max-height]="height"
 >
   <p-table
     #dt
@@ -19,6 +18,7 @@
     (onHeaderCheckboxToggle)="onHeaderCheckboxToggle($event)"
     styleClass="p-datatable-sm"
     [tableStyle]="{ 'min-width': '50rem' }"
+    [scrollHeight]="height"
   >
     <!-- Table Header -->
     <ng-template pTemplate="header">

@@ -44,6 +44,14 @@
   &.placeholder .dropdown-label {
     color: var(--color-text-tertiary);
   }
+
+  &.invalid {
+    border-color: var(--color-accent-coral);
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+    }
+  }
 }
 
 .dropdown-label {

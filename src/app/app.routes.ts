@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: 'products',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/products/components/product-list/product-list.component').then(
+      import('./features/products/pages/product-list/product-list.component').then(
         (m) => m.ProductListComponent
       ),
   },
@@ -19,7 +19,7 @@ export const routes: Routes = [
     path: 'products/new',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/products/components/product-form/product-form.component').then(
+      import('./features/products/pages/product-form/product-form.component').then(
         (m) => m.ProductFormComponent
       ),
   },
@@ -27,7 +27,7 @@ export const routes: Routes = [
     path: 'products/:id',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/products/components/product-detail/product-detail.component').then(
+      import('./features/products/pages/product-detail/product-detail.component').then(
         (m) => m.ProductDetailComponent
       ),
   },
@@ -35,7 +35,7 @@ export const routes: Routes = [
     path: 'products/:id/edit',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/products/components/product-form/product-form.component').then(
+      import('./features/products/pages/product-form/product-form.component').then(
         (m) => m.ProductFormComponent
       ),
   },

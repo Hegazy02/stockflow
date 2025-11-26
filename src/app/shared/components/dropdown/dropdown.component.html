@@ -4,6 +4,7 @@
     type="button"
     class="dropdown-trigger"
     [class.open]="isOpen"
+    [class.invalid]="showError"
     [class.placeholder]="selectedValue === null || selectedValue === undefined"
     [disabled]="disabled"
     (click)="toggleDropdown()"
@@ -21,61 +22,61 @@
     ></lucide-icon>
   </button>
 
+  <!-- Error Message -->
+  @if (showError && errorMessage) {
+  <app-error-message [message]="errorMessage"></app-error-message>
+  }
+
   <!-- Overlay Panel -->
   @if (isOpen) {
-    <div class="dropdown-overlay" role="listbox">
-      <!-- Filter Input -->
-      @if (filter && !loading) {
-        <div class="dropdown-filter">
-          <input
-            #filterInput
-            type="text"
-            class="filter-input"
-            placeholder="Search..."
-            [(ngModel)]="filterText"
-            (input)="onFilterChange(filterText)"
-            (keydown)="onKeyDown($event)"
-            aria-label="Filter options"
-          />
-        </div>
-      }
+  <div class="dropdown-overlay" role="listbox">
+    <!-- Filter Input -->
+    @if (filter && !loading) {
+    <div class="dropdown-filter">
+      <input
+        #filterInput
+        type="text"
+        class="filter-input"
+        placeholder="Search..."
+        [(ngModel)]="filterText"
+        (input)="onFilterChange(filterText)"
+        (keydown)="onKeyDown($event)"
+        aria-label="Filter options"
+      />
+    </div>
+    }
 
-      <!-- Loading State -->
-      @if (loading) {
-        <div class="dropdown-loading">
-          <lucide-icon
-            [img]="Loader2"
-            [size]="20"
-            class="spinner"
-          ></lucide-icon>
-          <span>Loading...</span>
-        </div>
-      }
+    <!-- Loading State -->
+    @if (loading) {
+    <div class="dropdown-loading">
+      <lucide-icon [img]="Loader2" [size]="20" class="spinner"></lucide-icon>
+      <span>Loading...</span>
+    </div>
+    }
 
-      <!-- Options List -->
-      @if (!loading) {
-        <div class="dropdown-options">
-          @if (getFilteredOptions().length > 0) {
-            @for (option of getFilteredOptions(); track option[optionValue]; let i = $index) {
-              <div
-                class="dropdown-option"
-                [class.selected]="option[optionValue] === selectedValue"
-                [class.highlighted]="i === highlightedIndex"
-                (click)="selectOption(option)"
-                (mouseenter)="highlightedIndex = i"
-                role="option"
-                [attr.aria-selected]="option[optionValue] === selectedValue"
-              >
-                {{ option[optionLabel] }}
-              </div>
-            }
-          } @else {
-            <div class="dropdown-empty">
-              {{ filterText ? noResultsMessage : emptyMessage }}
-            </div>
-          }
-        </div>
+    <!-- Options List -->
+    @if (!loading) {
+    <div class="dropdown-options">
+      @if (getFilteredOptions().length > 0) { @for (option of getFilteredOptions(); track
+      option[optionValue]; let i = $index) {
+      <div
+        class="dropdown-option"
+        [class.selected]="option[optionValue] === selectedValue"
+        [class.highlighted]="i === highlightedIndex"
+        (click)="selectOption(option)"
+        (mouseenter)="highlightedIndex = i"
+        role="option"
+        [attr.aria-selected]="option[optionValue] === selectedValue"
+      >
+        {{ option[optionLabel] }}
+      </div>
+      } } @else {
+      <div class="dropdown-empty">
+        {{ filterText ? noResultsMessage : emptyMessage }}
+      </div>
       }
     </div>
+    }
+  </div>
   }
 </div>

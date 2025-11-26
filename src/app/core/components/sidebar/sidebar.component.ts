@@ -74,8 +74,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((event: NavigationEnd) => {
-        console.log('redirect url', this.router.url);
-
         this.updateActiveMenuItem(event.urlAfterRedirects);
       });
   }

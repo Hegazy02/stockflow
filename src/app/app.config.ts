@@ -24,6 +24,7 @@ import { stockHistoryReducer } from './features/stock-history/store/stock-histor
 import { categoriesReducer } from './features/categories/store/categories.reducer';
 import { ProductsEffects } from './features/products/store/products.effects';
 import { CategoriesEffects } from './features/categories/store/categories.effects';
+import MyPreset from '../styles/primeng/my-preset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,7 +36,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: MyPreset,
         options: {
           darkModeSelector: false,
         },

@@ -1,10 +1,8 @@
 /* Global Styles - Quantora Dashboard Design System */
 
 // Import color palette and variables
-@import 'styles/variables.scss';
+@use 'styles/variables.scss';
 
-// Import PrimeNG theme
-@import 'styles/primeng-theme.scss';
 
 // Global Reset
 * {

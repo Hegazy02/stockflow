@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Product } from '../models/product.model';
+import { Product, ProductFormBody } from '../models/product.model';
 import { Pagination } from '../../../core/models/api-response';
 
 // Load Products
@@ -25,7 +25,7 @@ export const changePage = createAction(
 // Create Product
 export const createProduct = createAction(
   '[Products] Create Product',
-  props<{ product: Omit<Product, '_id' | 'createdAt' | 'updatedAt'> }>()
+  props<{ product: ProductFormBody }>()
 );
 export const createProductSuccess = createAction(
   '[Products] Create Product Success',
@@ -39,7 +39,7 @@ export const createProductFailure = createAction(
 // Update Product
 export const updateProduct = createAction(
   '[Products] Update Product',
-  props<{ product: Product }>()
+  props<{ product: ProductFormBody }>()
 );
 export const updateProductSuccess = createAction(
   '[Products] Update Product Success',
@@ -51,10 +51,7 @@ export const updateProductFailure = createAction(
 );
 
 // Get Product By ID
-export const getProductById = createAction(
-  '[Products] Get Product By ID',
-  props<{ id: string }>()
-);
+export const getProductById = createAction('[Products] Get Product By ID', props<{ id: string }>());
 export const getProductByIdSuccess = createAction(
   '[Products] Get Product By ID Success',
   props<{ product: Product }>()
