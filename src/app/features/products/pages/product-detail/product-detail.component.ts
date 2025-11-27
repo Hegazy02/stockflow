@@ -74,7 +74,7 @@ export class ProductDetailComponent implements OnInit {
       map(([stockLevels, warehouses]) => {
         return stockLevels.map((stock) => ({
           ...stock,
-          warehouse: warehouses.find((w) => w.id === stock.warehouseId),
+          warehouse: warehouses.find((w) => w._id === stock.warehouseId),
         }));
       }),
       takeUntilDestroyed(this.destroyRef)

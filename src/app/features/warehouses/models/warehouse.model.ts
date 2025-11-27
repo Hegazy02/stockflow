@@ -1,8 +1,14 @@
 export interface Warehouse {
-  id: string;
-  name: string;
+  _id: string;
+  title: string;
   location: string;
-  capacity: number;
-  createdAt: Date;
-  updatedAt: Date;
+  // manager: WarehouseManager;
+  manager: string;
+  status: 'Active' | 'Inactive';
+  createdAt: string;
+  updatedAt: string;
+}
+export interface WarehouseManager {
+  _id: string;
+  name: string;
 }

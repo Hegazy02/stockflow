@@ -1,25 +1,65 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Warehouse } from '../models/warehouse.model';
-
-export interface WarehousesState {
-  // State will be defined in task 7
-}
+import { WarehousesState, warehousesAdapter } from './warehouses.reducer';
 
 export const selectWarehousesState = createFeatureSelector<WarehousesState>('warehouses');
 
-// Selector to get all warehouses
-export const selectAllWarehouses = createSelector(
+const { selectAll, selectEntities, selectIds, selectTotal } = warehousesAdapter.getSelectors();
+
+export const selectAllWarehouses = createSelector(selectWarehousesState, selectAll);
+
+export const selectWarehouseEntities = createSelector(selectWarehousesState, selectEntities);
+
+export const selectWarehouseIds = createSelector(selectWarehousesState, selectIds);
+
+export const selectWarehousesTotal = createSelector(selectWarehousesState, selectTotal);
+
+export const selectWarehouseById = (id: string) =>
+  createSelector(selectWarehouseEntities, (entities) => entities[id]);
+
+export const selectWarehousesLoading = createSelector(
   selectWarehousesState,
-  (state: any): Warehouse[] => {
-    // This will be implemented when warehouses reducer is complete
-    // For now, return empty array
-    return [];
-  }
+  (state) => state.loading
 );
 
-// Selector to get warehouse by ID
-export const selectWarehouseById = (id: string) =>
-  createSelector(selectWarehousesState, (state: any): Warehouse | undefined => {
-    // This will be implemented when warehouses reducer is complete
-    return undefined;
-  });
+export const selectWarehousesError = createSelector(selectWarehousesState, (state) => state.error);
+
+export const selectWarehousesPagination = createSelector(
+  selectWarehousesState,
+  (state) => state.pagination
+);
+
+export const selectCurrentPage = createSelector(
+  selectWarehousesPagination,
+  (pagination) => pagination.page
+);
+
+export const selectPageSize = createSelector(
+  selectWarehousesPagination,
+  (pagination) => pagination.limit
+);
+
+export const selectTotalRecords = createSelector(
+  selectWarehousesPagination,
+  (pagination) => pagination.total
+);
+
+export const selectTotalPages = createSelector(
+  selectWarehousesPagination,
+  (pagination) => pagination.pages
+);
+
+// Warehouse Managers Selectors
+export const selectWarehouseManagers = createSelector(
+  selectWarehousesState,
+  (state) => state.managers
+);
+
+export const selectWarehouseManagersLoading = createSelector(
+  selectWarehousesState,
+  (state) => state.managersLoading
+);
+
+export const selectWarehouseManagersError = createSelector(
+  selectWarehousesState,
+  (state) => state.managersError
+);

@@ -1,0 +1,68 @@
+<div>
+  <div class="form-header">
+    <button type="button" class="btn-back" (click)="onCancel()">
+      <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
+      <span>Back to Warehouses</span>
+    </button>
+    <h1>{{ isEditMode ? 'Edit Warehouse' : 'Create New Warehouse' }}</h1>
+  </div>
+
+  <form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()" class="warehouse-form">
+    <app-form-input
+      label="Warehouse Name"
+      placeholder="Enter warehouse name"
+      formControlName="title"
+      [required]="true"
+      [minLength]="2"
+    ></app-form-input>
+
+    <app-form-input
+      label="Location"
+      placeholder="Enter location"
+      formControlName="location"
+      [required]="true"
+    ></app-form-input>
+    <app-form-input
+      label="Manager"
+      placeholder="Enter manager name"
+      formControlName="manager"
+    ></app-form-input>
+
+    <!-- <div class="form-field">
+      <label for="managerId"> Manager <span class="required">*</span> </label>
+
+      <app-dropdown
+        id="managerId"
+        formControlName="managerId"
+        [options]="(managers$ | async)!"
+        optionLabel="name"
+        optionValue="_id"
+        placeholder="Select manager"
+      ></app-dropdown>
+    </div> -->
+
+    <div class="form-field">
+      <label for="status"> Status <span class="required">*</span> </label>
+
+      <app-dropdown
+        id="status"
+        formControlName="status"
+        [options]="statusOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select status"
+      ></app-dropdown>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="onCancel()">
+        <lucide-icon [img]="X" [size]="18"></lucide-icon>
+        <span>Cancel</span>
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="warehouseForm.invalid">
+        <lucide-icon [img]="Save" [size]="18"></lucide-icon>
+        <span>{{ isEditMode ? 'Update Warehouse' : 'Create Warehouse' }}</span>
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,94 @@
+.warehouses-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.warehouses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  flex-shrink: 0;
+
+  h1 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+
+    button:disabled {
+      cursor: default;
+    }
+  }
+}
+
+.error-container {
+  margin-bottom: var(--spacing-lg);
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: #fee;
+    border: 1px solid #fcc;
+    border-radius: var(--border-radius-md);
+    color: #c33;
+
+    .error-icon {
+      font-size: var(--font-size-xl);
+      flex-shrink: 0;
+    }
+
+    .error-text {
+      flex: 1;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .btn-retry {
+      flex-shrink: 0;
+      padding: var(--spacing-sm) var(--spacing-md);
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+
+.warehouses-table {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  app-data-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    ::ng-deep .table-container {
+      height: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .warehouses-container {
+    padding: var(--spacing-md);
+  }
+
+  .warehouses-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+
+    h1 {
+      font-size: var(--font-size-2xl);
+    }
+  }
+}

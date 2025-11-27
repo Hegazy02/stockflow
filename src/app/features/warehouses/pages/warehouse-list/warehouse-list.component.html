@@ -1,0 +1,95 @@
+<div class="warehouses-container">
+  <div class="warehouses-header">
+    <h1>Warehouses</h1>
+    <div class="header-actions">
+      <button
+        class="btn btn-danger"
+        (click)="confirmBulkDelete()"
+        [disabled]="selectedWarehouses.length === 0"
+      >
+        <span
+          >Delete Selected @if (selectedWarehouses.length > 0) {({{
+            selectedWarehouses.length
+          }})}</span
+        >
+      </button>
+      <button class="btn btn-primary" (click)="navigateToCreate()">
+        <span>+ Add Warehouse</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  @if (error$ | async; as error) {
+  <div class="error-container">
+    <div class="error-message">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{
+        error.message || 'Failed to load warehouses. Please try again.'
+      }}</span>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadWarehouses()">Retry</button>
+    </div>
+  </div>
+  }
+
+  <div class="warehouses-table">
+    <app-data-table
+      [data]="warehouses"
+      [columns]="columns"
+      [actions]="actions"
+      [loading]="(loading$ | async)!"
+      [paginator]="true"
+      [rows]="(pageSize$ | async) || 10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [totalRecords]="(totalRecords$ | async) || 0"
+      [currentPage]="(currentPage$ | async) || 1"
+      [pageSize]="(pageSize$ | async) || 10"
+      [height]="'calc(100vh - 200px)'"
+      [showActions]="true"
+      [globalFilterFields]="['title', 'location', 'managerId', 'status']"
+      [selectionMode]="'multiple'"
+      [dataKey]="'_id'"
+      [showFilters]="true"
+      (filterChange)="onFilterChange($event)"
+      (pageChange)="onPageChange($event)"
+      (rowSelect)="onRowSelect($event)"
+      (rowUnselect)="onRowSelect($event)"
+    ></app-data-table>
+  </div>
+
+  <!-- Single Warehouse Delete Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Warehouse"
+    [message]="
+      warehouseToDelete
+        ? 'Are you sure you want to delete ' + warehouseToDelete.title + '?'
+        : ''
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteWarehouse()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+
+  <!-- Bulk Delete Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showBulkDeleteDialog"
+    title="Delete Multiple Warehouses"
+    [message]="
+      'Are you sure you want to delete ' +
+      selectedWarehouses.length +
+      ' warehouse' +
+      (selectedWarehouses.length > 1 ? 's' : '') +
+      '?'
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete All"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="bulkDeleteWarehouses()"
+    (cancel)="cancelBulkDelete()"
+  ></app-confirm-dialog>
+</div>

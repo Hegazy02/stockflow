@@ -81,7 +81,7 @@
               @for (stock of stockLevels; track stock.warehouseId) {
               <tr [class.low-stock]="stock.quantity < 10">
                 <td class="warehouse-name">
-                  {{ stock.warehouse?.name || 'Unknown Warehouse' }}
+                  {{ stock.warehouse?.title || 'Unknown Warehouse' }}
                 </td>
                 <td class="warehouse-location">
                   {{ stock.warehouse?.location || 'N/A' }}

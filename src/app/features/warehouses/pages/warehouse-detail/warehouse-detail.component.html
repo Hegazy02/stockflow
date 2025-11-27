@@ -1,0 +1,82 @@
+<!-- Loading State -->
+@if (loading$ | async) {
+<div class="loading-container">
+  <div class="loading-spinner"></div>
+  <p>Loading warehouse details...</p>
+</div>
+} @else if (warehouse$ | async; as warehouse) {
+<!-- Warehouse Content -->
+<div class="header">
+  <button class="btn-back" (click)="navigateToList()">
+    <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
+    <span>Back to Warehouses</span>
+  </button>
+  <div class="actions">
+    <button class="btn-secondary" (click)="navigateToEdit()">
+      <lucide-icon [img]="Edit" [size]="18"></lucide-icon>
+      <span>Edit</span>
+    </button>
+    <button class="btn-danger" (click)="confirmDelete()">
+      <lucide-icon [img]="Trash2" [size]="18"></lucide-icon>
+      <span>Delete</span>
+    </button>
+  </div>
+</div>
+
+<div class="warehouse-card">
+  <div class="warehouse-header">
+    <h1>{{ warehouse.title }}</h1>
+    <span class="status-badge" [class.active]="warehouse.status === 'Active'">{{
+      warehouse.status
+    }}</span>
+  </div>
+
+  <div class="warehouse-details">
+    <div class="detail-section">
+      <h2>Warehouse Information</h2>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="label">Location:</span>
+          <span class="value">{{ warehouse.location }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Manager:</span>
+          <span class="value">{{ warehouse.manager.name }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Status:</span>
+          <span class="value">{{ warehouse.status }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Created:</span>
+          <span class="value">{{ warehouse.createdAt | date : 'medium' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Last Updated:</span>
+          <span class="value">{{ warehouse.updatedAt | date : 'medium' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Dialog -->
+<app-confirm-dialog
+  [isOpen]="showDeleteConfirm"
+  title="Delete Warehouse"
+  [message]="'Are you sure you want to delete ' + warehouseTitle + '?'"
+  warningMessage="This action cannot be undone."
+  confirmText="Delete"
+  cancelText="Cancel"
+  confirmButtonClass="btn-danger"
+  (confirm)="deleteWarehouse()"
+  (cancel)="cancelDelete()"
+></app-confirm-dialog>
+} @else {
+<!-- Not Found State -->
+<div class="not-found">
+  <h2>Warehouse Not Found</h2>
+  <p>The warehouse you're looking for doesn't exist.</p>
+  <button class="btn-primary" (click)="navigateToList()">Back to Warehouses</button>
+</div>
+}

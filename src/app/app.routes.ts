@@ -40,38 +40,47 @@ export const routes: Routes = [
       ),
   },
 
-  //   {
-  //     path: 'warehouses',
-  //     canActivate: [authGuard],
-  //     loadComponent: () => import('./features/warehouses/components/warehouse-list/warehouse-list.component')
-  //       .then(m => m.WarehouseListComponent),
-  //     children: [
-  //       {
-  //         path: 'new',
-  //         loadComponent: () => import('./features/warehouses/components/warehouse-form/warehouse-form.component')
-  //           .then(m => m.WarehouseFormComponent)
-  //       },
-  //       {
-  //         path: ':id',
-  //         loadComponent: () => import('./features/warehouses/components/warehouse-detail/warehouse-detail.component')
-  //           .then(m => m.WarehouseDetailComponent)
-  //       },
-  //       {
-  //         path: ':id/edit',
-  //         loadComponent: () => import('./features/warehouses/components/warehouse-form/warehouse-form.component')
-  //           .then(m => m.WarehouseFormComponent)
-  //       }
-  //     ]
-  //   },
+  {
+    path: 'warehouses',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/warehouses/pages/warehouse-list/warehouse-list.component').then(
+        (m) => m.WarehouseListComponent
+      ),
+  },
+  {
+    path: 'warehouses/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/warehouses/pages/warehouse-form/warehouse-form.component').then(
+        (m) => m.WarehouseFormComponent
+      ),
+  },
+  {
+    path: 'warehouses/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/warehouses/pages/warehouse-detail/warehouse-detail.component').then(
+        (m) => m.WarehouseDetailComponent
+      ),
+  },
+  {
+    path: 'warehouses/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/warehouses/pages/warehouse-form/warehouse-form.component').then(
+        (m) => m.WarehouseFormComponent
+      ),
+  },
   //   {
   //     path: 'stock',
   //     canActivate: [authGuard],
-  //     loadComponent: () => import('./features/stock/components/stock-list/stock-list.component')
+  //     loadComponent: () => import('./features/stock/pages/stock-list/stock-list.component')
   //       .then(m => m.StockListComponent),
   //     children: [
   //       {
   //         path: 'adjust',
-  //         loadComponent: () => import('./features/stock/components/stock-adjustment/stock-adjustment.component')
+  //         loadComponent: () => import('./features/stock/pages/stock-adjustment/stock-adjustment.component')
   //           .then(m => m.StockAdjustmentComponent)
   //       }
   //     ]
@@ -79,17 +88,17 @@ export const routes: Routes = [
   //   {
   //     path: 'transfers',
   //     canActivate: [authGuard],
-  //     loadComponent: () => import('./features/transfers/components/transfer-list/transfer-list.component')
+  //     loadComponent: () => import('./features/transfers/pages/transfer-list/transfer-list.component')
   //       .then(m => m.TransferListComponent),
   //     children: [
   //       {
   //         path: 'new',
-  //         loadComponent: () => import('./features/transfers/components/transfer-form/transfer-form.component')
+  //         loadComponent: () => import('./features/transfers/pages/transfer-form/transfer-form.component')
   //           .then(m => m.TransferFormComponent)
   //       },
   //       {
   //         path: ':id',
-  //         loadComponent: () => import('./features/transfers/components/transfer-detail/transfer-detail.component')
+  //         loadComponent: () => import('./features/transfers/pages/transfer-detail/transfer-detail.component')
   //           .then(m => m.TransferDetailComponent)
   //       }
   //     ]
@@ -97,12 +106,12 @@ export const routes: Routes = [
   //   {
   //     path: 'history',
   //     canActivate: [authGuard],
-  //     loadComponent: () => import('./features/stock-history/components/stock-history-list/stock-history-list.component')
+  //     loadComponent: () => import('./features/stock-history/pages/stock-history-list/stock-history-list.component')
   //       .then(m => m.StockHistoryListComponent),
   //     children: [
   //       {
   //         path: ':id',
-  //         loadComponent: () => import('./features/stock-history/components/stock-history-detail/stock-history-detail.component')
+  //         loadComponent: () => import('./features/stock-history/pages/stock-history-detail/stock-history-detail.component')
   //           .then(m => m.StockHistoryDetailComponent)
   //       }
   //     ]
