@@ -7,6 +7,7 @@ import { Popover } from 'primeng/popover';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { LucideAngularModule, Eye, Edit, Trash2, MoreVertical, Filter, X } from 'lucide-angular';
+import { DropdownComponent } from '../dropdown/dropdown.component';
 export interface FilterChange {
   field: string;
   value: string;
@@ -22,7 +23,7 @@ export interface PageChangeEvent {
 }
 
 export type ColumnType = 'text' | 'date' | 'datetime' | 'number' | 'currency' | 'boolean';
-
+export type FilterType = 'text' | 'dropdown';
 export interface TableColumn {
   field: string;
   header: string;
@@ -30,6 +31,9 @@ export interface TableColumn {
   width?: string;
   type?: ColumnType;
   dateFormat?: string; // e.g., 'short', 'medium', 'long', 'full', or custom format like 'dd/MM/yyyy'
+  filterTypes?: FilterType[];
+  // Add filterType property
+  dropdownConfig?: DropDownConfig;
 }
 
 export interface TableAction {
@@ -37,6 +41,12 @@ export interface TableAction {
   label: string;
   command: (rowData: any) => void;
   styleClass?: string;
+}
+export interface DropDownConfig {
+  options: any[];
+  optionLabel: string;
+  optionValue: string;
+  selectedValue: null | string;
 }
 
 @Component({
@@ -50,6 +60,7 @@ export interface TableAction {
     ButtonModule,
     PaginatorModule,
     LucideAngularModule,
+    DropdownComponent,
   ],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
@@ -151,7 +162,15 @@ export class DataTableComponent {
 
   applyFilter(table: any, field: string, value: string): void {
     this.filterValues[field] = value;
-    table.filter(value, field, 'contains');
+    
+    // Update dropdown config selectedValue if this is a dropdown filter
+    const column = this.columns.find(col => col.field === field);
+    if (column?.dropdownConfig) {
+      column.dropdownConfig.selectedValue = value;
+    }
+    
+    // Don't call table.filter() - we're doing server-side filtering
+    // The parent component will handle the filtering via the filterChange event
 
     // Emit filter change event
     this.filterChange.emit({
@@ -163,7 +182,14 @@ export class DataTableComponent {
 
   clearFilter(table: any, field: string): void {
     this.filterValues[field] = '';
-    table.filter('', field, 'contains');
+    
+    // Clear dropdown config selectedValue if this is a dropdown filter
+    const column = this.columns.find(col => col.field === field);
+    if (column?.dropdownConfig) {
+      column.dropdownConfig.selectedValue = null;
+    }
+    
+    // Don't call table.filter() - we're doing server-side filtering
     this.hideFilterPopover(field);
 
     // Emit filter change event

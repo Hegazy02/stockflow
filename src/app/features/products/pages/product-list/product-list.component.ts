@@ -25,6 +25,8 @@ import {
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { loadCategories, selectAllCategories } from '../../../categories/store';
+import { Category } from '../../../categories/models/category.model';
 
 @Component({
   selector: 'app-product-list',
@@ -43,7 +45,8 @@ export class ProductListComponent implements OnInit {
   totalRecords$: Observable<number>;
   currentPage$: Observable<number>;
   pageSize$: Observable<number>;
-
+  // Initialize category observables
+  categories$: Observable<Category[]>;
   products: Product[] = [];
   selectedProducts: Product[] = [];
 
@@ -56,7 +59,19 @@ export class ProductListComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'name', header: 'Product Name', width: '25%', filterable: true },
     { field: 'sku', header: 'SKU', width: '10%' },
-    { field: 'category.name', header: 'Category', width: '20%', filterable: true },
+    {
+      field: 'category.name',
+      header: 'Category',
+      width: '20%',
+      filterable: true,
+      filterTypes: ['dropdown'],
+      dropdownConfig: {
+        options: [], // Initialize as empty array
+        optionLabel: 'name',
+        optionValue: '_id',
+        selectedValue: null,
+      },
+    },
     { field: 'description', header: 'Description', width: '25%' },
     {
       field: 'createdAt',
@@ -96,30 +111,49 @@ export class ProductListComponent implements OnInit {
     this.totalRecords$ = this.store.select(selectTotalRecords);
     this.currentPage$ = this.store.select(selectCurrentPage);
     this.pageSize$ = this.store.select(selectPageSize);
+    this.categories$ = this.store.select(selectAllCategories);
   }
 
   ngOnInit(): void {
     // Read pagination from URL query params
     this.loadProductsUsingURLParams();
+    this.loadFiltersData();
 
     // Subscribe to products
-    this.products$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((products) => (this.products = products));
+    this.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((products) => {
+      console.log('products', products);
+      this.products = products;
+    });
   }
   private loadProductsUsingURLParams() {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const page = parseInt(params['page']) || 1;
       const limit = parseInt(params['limit']) || 10;
-
-      this.store.dispatch(loadProducts({ page, limit }));
+      const name = params['name'] || undefined;
+      const category = params['category'] || undefined;
+      if (category) {
+        const categoryColumn = this.columns.find((col) => col.field === 'category.name');
+        if (categoryColumn?.dropdownConfig) {
+          categoryColumn.dropdownConfig.selectedValue = category;
+        }
+      }
+      this.store.dispatch(loadProducts({ page, limit, name, category }));
+    });
+  }
+  loadFiltersData() {
+    this.store.dispatch(loadCategories());
+    this.categories$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((categories) => {
+      const categoryDropdown = this.columns.find((column) => column.field === 'category.name');
+      if (categoryDropdown && categoryDropdown.dropdownConfig) {
+        categoryDropdown.dropdownConfig.options = categories;
+      }
     });
   }
 
   onFilterChange(filterChange: FilterChange) {
-    console.log('filter', filterChange);
-    const key = filterChange.field;
-    const value = filterChange.value;
+    const filters = filterChange.filters;
+    filters['category'] = filters['category.name'];
+    delete filters['category.name'];
 
     // Get current page size from store
     let currentLimit = 10; // default
@@ -129,15 +163,26 @@ export class ProductListComponent implements OnInit {
     // Update URL to reset page to 1
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page: 1, limit: currentLimit, [key]: value },
+      queryParams: { page: 1, limit: currentLimit, ...filters },
       queryParamsHandling: 'merge',
     });
 
     // Dispatch loadProducts with page 1 and current limit
-    this.store.dispatch(loadProducts({ page: 1, limit: currentLimit, [key]: value }));
+    this.store.dispatch(
+      loadProducts({
+        page: 1,
+        limit: currentLimit,
+        ...filters,
+      })
+    );
   }
 
   onPageChange(event: PageChangeEvent): void {
+    // Get current filters from URL
+    const currentParams = this.route.snapshot.queryParams;
+    const name = currentParams['name'] || undefined;
+    const category = currentParams['category'] || undefined;
+
     // Update URL query parameters without navigation
     this.router.navigate([], {
       relativeTo: this.route,
@@ -145,8 +190,15 @@ export class ProductListComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
 
-    // Dispatch action to load new page
-    this.store.dispatch(changePage({ page: event.page, limit: event.pageSize }));
+    // Dispatch action to load new page with filters
+    this.store.dispatch(
+      loadProducts({
+        page: event.page,
+        limit: event.pageSize,
+        name,
+        category,
+      })
+    );
   }
   onRowSelect(rows: any) {
     this.selectedProducts = rows;

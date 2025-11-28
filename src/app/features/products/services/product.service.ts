@@ -26,11 +26,17 @@ export class ProductService {
     name: string | undefined;
     categoryId: string | undefined;
   }): Observable<ApiResponse<Product>> {
-    const params = new HttpParams()
-      .set('page', requestParams.page?.toString() ?? 1)
-      .set('limit', requestParams.limit?.toString() ?? 10)
-      .set('name', requestParams?.name ?? '')
-      .set('categoryId', requestParams?.categoryId ?? '');
+    let params = new HttpParams()
+      .set('page', requestParams.page?.toString() ?? '1')
+      .set('limit', requestParams.limit?.toString() ?? '10');
+
+    // Only add filter params if they have values
+    if (requestParams.name) {
+      params = params.set('name', requestParams.name);
+    }
+    if (requestParams.categoryId) {
+      params = params.set('categoryId', requestParams.categoryId);
+    }
 
     return this.http.get<ApiResponse<Product>>(this.apiUrl, { params });
   }

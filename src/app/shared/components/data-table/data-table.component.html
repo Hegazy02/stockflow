@@ -51,6 +51,7 @@
                     </button>
                   </div>
                   <div class="filter-body">
+                    @if (!col.filterTypes || col.filterTypes.includes("text")) {
                     <input
                       pInputText
                       type="text"
@@ -59,6 +60,17 @@
                       (input)="applyFilter(dt, col.field, filterValues[col.field])"
                       class="filter-input-popup"
                     />
+                    } @if (col.filterTypes?.includes("dropdown") && col.dropdownConfig) {
+                    <app-dropdown
+                      [label]="col.header"
+                      [options]="col.dropdownConfig.options"
+                      [optionLabel]="col.dropdownConfig.optionLabel"
+                      [optionValue]="col.dropdownConfig.optionValue"
+                      [selectedValue]="col.dropdownConfig.selectedValue"
+                      [placeholder]="'Select ' + col.header"
+                      (onChange)="applyFilter(dt, col.field, $event)"
+                    ></app-dropdown>
+                    }
                   </div>
                   <div class="filter-footer">
                     <button type="button" class="btn-clear" (click)="clearFilter(dt, col.field)">

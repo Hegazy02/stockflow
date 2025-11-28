@@ -38,14 +38,20 @@ export class ProductsEffects {
           const { page, limit, name, category } = action;
           const params = { page, limit, name, categoryId: category };
 
+          console.log('📡 API Request Params:', params);
+
           return this.productsService.getAll(params).pipe(
-            map((response) =>
-              ProductsActions.loadProductsSuccess({
+            map((response) => {
+              console.log('✅ API Response:', response);
+              return ProductsActions.loadProductsSuccess({
                 products: response.data as Product[],
                 pagination: response.pagination,
-              })
-            ),
-            catchError((error) => of(ProductsActions.loadProductsFailure({ error })))
+              });
+            }),
+            catchError((error) => {
+              console.error('❌ API Error:', error);
+              return of(ProductsActions.loadProductsFailure({ error }));
+            })
           );
         })
       )

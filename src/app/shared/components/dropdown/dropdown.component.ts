@@ -20,7 +20,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { LucideAngularModule, ChevronDown, Loader2 } from 'lucide-angular';
-import { ErrorMessageComponent } from "../error-message/error-message.component";
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 export interface DropdownOption {
   [key: string]: any;
@@ -44,6 +44,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   @Input() options: DropdownOption[] = [];
   @Input() optionLabel: string = 'label';
   @Input() optionValue: string = 'value';
+  @Input() selectedValue: any = null;
   @Input() placeholder: string = 'Select an option';
   @Input() filter: boolean = true;
   @Input() loading: boolean = false;
@@ -58,7 +59,6 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
 
   isOpen: boolean = false;
   filterText: string = '';
-  selectedValue: any = null;
   highlightedIndex: number = -1;
   ngControl?: NgControl;
 
