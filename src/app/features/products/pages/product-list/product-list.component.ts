@@ -118,6 +118,8 @@ export class ProductListComponent implements OnInit {
 
   onFilterChange(filterChange: FilterChange) {
     console.log('filter', filterChange);
+    const key = filterChange.field;
+    const value = filterChange.value;
 
     // Get current page size from store
     let currentLimit = 10; // default
@@ -127,12 +129,12 @@ export class ProductListComponent implements OnInit {
     // Update URL to reset page to 1
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page: 1, limit: currentLimit },
+      queryParams: { page: 1, limit: currentLimit, [key]: value },
       queryParamsHandling: 'merge',
     });
 
     // Dispatch loadProducts with page 1 and current limit
-    this.store.dispatch(loadProducts({ page: 1, limit: currentLimit }));
+    this.store.dispatch(loadProducts({ page: 1, limit: currentLimit, [key]: value }));
   }
 
   onPageChange(event: PageChangeEvent): void {

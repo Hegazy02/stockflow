@@ -35,10 +35,10 @@ export class ProductsEffects {
         ofType(ProductsActions.loadProducts),
         // exhaustMap cancel new request if the old one didn't finish yet
         exhaustMap((action) => {
-          const page = action.page ?? 1;
-          const limit = action.limit ?? 10;
+          const { page, limit, name, category } = action;
+          const params = { page, limit, name, categoryId: category };
 
-          return this.productsService.getAll(page, limit).pipe(
+          return this.productsService.getAll(params).pipe(
             map((response) =>
               ProductsActions.loadProductsSuccess({
                 products: response.data as Product[],

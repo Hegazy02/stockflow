@@ -5,7 +5,7 @@ import { Pagination } from '../../../core/models/api-response';
 // Load Products
 export const loadProducts = createAction(
   '[Products] Load Products',
-  props<{ page?: number; limit?: number }>()
+  props<{ page?: number; limit?: number; name?: string; category?: string }>()
 );
 export const loadProductsSuccess = createAction(
   '[Products] Load Products Success',

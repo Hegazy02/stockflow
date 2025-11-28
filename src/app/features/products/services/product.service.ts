@@ -20,8 +20,17 @@ export class ProductService {
    * @param page - Page number (default: 1)
    * @param limit - Number of records per page (default: 10)
    */
-  getAll(page: number = 1, limit: number = 10): Observable<ApiResponse<Product>> {
-    const params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
+  getAll(requestParams: {
+    page: number | undefined;
+    limit: number | undefined;
+    name: string | undefined;
+    categoryId: string | undefined;
+  }): Observable<ApiResponse<Product>> {
+    const params = new HttpParams()
+      .set('page', requestParams.page?.toString() ?? 1)
+      .set('limit', requestParams.limit?.toString() ?? 10)
+      .set('name', requestParams?.name ?? '')
+      .set('categoryId', requestParams?.categoryId ?? '');
 
     return this.http.get<ApiResponse<Product>>(this.apiUrl, { params });
   }
