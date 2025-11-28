@@ -9,11 +9,12 @@ import {
 } from '@angular/forms';
 import { LucideAngularModule, AlertCircle } from 'lucide-angular';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { LabelComponent } from "../label/label";
 
 @Component({
   selector: 'app-form-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, ErrorMessageComponent],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, ErrorMessageComponent, LabelComponent],
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   providers: [

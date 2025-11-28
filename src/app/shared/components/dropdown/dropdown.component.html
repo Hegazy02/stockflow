@@ -1,4 +1,8 @@
 <div class="dropdown-container" [class.disabled]="disabled">
+  @if (hasLabel) {
+  <app-label [label]="label" [required]="required"></app-label>
+
+  }
   <!-- Trigger Button -->
   <button
     type="button"

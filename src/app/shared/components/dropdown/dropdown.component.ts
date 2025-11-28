@@ -21,6 +21,7 @@ import {
 } from '@angular/forms';
 import { LucideAngularModule, ChevronDown, Loader2 } from 'lucide-angular';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { LabelComponent } from '../label/label';
 
 export interface DropdownOption {
   [key: string]: any;
@@ -29,7 +30,7 @@ export interface DropdownOption {
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, ErrorMessageComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ErrorMessageComponent, LabelComponent],
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
   providers: [
@@ -52,6 +53,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   @Input() emptyMessage: string = 'No options available';
   @Input() noResultsMessage: string = 'No results found';
   @Input() label: string = '';
+  @Input() hasLabel: boolean = true;
 
   @Output() onChange = new EventEmitter<any>();
 
@@ -68,6 +70,9 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   private onChangeFn: (value: any) => void = () => {};
   private onTouchedFn: () => void = () => {};
   private shouldFocusFilter: boolean = false;
+  get required() {
+    return this.ngControl?.errors?.['required'] || false;
+  }
 
   constructor(private elementRef: ElementRef, private injector: Injector) {}
 

@@ -1,11 +1,7 @@
 <div class="form-input-wrapper">
   @if (label) {
-  <label [for]="label" class="form-label">
-    {{ label }}
-    @if (required) {
-    <span class="required">*</span>
-    }
-  </label>
+  <app-label [label]="label" [required]="required"></app-label>
+
   } @if (type === 'textarea') {
   <textarea
     [id]="label"

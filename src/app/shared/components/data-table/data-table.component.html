@@ -63,6 +63,7 @@
                     } @if (col.filterTypes?.includes("dropdown") && col.dropdownConfig) {
                     <app-dropdown
                       [label]="col.header"
+                      [hasLabel]="false"
                       [options]="col.dropdownConfig.options"
                       [optionLabel]="col.dropdownConfig.optionLabel"
                       [optionValue]="col.dropdownConfig.optionValue"
