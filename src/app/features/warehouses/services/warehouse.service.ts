@@ -38,8 +38,8 @@ export class WarehouseService {
    * Get warehouse by ID
    * GET /api/warehouses/:id
    */
-  getById(id: string): Observable<Warehouse> {
-    return this.http.get<Warehouse>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<ApiResponse<Warehouse>> {
+    return this.http.get<ApiResponse<Warehouse>>(`${this.apiUrl}/${id}`);
   }
 
   /**

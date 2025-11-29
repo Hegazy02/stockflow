@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { map, catchError, exhaustMap, tap } from 'rxjs/operators';
 import { WarehouseService } from '../services/warehouse.service';
 import * as WarehousesActions from './warehouses.actions';
-import { WarehouseManager } from '../models/warehouse.model';
+import { Warehouse, WarehouseManager } from '../models/warehouse.model';
 
 @Injectable()
 export class WarehousesEffects {
@@ -77,7 +77,9 @@ export class WarehousesEffects {
         ofType(WarehousesActions.getWarehouseById),
         exhaustMap((action) =>
           this.warehousesService.getById(action.id).pipe(
-            map((warehouse) => WarehousesActions.getWarehouseByIdSuccess({ warehouse })),
+            map((response) =>
+              WarehousesActions.getWarehouseByIdSuccess({ warehouse: response.data as Warehouse })
+            ),
             catchError((error) => of(WarehousesActions.getWarehouseByIdFailure({ error })))
           )
         )
