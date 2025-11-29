@@ -1,42 +1,4 @@
-
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-xl);
-
-  .actions {
-    display: flex;
-    gap: var(--spacing-md);
-  }
-}
-
-.btn-back {
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  font-size: var(--font-size-base);
-  cursor: pointer;
-  padding: var(--spacing-sm) var(--spacing-md);
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-weight: var(--font-weight-medium);
-
-  &:hover {
-    color: var(--color-primary-dark);
-  }
-
-  lucide-icon {
-    display: flex;
-  }
-}
-
-.btn-primary,
-.btn-secondary,
-.btn-danger {
+.btn-primary {
   padding: var(--spacing-sm) var(--spacing-lg);
   border: none;
   border-radius: var(--radius-md);
@@ -66,31 +28,12 @@
   }
 }
 
-.btn-secondary {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-medium);
-
-  &:hover {
-    background-color: var(--color-gray-lightest);
-    border-color: var(--color-primary);
-  }
-}
-
-.btn-danger {
-  background-color: var(--color-accent-coral);
-  color: var(--color-white);
-
-  &:hover {
-    background-color: var(--color-accent-coral-dark);
-  }
-}
-
 .product-card {
   background: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+  margin-top: 12px;
 }
 
 .product-header {
@@ -175,7 +118,11 @@
 
 .stock-container {
   .total-stock {
-    background: linear-gradient(135deg, var(--color-accent-green) 0%, var(--color-accent-green-dark) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--color-accent-green) 0%,
+      var(--color-accent-green-dark) 100%
+    );
     color: var(--color-white);
     padding: var(--spacing-lg);
     border-radius: var(--radius-md);
@@ -376,5 +323,3 @@
     margin-bottom: var(--spacing-xl);
   }
 }
-
-

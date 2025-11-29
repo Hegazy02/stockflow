@@ -1,0 +1,23 @@
+<div class="header">
+  <!-- Back Button -->
+  <button class="btn-back" (click)="back.emit()">
+    <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
+    <span>Back</span>
+  </button>
+
+  <!-- Actions -->
+  <div class="actions">
+    @if (hasEdit) {
+    <button class="btn-secondary" (click)="edit.emit()">
+      <lucide-icon [img]="Edit" [size]="18"></lucide-icon>
+      <span>Edit</span>
+    </button>
+
+    } @if (hasDelete) {
+    <button class="btn-danger" (click)="delete.emit()">
+      <lucide-icon [img]="Trash2" [size]="18"></lucide-icon>
+      <span>Delete</span>
+    </button>
+    }
+  </div>
+</div>

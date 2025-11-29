@@ -9,11 +9,12 @@ import { deleteWarehouses, getWarehouseById } from '../../store/warehouses.actio
 import { LucideAngularModule, ArrowLeft, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
 
 @Component({
   selector: 'app-warehouse-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent],
+  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent, DetailsPageHeaderComponent],
   templateUrl: './warehouse-detail.component.html',
   styleUrls: ['./warehouse-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

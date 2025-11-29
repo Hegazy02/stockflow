@@ -1,0 +1,83 @@
+<div >
+  <div class="categories-header">
+    <h1>Categories</h1>
+    <div class="header-actions">
+      <button
+        class="btn btn-danger"
+        (click)="confirmBulkDelete()"
+        [disabled]="selectedCategories.length === 0"
+      >
+        <span
+          >Delete Selected @if (selectedCategories.length > 0) {({{
+            selectedCategories.length
+          }})}</span
+        >
+      </button>
+      <button class="btn btn-primary" (click)="navigateToCreate()">
+        <span>+ Add Category</span>
+      </button>
+    </div>
+  </div>
+
+  @if (error$ | async; as error) {
+  <div class="error-container">
+    <div class="error-message">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{
+        error.message || 'Failed to load categories. Please try again.'
+      }}</span>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadCategories()">Retry</button>
+    </div>
+  </div>
+  }
+
+  <div class="categories-table">
+    <app-data-table
+      [data]="categories"
+      [columns]="columns"
+      [actions]="actions"
+      [loading]="(loading$ | async)!"
+      [paginator]="false"
+      [height]="'calc(100vh - 200px)'"
+      [showActions]="true"
+      [globalFilterFields]="['name', 'description', 'status']"
+      [selectionMode]="'multiple'"
+      [dataKey]="'_id'"
+      [showFilters]="false"
+      (rowSelect)="onRowSelect($event)"
+      (rowUnselect)="onRowSelect($event)"
+    ></app-data-table>
+  </div>
+
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Category"
+    [message]="
+      categoryToDelete ? 'Are you sure you want to delete ' + categoryToDelete.name + '?' : ''
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteCategory()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+
+  <app-confirm-dialog
+    [isOpen]="showBulkDeleteDialog"
+    title="Delete Multiple Categories"
+    [message]="
+      'Are you sure you want to delete ' +
+      selectedCategories.length +
+      ' categor' +
+      (selectedCategories.length > 1 ? 'ies' : 'y') +
+      '?'
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete All"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="bulkDeleteCategories()"
+    (cancel)="cancelBulkDelete()"
+  ></app-confirm-dialog>
+</div>

@@ -6,22 +6,12 @@
 </div>
 } @else if (product$ | async; as product) {
 <!-- Product Content -->
-<div class="header">
-  <button class="btn-back" (click)="navigateToList()">
-    <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
-    <span>Back to Products</span>
-  </button>
-  <div class="actions">
-    <button class="btn-secondary" (click)="navigateToEdit()">
-      <lucide-icon [img]="Edit" [size]="18"></lucide-icon>
-      <span>Edit</span>
-    </button>
-    <button class="btn-danger" (click)="confirmDelete()">
-      <lucide-icon [img]="Trash2" [size]="18"></lucide-icon>
-      <span>Delete</span>
-    </button>
-  </div>
-</div>
+<app-details-page-header
+  (back)="navigateToList()"
+  (edit)="navigateToEdit()"
+  (delete)="confirmDelete()"
+>
+</app-details-page-header>
 
 <div class="product-card">
   <div class="product-header">

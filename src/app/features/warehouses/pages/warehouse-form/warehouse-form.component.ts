@@ -18,6 +18,7 @@ import {
 import { LucideAngularModule, ArrowLeft, Save, X } from 'lucide-angular';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
+import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
 
 @Component({
   selector: 'app-warehouse-form',
@@ -28,7 +29,8 @@ import { DropdownComponent } from '../../../../shared/components/dropdown/dropdo
     LucideAngularModule,
     FormInputComponent,
     DropdownComponent,
-  ],
+    DetailsPageHeaderComponent
+],
   templateUrl: './warehouse-form.component.html',
   styleUrls: ['./warehouse-form.component.scss'],
 })

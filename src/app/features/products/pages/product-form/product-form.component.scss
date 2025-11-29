@@ -1,36 +1,9 @@
-
-.form-header {
-  margin-bottom: var(--spacing-xl);
-
-  .btn-back {
-    background: none;
-    border: none;
-    color: var(--color-primary);
-    font-size: var(--font-size-base);
-    cursor: pointer;
-    padding: var(--spacing-sm) var(--spacing-md);
-    transition: all var(--transition-fast);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    font-weight: var(--font-weight-medium);
-    margin-bottom: var(--spacing-md);
-
-    &:hover {
-      color: var(--color-primary-dark);
-    }
-
-    lucide-icon {
-      display: flex;
-    }
-  }
-
-  h1 {
-    margin: 0;
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-  }
+h1 {
+  margin: 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
 }
 
 .product-form {
@@ -310,7 +283,7 @@
   // Mobile-specific dropdown styling
   ::ng-deep .p-select-overlay {
     max-width: calc(100vw - var(--spacing-lg));
-    
+
     .p-select-option {
       padding: var(--spacing-md) var(--spacing-sm);
       font-size: var(--font-size-sm);

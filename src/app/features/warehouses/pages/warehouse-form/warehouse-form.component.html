@@ -1,11 +1,7 @@
 <div>
-  <div class="form-header">
-    <button type="button" class="btn-back" (click)="onCancel()">
-      <lucide-icon [img]="ArrowLeft" [size]="18"></lucide-icon>
-      <span>Back to Warehouses</span>
-    </button>
-    <h1>{{ isEditMode ? 'Edit Warehouse' : 'Create New Warehouse' }}</h1>
-  </div>
+  <app-details-page-header [hasDelete]="false" [hasEdit]="false" (back)="onCancel()">
+  </app-details-page-header>
+  <h1>{{ isEditMode ? 'Edit Warehouse' : 'Create New Warehouse' }}</h1>
 
   <form [formGroup]="warehouseForm" (ngSubmit)="onSubmit()" class="warehouse-form">
     <app-form-input

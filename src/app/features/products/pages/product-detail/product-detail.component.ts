@@ -14,6 +14,7 @@ import { selectAllWarehouses } from '../../../warehouses/store/warehouses.select
 import { LucideAngularModule, ArrowLeft, Edit, Trash2, Package } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
 
 export interface StockLevelWithWarehouse extends StockLevel {
   warehouse?: Warehouse;
@@ -22,7 +23,7 @@ export interface StockLevelWithWarehouse extends StockLevel {
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent],
+  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent, DetailsPageHeaderComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,0 +1,55 @@
+<div>
+  <app-details-page-header [hasDelete]="false" [hasEdit]="false" (back)="onCancel()">
+  </app-details-page-header>
+  <h1>{{ isEditMode ? 'Edit Category' : 'Create New Category' }}</h1>
+
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <app-form-input
+          formControlName="name"
+          label="Category Name"
+          placeholder="Enter category name"
+          [required]="true"
+        ></app-form-input>
+      </div>
+
+      <div class="form-group full-width">
+        <app-form-input
+          formControlName="description"
+          label="Description"
+          placeholder="Enter category description"
+          type="textarea"
+          [rows]="4"
+        ></app-form-input>
+      </div>
+
+      <div class="form-group">
+        <app-dropdown
+          formControlName="status"
+          label="Status"
+          [options]="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select status"
+          [required]="true"
+        ></app-dropdown>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="categoryForm.invalid || (loading$ | async)"
+      >
+        @if (loading$ | async) {
+        <span>Saving...</span>
+        } @else {
+        <span>{{ isEditMode ? 'Update' : 'Create' }} Category</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>

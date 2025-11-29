@@ -1,0 +1,72 @@
+<div>
+  @if (loading$ | async) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading category...</p>
+  </div>
+  } @else if (category$ | async; as category) {
+  <app-details-page-header (back)="onBack()" (edit)="onEdit()" (delete)="confirmDelete()">
+  </app-details-page-header>
+  <div class="category-card">
+    <div class="category-header">
+      <h1>{{ category.name }}</h1>
+      <span class="status-badge" [class.active]="category.status === 'Active'">{{
+        category.status
+      }}</span>
+    </div>
+    <div class="detail-content">
+      <div class="info-card">
+        <h2>Category Information</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Name</label>
+            <p>{{ category.name }}</p>
+          </div>
+
+          <div class="info-item">
+            <label>Status</label>
+            <p>
+              <span class="status-badge" [class.active]="category.status === 'Active'">{{
+                category.status || 'Active'
+              }}</span>
+            </p>
+          </div>
+
+          <div class="info-item full-width">
+            <label>Description</label>
+            <p>{{ category.description || 'No description provided' }}</p>
+          </div>
+
+          <div class="info-item">
+            <label>Created At</label>
+            <p>{{ category.createdAt | date : 'medium' }}</p>
+          </div>
+
+          <div class="info-item">
+            <label>Updated At</label>
+            <p>{{ category.updatedAt | date : 'medium' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Category"
+    [message]="'Are you sure you want to delete ' + category.name + '?'"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="onDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+  } @else {
+  <div class="not-found">
+    <h2>Category Not Found</h2>
+    <p>The category you're looking for doesn't exist.</p>
+    <button class="btn btn-primary" (click)="onBack()">Back to Categories</button>
+  </div>
+  }
+</div>

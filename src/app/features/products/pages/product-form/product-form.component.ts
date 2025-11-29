@@ -17,6 +17,7 @@ import {
   selectCategoriesLoading,
   selectCategoriesError,
 } from '../../../categories/store/categories.selectors';
+import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
 
 @Component({
   selector: 'app-product-form',
@@ -27,7 +28,8 @@ import {
     LucideAngularModule,
     FormInputComponent,
     DropdownComponent,
-  ],
+    DetailsPageHeaderComponent
+],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],
 })

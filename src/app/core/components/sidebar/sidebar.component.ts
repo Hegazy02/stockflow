@@ -8,6 +8,7 @@ import {
   Package,
   TrendingUp,
   Warehouse,
+  Shapes,
   ArrowLeftRight,
   FileText,
   Bell,
@@ -43,6 +44,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly Package = Package;
   readonly TrendingUp = TrendingUp;
   readonly Warehouse = Warehouse;
+  readonly Shapes = Shapes;
   readonly ArrowLeftRight = ArrowLeftRight;
   readonly FileText = FileText;
   readonly Bell = Bell;
@@ -54,11 +56,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: false },
-    { label: 'Products', icon: Package, route: '/products', active: false },
-    { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
-    { label: 'Stock Levels', icon: TrendingUp, route: '/stock-levels', active: false },
+    { label: 'Stock', icon: TrendingUp, route: '/stock-levels', active: false },
     { label: 'Stock Transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
     { label: 'Reports', icon: FileText, route: '/reports', active: false },
+    { label: 'Products', icon: Package, route: '/products', active: false },
+    { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
+    { label: 'Categories', icon: Shapes, route: '/categories', active: false },
   ];
 
   constructor(private router: Router) {}

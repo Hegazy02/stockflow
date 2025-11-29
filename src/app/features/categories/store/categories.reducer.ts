@@ -11,7 +11,7 @@ export interface CategoriesState extends EntityState<Category> {
 
 export const categoriesAdapter: EntityAdapter<Category> = createEntityAdapter<Category>({
   selectId: (category: Category) => category._id,
-  sortComparer: (a, b) => a.name.localeCompare(b.name),
+  sortComparer: false,
 });
 
 export const initialState: CategoriesState = categoriesAdapter.getInitialState({
@@ -22,6 +22,7 @@ export const initialState: CategoriesState = categoriesAdapter.getInitialState({
 
 export const categoriesReducer = createReducer(
   initialState,
+  // Load Categories
   on(CategoriesActions.loadCategories, (state) => ({
     ...state,
     loading: true,
@@ -36,6 +37,80 @@ export const categoriesReducer = createReducer(
     })
   ),
   on(CategoriesActions.loadCategoriesFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Get Category By ID
+  on(CategoriesActions.getCategoryById, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(CategoriesActions.getCategoryByIdSuccess, (state, { category }) =>
+    categoriesAdapter.upsertOne(category, {
+      ...state,
+      loading: false,
+      error: null,
+    })
+  ),
+  on(CategoriesActions.getCategoryByIdFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Create Category
+  on(CategoriesActions.createCategory, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(CategoriesActions.createCategorySuccess, (state, { category }) =>
+    categoriesAdapter.addOne(category, { ...state, loading: false, error: null })
+  ),
+  on(CategoriesActions.createCategoryFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Update Category
+  on(CategoriesActions.updateCategory, (state) => ({ ...state, loading: true, error: null })),
+  on(CategoriesActions.updateCategorySuccess, (state, { category }) =>
+    categoriesAdapter.updateOne(
+      {
+        id: category._id,
+        changes: category,
+      },
+      {
+        ...state,
+        loading: false,
+        error: null,
+      }
+    )
+  ),
+  on(CategoriesActions.updateCategoryFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  // Delete Categories
+  on(CategoriesActions.deleteCategories, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(CategoriesActions.deleteCategoriesSuccess, (state, { ids }) =>
+    categoriesAdapter.removeMany(ids, {
+      ...state,
+      loading: false,
+      error: null,
+    })
+  ),
+  on(CategoriesActions.deleteCategoriesFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

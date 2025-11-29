@@ -72,6 +72,39 @@ export const routes: Routes = [
         (m) => m.WarehouseFormComponent
       ),
   },
+
+  {
+    path: 'categories',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/categories/pages/category-list/category-list.component').then(
+        (m) => m.CategoryListComponent
+      ),
+  },
+  {
+    path: 'categories/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/categories/pages/category-form/category-form.component').then(
+        (m) => m.CategoryFormComponent
+      ),
+  },
+  {
+    path: 'categories/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/categories/pages/category-detail/category-detail.component').then(
+        (m) => m.CategoryDetailComponent
+      ),
+  },
+  {
+    path: 'categories/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/categories/pages/category-form/category-form.component').then(
+        (m) => m.CategoryFormComponent
+      ),
+  },
   //   {
   //     path: 'stock',
   //     canActivate: [authGuard],

@@ -17,16 +17,75 @@ export class CategoryService {
   /**
    * Get all categories
    * GET /api/categories
-   * @returns Observable of ProductCategory array
    */
-  getAll(): Observable<ApiResponse<Category[]>> {
-    return this.http.get<ApiResponse<Category[]>>(this.apiUrl);
+  getAll(): Observable<ApiResponse<Category>> {
+    return this.http.get<ApiResponse<Category>>(this.apiUrl);
+  }
+
+  /**
+   * Get category by ID
+   * GET /api/categories/:id
+   */
+  getById(id: string): Observable<ApiResponse<Category>> {
+    return this.http.get<ApiResponse<Category>>(`${this.apiUrl}/${id}`);
+  }
+
+  /**
+   * Create a new category
+   * POST /api/categories
+   */
+  create(category: Omit<Category, '_id' | 'createdAt' | 'updatedAt'>): Observable<Category> {
+    return this.http.post<Category>(this.apiUrl, category);
+  }
+
+  /**
+   * Update an existing category
+   * PUT /api/categories/:id
+   */
+  update(category: Category): Observable<Category> {
+    return this.http.put<Category>(`${this.apiUrl}/${category._id}`, category);
+  }
+
+  /**
+   * Delete category(s)
+   * DELETE /api/categories/:id (single)
+   * POST /api/categories/bulk-delete (multiple)
+   */
+  delete(ids: string[]): Observable<{ ids: string[] }> {
+    if (ids.length === 0) {
+      return throwError(() => ({
+        code: 'VALIDATION_ERROR',
+        message: 'No category IDs provided for deletion',
+      }));
+    }
+
+    if (ids.length === 1) {
+      return this.http.delete<void>(`${this.apiUrl}/${ids[0]}`).pipe(
+        map(() => ({ ids })),
+        catchError(this.handleError)
+      );
+    } else {
+      return this.http
+        .post<{
+          success: boolean;
+          message: string;
+          data: { deletedCount: number; requestedCount: number };
+        }>(`${this.apiUrl}/bulk-delete`, { ids })
+        .pipe(
+          map((response) => {
+            if (response.success) {
+              return { ids };
+            } else {
+              throw new Error(response.message || 'Bulk delete failed');
+            }
+          }),
+          catchError(this.handleError)
+        );
+    }
   }
 
   /**
    * Handle HTTP errors
-   * @param error - HTTP error response
-   * @returns Observable that throws a structured error object
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Failed to load categories';
