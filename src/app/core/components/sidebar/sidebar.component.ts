@@ -59,7 +59,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: false },
     { label: 'Stock', icon: TrendingUp, route: '/stock-levels', active: false },
-    { label: 'Stock Transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
+    { label: 'Stock transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
     { label: 'Reports', icon: FileText, route: '/reports', active: false },
     { label: 'Partners', icon: UsersRound, route: '/partners', active: false },
     { label: 'Products', icon: Package, route: '/products', active: false },
