@@ -21,9 +21,7 @@ export class PartnerService {
    * @param limit - Number of records per page (default: 10)
    */
   getAll(page: number = 1, limit: number = 10): Observable<ApiResponse<Partner>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
+    const params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
 
     return this.http.get<ApiResponse<Partner>>(this.apiUrl, { params });
   }
@@ -32,8 +30,8 @@ export class PartnerService {
    * Get partner by ID
    * GET /api/partners/:id
    */
-  getById(id: string): Observable<Partner> {
-    return this.http.get<Partner>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<ApiResponse<Partner>> {
+    return this.http.get<ApiResponse<Partner>>(`${this.apiUrl}/${id}`);
   }
 
   /**

@@ -57,7 +57,9 @@ export class PartnersEffects {
         ofType(PartnersActions.getPartnerById),
         exhaustMap((action) =>
           this.partnerService.getById(action.id).pipe(
-            map((partner) => PartnersActions.getPartnerByIdSuccess({ partner })),
+            map((response) =>
+              PartnersActions.getPartnerByIdSuccess({ partner: response.data as Partner })
+            ),
             catchError((error) => of(PartnersActions.getPartnerByIdFailure({ error })))
           )
         )
