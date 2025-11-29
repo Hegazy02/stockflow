@@ -1,0 +1,45 @@
+<div class="detail-container">
+  @if (loading$ | async) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading unit...</p>
+  </div>
+  } @else if (unit$ | async; as unit) {
+  <app-details-page-header (back)="onBack()" (edit)="onEdit()" (delete)="confirmDelete()">
+  </app-details-page-header>
+
+  <div class="detail-content">
+    <div class="info-card">
+      <h2>Unit Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Name</label>
+          <p>{{ unit.name }}</p>
+        </div>
+
+        <div class="info-item">
+          <label>Abbreviation</label>
+          <p>{{ unit.abbreviation }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Unit"
+    [message]="'Are you sure you want to delete ' + unit.name + '?'"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="onDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+  } @else {
+  <div class="not-found">
+    <h2>Unit Not Found</h2>
+    <p>The unit you're l</p>
+  </div>
+  }
+</div>

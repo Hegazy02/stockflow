@@ -107,6 +107,39 @@ export const routes: Routes = [
   },
 
   {
+    path: 'units',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/units/pages/unit-list/unit-list.component').then(
+        (m) => m.UnitListComponent
+      ),
+  },
+  {
+    path: 'units/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/units/pages/unit-form/unit-form.component').then(
+        (m) => m.UnitFormComponent
+      ),
+  },
+  {
+    path: 'units/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/units/pages/unit-detail/unit-detail.component').then(
+        (m) => m.UnitDetailComponent
+      ),
+  },
+  {
+    path: 'units/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/units/pages/unit-form/unit-form.component').then(
+        (m) => m.UnitFormComponent
+      ),
+  },
+
+  {
     path: 'partners',
     canActivate: [authGuard],
     loadComponent: () =>

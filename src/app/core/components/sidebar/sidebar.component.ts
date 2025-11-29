@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Warehouse,
   Shapes,
+  Ruler,
   ArrowLeftRight,
   FileText,
   Bell,
@@ -46,6 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly TrendingUp = TrendingUp;
   readonly Warehouse = Warehouse;
   readonly Shapes = Shapes;
+  readonly Ruler = Ruler;
   readonly UsersRound = UsersRound;
   readonly ArrowLeftRight = ArrowLeftRight;
   readonly FileText = FileText;
@@ -64,6 +66,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Partners', icon: UsersRound, route: '/partners', active: false },
     { label: 'Products', icon: Package, route: '/products', active: false },
     { label: 'Categories', icon: Shapes, route: '/categories', active: false },
+    { label: 'Units', icon: Ruler, route: '/units', active: false },
     { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
   ];
 

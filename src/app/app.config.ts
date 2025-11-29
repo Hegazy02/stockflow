@@ -23,10 +23,12 @@ import { transfersReducer } from './features/transfers/store/transfers.reducer';
 import { stockHistoryReducer } from './features/stock-history/store/stock-history.reducer';
 import { categoriesReducer } from './features/categories/store/categories.reducer';
 import { partnersReducer } from './features/partners/store/partners.reducer';
+import { unitsReducer } from './features/units/store/units.reducer';
 import { ProductsEffects } from './features/products/store/products.effects';
 import { CategoriesEffects } from './features/categories/store/categories.effects';
 import { WarehousesEffects } from './features/warehouses/store/warehouses.effects';
 import { PartnersEffects } from './features/partners/store/partners.effects';
+import { UnitsEffects } from './features/units/store/units.effects';
 import MyPreset from '../styles/primeng/my-preset';
 
 export const appConfig: ApplicationConfig = {
@@ -53,8 +55,15 @@ export const appConfig: ApplicationConfig = {
       stockHistory: stockHistoryReducer,
       categories: categoriesReducer,
       partners: partnersReducer,
+      units: unitsReducer,
     }),
-    provideEffects([ProductsEffects, CategoriesEffects, WarehousesEffects, PartnersEffects]),
+    provideEffects([
+      ProductsEffects,
+      CategoriesEffects,
+      WarehousesEffects,
+      PartnersEffects,
+      UnitsEffects,
+    ]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

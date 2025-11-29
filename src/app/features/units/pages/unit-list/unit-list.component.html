@@ -1,0 +1,75 @@
+<div>
+  <app-list-page-header
+    [title]="'Units'"
+    [addContent]="'Add unit'"
+    (add)="navigateToCreate()"
+    (bulkDelete)="confirmBulkDelete()"
+    [selectedCount]="selectedUnits.length"
+  ></app-list-page-header>
+
+  @if (error$ | async; as error) {
+  <div class="error-container">
+    <div class="error-message">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{
+        error.message || 'Failed to load units. Please try again.'
+      }}</span>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadUnits()">Retry</button>
+    </div>
+  </div>
+  }
+
+  <div class="units-table">
+    <app-data-table
+      [data]="units"
+      [columns]="columns"
+      [actions]="actions"
+      [loading]="(loading$ | async)!"
+      [paginator]="true"
+      [rows]="(pageSize$ | async) || 10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [totalRecords]="(totalRecords$ | async) || 0"
+      [currentPage]="(currentPage$ | async) || 1"
+      [pageSize]="(pageSize$ | async) || 10"
+      [height]="'calc(100vh - 200px)'"
+      [showActions]="true"
+      [globalFilterFields]="['name', 'abbreviation', 'description', 'status']"
+      [selectionMode]="'multiple'"
+      [dataKey]="'_id'"
+      [showFilters]="false"
+      (pageChange)="onPageChange($event)"
+      (rowSelect)="onRowSelect($event)"
+      (rowUnselect)="onRowSelect($event)"
+    ></app-data-table>
+  </div>
+
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Unit"
+    [message]="unitToDelete ? 'Are you sure you want to delete ' + unitToDelete.name + '?' : ''"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteUnit()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+
+  <app-confirm-dialog
+    [isOpen]="showBulkDeleteDialog"
+    title="Delete Multiple Units"
+    [message]="
+      'Are you sure you want to delete ' +
+      selectedUnits.length +
+      ' unit' +
+      (selectedUnits.length > 1 ? 's' : '') +
+      '?'
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete All"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="bulkDeleteUnits()"
+    (cancel)="cancelBulkDelete()"
+  ></app-confirm-dialog>
+</div>
