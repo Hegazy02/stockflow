@@ -105,6 +105,39 @@ export const routes: Routes = [
         (m) => m.CategoryFormComponent
       ),
   },
+
+  {
+    path: 'partners',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/partners/pages/partner-list/partner-list.component').then(
+        (m) => m.PartnerListComponent
+      ),
+  },
+  {
+    path: 'partners/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/partners/pages/partner-form/partner-form.component').then(
+        (m) => m.PartnerFormComponent
+      ),
+  },
+  {
+    path: 'partners/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/partners/pages/partner-detail/partner-detail.component').then(
+        (m) => m.PartnerDetailComponent
+      ),
+  },
+  {
+    path: 'partners/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/partners/pages/partner-form/partner-form.component').then(
+        (m) => m.PartnerFormComponent
+      ),
+  },
   //   {
   //     path: 'stock',
   //     canActivate: [authGuard],

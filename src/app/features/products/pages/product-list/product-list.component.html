@@ -1,21 +1,11 @@
-<div class="products-container">
-  <div class="products-header">
-    <h1>Products</h1>
-    <div class="header-actions">
-      <button
-        class="btn btn-danger"
-        (click)="confirmBulkDelete()"
-        [disabled]="selectedProducts.length === 0"
-      >
-        <span
-          >Delete Selected @if (selectedProducts.length > 0) {({{ selectedProducts.length }})}</span
-        >
-      </button>
-      <button class="btn btn-primary" (click)="navigateToCreate()">
-        <span>+ Add Product</span>
-      </button>
-    </div>
-  </div>
+<div>
+  <app-list-page-header
+    [title]="'Products'"
+    [addContent]="'Add product'"
+    [selectedCount]="selectedProducts.length"
+    (bulkDelete)="confirmBulkDelete()"
+    (add)="navigateToCreate()"
+  ></app-list-page-header>
 
   <!-- Error Message -->
   @if (error$ | async; as error) {

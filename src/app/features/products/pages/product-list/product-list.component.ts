@@ -14,7 +14,7 @@ import {
   selectCurrentPage,
   selectPageSize,
 } from '../../store/products.selectors';
-import { loadProducts, deleteProducts, changePage } from '../../store/products.actions';
+import { loadProducts, deleteProducts } from '../../store/products.actions';
 import {
   DataTableComponent,
   TableColumn,
@@ -27,11 +27,12 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadCategories, selectAllCategories } from '../../../categories/store';
 import { Category } from '../../../categories/models/category.model';
+import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent],
+  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })

@@ -18,11 +18,12 @@ import {
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent],
+  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss'],
 })

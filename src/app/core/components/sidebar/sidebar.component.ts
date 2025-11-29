@@ -14,6 +14,7 @@ import {
   Bell,
   Mail,
   Plus,
+  UsersRound,
   Settings,
   LogOut,
   ChevronRight,
@@ -45,6 +46,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly TrendingUp = TrendingUp;
   readonly Warehouse = Warehouse;
   readonly Shapes = Shapes;
+  readonly UsersRound = UsersRound;
   readonly ArrowLeftRight = ArrowLeftRight;
   readonly FileText = FileText;
   readonly Bell = Bell;
@@ -59,9 +61,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Stock', icon: TrendingUp, route: '/stock-levels', active: false },
     { label: 'Stock Transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
     { label: 'Reports', icon: FileText, route: '/reports', active: false },
+    { label: 'Partners', icon: UsersRound, route: '/partners', active: false },
     { label: 'Products', icon: Package, route: '/products', active: false },
-    { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
     { label: 'Categories', icon: Shapes, route: '/categories', active: false },
+    { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
   ];
 
   constructor(private router: Router) {}

@@ -1,28 +1,27 @@
-<div class="warehouses-container">
+<div>
   <app-list-page-header
-    [title]="'Warehouses'"
-    [addContent]="'Add warehouse'"
-    [selectedCount]="selectedWarehouses.length"
+    [title]="'Partners'"
+    [addContent]="'Add partner'"
+    [selectedCount]="selectedPartners.length"
     (bulkDelete)="confirmBulkDelete()"
     (add)="navigateToCreate()"
   ></app-list-page-header>
 
-  <!-- Error Message -->
   @if (error$ | async; as error) {
   <div class="error-container">
     <div class="error-message">
       <span class="error-icon">⚠️</span>
       <span class="error-text">{{
-        error.message || 'Failed to load warehouses. Please try again.'
+        error.message || 'Failed to load partners. Please try again.'
       }}</span>
-      <button class="btn btn-secondary btn-retry" (click)="retryLoadWarehouses()">Retry</button>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadPartners()">Retry</button>
     </div>
   </div>
   }
 
-  <div class="warehouses-table">
+  <div class="partners-table">
     <app-data-table
-      [data]="warehouses"
+      [data]="partners"
       [columns]="columns"
       [actions]="actions"
       [loading]="(loading$ | async)!"
@@ -34,48 +33,45 @@
       [pageSize]="(pageSize$ | async) || 10"
       [height]="'calc(100vh - 200px)'"
       [showActions]="true"
-      [globalFilterFields]="['title', 'location', 'managerId', 'status']"
+      [globalFilterFields]="['name', 'phoneNumber', 'type', 'description']"
       [selectionMode]="'multiple'"
       [dataKey]="'_id'"
-      [showFilters]="true"
-      (filterChange)="onFilterChange($event)"
+      [showFilters]="false"
       (pageChange)="onPageChange($event)"
       (rowSelect)="onRowSelect($event)"
       (rowUnselect)="onRowSelect($event)"
     ></app-data-table>
   </div>
 
-  <!-- Single Warehouse Delete Dialog -->
   <app-confirm-dialog
     [isOpen]="showDeleteDialog"
-    title="Delete Warehouse"
+    title="Delete Partner"
     [message]="
-      warehouseToDelete ? 'Are you sure you want to delete ' + warehouseToDelete.title + '?' : ''
+      partnerToDelete ? 'Are you sure you want to delete ' + partnerToDelete.name + '?' : ''
     "
     warningMessage="This action cannot be undone."
     confirmText="Delete"
     cancelText="Cancel"
     confirmButtonClass="btn-danger"
-    (confirm)="deleteWarehouse()"
+    (confirm)="deletePartner()"
     (cancel)="cancelDelete()"
   ></app-confirm-dialog>
 
-  <!-- Bulk Delete Dialog -->
   <app-confirm-dialog
     [isOpen]="showBulkDeleteDialog"
-    title="Delete Multiple Warehouses"
+    title="Delete Multiple Partners"
     [message]="
       'Are you sure you want to delete ' +
-      selectedWarehouses.length +
-      ' warehouse' +
-      (selectedWarehouses.length > 1 ? 's' : '') +
+      selectedPartners.length +
+      ' partner' +
+      (selectedPartners.length > 1 ? 's' : '') +
       '?'
     "
     warningMessage="This action cannot be undone."
     confirmText="Delete All"
     cancelText="Cancel"
     confirmButtonClass="btn-danger"
-    (confirm)="bulkDeleteWarehouses()"
+    (confirm)="bulkDeletePartners()"
     (cancel)="cancelBulkDelete()"
   ></app-confirm-dialog>
 </div>
