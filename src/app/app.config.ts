@@ -24,11 +24,13 @@ import { stockHistoryReducer } from './features/stock-history/store/stock-histor
 import { categoriesReducer } from './features/categories/store/categories.reducer';
 import { partnersReducer } from './features/partners/store/partners.reducer';
 import { unitsReducer } from './features/units/store/units.reducer';
+import { transactionsReducer } from './features/transactions/store/transactions.reducer';
 import { ProductsEffects } from './features/products/store/products.effects';
 import { CategoriesEffects } from './features/categories/store/categories.effects';
 import { WarehousesEffects } from './features/warehouses/store/warehouses.effects';
 import { PartnersEffects } from './features/partners/store/partners.effects';
 import { UnitsEffects } from './features/units/store/units.effects';
+import { TransactionsEffects } from './features/transactions/store/transactions.effects';
 import MyPreset from '../styles/primeng/my-preset';
 
 export const appConfig: ApplicationConfig = {
@@ -56,6 +58,7 @@ export const appConfig: ApplicationConfig = {
       categories: categoriesReducer,
       partners: partnersReducer,
       units: unitsReducer,
+      transactions: transactionsReducer,
     }),
     provideEffects([
       ProductsEffects,
@@ -63,6 +66,7 @@ export const appConfig: ApplicationConfig = {
       WarehousesEffects,
       PartnersEffects,
       UnitsEffects,
+      TransactionsEffects,
     ]),
     provideStoreDevtools({
       maxAge: 25,

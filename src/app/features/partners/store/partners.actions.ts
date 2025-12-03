@@ -5,7 +5,7 @@ import { Pagination } from '../../../core/models/api-response';
 // Load Partners
 export const loadPartners = createAction(
   '[Partners] Load Partners',
-  props<{ page?: number; limit?: number }>()
+  props<{ page?: number; limit?: number; type?: string; name?: string }>()
 );
 export const loadPartnersSuccess = createAction(
   '[Partners] Load Partners Success',
@@ -23,10 +23,7 @@ export const changePage = createAction(
 );
 
 // Get Partner By ID
-export const getPartnerById = createAction(
-  '[Partners] Get Partner By ID',
-  props<{ id: string }>()
-);
+export const getPartnerById = createAction('[Partners] Get Partner By ID', props<{ id: string }>());
 export const getPartnerByIdSuccess = createAction(
   '[Partners] Get Partner By ID Success',
   props<{ partner: Partner }>()

@@ -140,6 +140,39 @@ export const routes: Routes = [
   },
 
   {
+    path: 'transactions',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/transactions/pages/transaction-list/transaction-list.component').then(
+        (m) => m.TransactionListComponent
+      ),
+  },
+  {
+    path: 'transactions/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/transactions/pages/transaction-form/transaction-form.component').then(
+        (m) => m.TransactionFormComponent
+      ),
+  },
+  {
+    path: 'transactions/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/transactions/pages/transaction-detail/transaction-detail.component').then(
+        (m) => m.TransactionDetailComponent
+      ),
+  },
+  // {
+  //   path: 'transactions/:id/edit',
+  //   canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import('./features/transactions/pages/transaction-form/transaction-form.component').then(
+  //       (m) => m.TransactionFormComponent
+  //     ),
+  // },
+
+  {
     path: 'partners',
     canActivate: [authGuard],
     loadComponent: () =>

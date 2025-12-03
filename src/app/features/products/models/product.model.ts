@@ -4,6 +4,7 @@ export interface Product {
   sku: string;
   category: ProductCategory;
   description: string;
+  quantity?: number;
   createdAt: string;
   updatedAt: string;
 }

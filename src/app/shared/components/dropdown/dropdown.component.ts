@@ -56,8 +56,11 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   @Input() hasLabel: boolean = true;
 
   @Output() onChange = new EventEmitter<any>();
+  @Output() onScrollEnd = new EventEmitter<void>();
+  @Output() onSearch = new EventEmitter<string>();
 
   @ViewChild('filterInput') filterInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('optionsList') optionsList?: ElementRef<HTMLDivElement>;
 
   isOpen: boolean = false;
   filterText: string = '';
@@ -125,9 +128,29 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
     }
   }
 
+  // Public method to open dropdown programmatically
+  open(): void {
+    if (this.disabled || this.isOpen) return;
+    this.isOpen = true;
+    this.filterText = '';
+    this.highlightedIndex = -1;
+    this.shouldFocusFilter = true;
+  }
+
   onFilterChange(value: string): void {
     this.filterText = value;
     this.highlightedIndex = -1;
+    this.onSearch.emit(value);
+  }
+
+  onOptionsScroll(event: Event): void {
+    const element = event.target as HTMLElement;
+    const threshold = 10; // pixels from bottom to trigger
+    const atBottom = element.scrollHeight - element.scrollTop - element.clientHeight < threshold;
+
+    if (atBottom && !this.loading) {
+      this.onScrollEnd.emit();
+    }
   }
 
   getDisplayLabel(): string {
@@ -153,7 +176,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
     this.selectedValue = value;
     this.onChangeFn(value);
     this.onTouchedFn();
-    this.onChange.emit(value);
+    this.onChange.emit(option);
     this.isOpen = false;
   }
 

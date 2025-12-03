@@ -30,15 +30,17 @@ export class PartnersEffects {
           const page = action.page ?? 1;
           const limit = action.limit ?? 10;
 
-          return this.partnerService.getAll(page, limit).pipe(
-            map((response) =>
-              PartnersActions.loadPartnersSuccess({
-                partners: Array.isArray(response.data) ? response.data : [response.data],
-                pagination: response.pagination,
-              })
-            ),
-            catchError((error) => of(PartnersActions.loadPartnersFailure({ error })))
-          );
+          return this.partnerService
+            .getAll({ page, limit, type: action.type, name: action.name })
+            .pipe(
+              map((response) =>
+                PartnersActions.loadPartnersSuccess({
+                  partners: Array.isArray(response.data) ? response.data : [response.data],
+                  pagination: response.pagination,
+                })
+              ),
+              catchError((error) => of(PartnersActions.loadPartnersFailure({ error })))
+            );
         })
       )
     );

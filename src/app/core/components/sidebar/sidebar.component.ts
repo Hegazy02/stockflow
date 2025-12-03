@@ -12,6 +12,7 @@ import {
   Ruler,
   ArrowLeftRight,
   FileText,
+  Receipt,
   Bell,
   Mail,
   Plus,
@@ -48,6 +49,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly Warehouse = Warehouse;
   readonly Shapes = Shapes;
   readonly Ruler = Ruler;
+  readonly Receipt = Receipt;
   readonly UsersRound = UsersRound;
   readonly ArrowLeftRight = ArrowLeftRight;
   readonly FileText = FileText;
@@ -60,11 +62,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: false },
-    { label: 'Stock', icon: TrendingUp, route: '/stock-levels', active: false },
-    { label: 'Stock transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
+    // { label: 'Stock', icon: TrendingUp, route: '/stock-levels', active: false },
+    { label: 'Transactions', icon: Receipt, route: '/transactions', active: false },
+    // { label: 'Stock Transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
+    { label: 'Products', icon: Package, route: '/products', active: false },
     { label: 'Reports', icon: FileText, route: '/reports', active: false },
     { label: 'Partners', icon: UsersRound, route: '/partners', active: false },
-    { label: 'Products', icon: Package, route: '/products', active: false },
     { label: 'Categories', icon: Shapes, route: '/categories', active: false },
     { label: 'Units', icon: Ruler, route: '/units', active: false },
     { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },

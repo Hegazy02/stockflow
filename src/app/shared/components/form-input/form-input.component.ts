@@ -9,12 +9,18 @@ import {
 } from '@angular/forms';
 import { LucideAngularModule, AlertCircle } from 'lucide-angular';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
-import { LabelComponent } from "../label/label";
+import { LabelComponent } from '../label/label';
 
 @Component({
   selector: 'app-form-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, ErrorMessageComponent, LabelComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    LucideAngularModule,
+    ErrorMessageComponent,
+    LabelComponent,
+  ],
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
   providers: [
@@ -35,11 +41,10 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
   @Input() minLength?: number;
   @Input() maxLength?: number;
   @Input() pattern?: string;
-
+  @Input() disabled: boolean = false;
   readonly AlertCircle = AlertCircle;
 
   value: string = '';
-  disabled: boolean = false;
   ngControl?: NgControl;
 
   onChange: (value: string) => void = () => {};
@@ -65,7 +70,7 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    // this.disabled = isDisabled;
   }
 
   onInput(event: Event): void {

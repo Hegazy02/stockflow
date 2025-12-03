@@ -2,82 +2,55 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Partner } from '../models/partner.model';
+import { Transaction, TransactionFormData } from '../models/transaction.model';
 import { ApiResponse } from '../../../core/models/api-response';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PartnerService {
-  private readonly apiUrl = `${environment.apiUrl}/partners`;
+export class TransactionService {
+  private readonly apiUrl = `${environment.apiUrl}/transactions`;
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Get all partners
-   * GET /api/partners
-   * @param page - Page number (default: 1)
-   * @param limit - Number of records per page (default: 10)
-   */
-  getAll({
-    page,
-    limit,
-    type,
-    name,
-  }: {
-    page: number;
-    limit: number;
-    type?: string;
-    name?: string;
-  }): Observable<ApiResponse<Partner>> {
-    let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
+  getAll(requestParams: {
+    page: number | undefined;
+    limit: number | undefined;
+    partner?: string | undefined;
+    transactionType?: string | undefined;
+  }): Observable<ApiResponse<Transaction>> {
+    let params = new HttpParams()
+      .set('page', requestParams.page?.toString() ?? '1')
+      .set('limit', requestParams.limit?.toString() ?? '10');
 
-    if (type) {
-      params = params.append('type', type);
+    if (requestParams.partner) {
+      params = params.set('partner', requestParams.partner);
+    }
+    if (requestParams.transactionType) {
+      params = params.set('transactionType', requestParams.transactionType);
     }
 
-    if (name) {
-      params = params.append('name', name);
-    }
-
-    return this.http.get<ApiResponse<Partner>>(this.apiUrl, { params });
+    return this.http.get<ApiResponse<Transaction>>(this.apiUrl, { params });
   }
 
-  /**
-   * Get partner by ID
-   * GET /api/partners/:id
-   */
-  getById(id: string): Observable<ApiResponse<Partner>> {
-    return this.http.get<ApiResponse<Partner>>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<ApiResponse<Transaction>> {
+    return this.http.get<ApiResponse<Transaction>>(`${this.apiUrl}/${id}`);
   }
 
-  /**
-   * Create a new partner
-   * POST /api/partners
-   */
-  create(partner: Omit<Partner, '_id' | 'createdAt' | 'updatedAt'>): Observable<Partner> {
-    return this.http.post<Partner>(this.apiUrl, partner);
+  create(transaction: TransactionFormData): Observable<Transaction> {
+    return this.http.post<Transaction>(this.apiUrl, transaction);
   }
 
-  /**
-   * Update an existing partner
-   * PUT /api/partners/:id
-   */
-  update(partner: Partner): Observable<Partner> {
-    return this.http.put<Partner>(`${this.apiUrl}/${partner._id}`, partner);
+  update(id: string, transaction: TransactionFormData): Observable<Transaction> {
+    return this.http.put<Transaction>(`${this.apiUrl}/${id}`, transaction);
   }
 
-  /**
-   * Delete partner(s)
-   * DELETE /api/partners/:id (single)
-   * POST /api/partners/bulk-delete (multiple)
-   */
   delete(ids: string[]): Observable<{ ids: string[] }> {
     if (ids.length === 0) {
       return throwError(() => ({
         code: 'VALIDATION_ERROR',
-        message: 'No partner IDs provided for deletion',
+        message: 'No transaction IDs provided for deletion',
       }));
     }
 
@@ -106,9 +79,6 @@ export class PartnerService {
     }
   }
 
-  /**
-   * Handle HTTP errors
-   */
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred';
     let errorCode = 'UNKNOWN_ERROR';
@@ -124,7 +94,7 @@ export class PartnerService {
       switch (error.status) {
         case 404:
           errorCode = 'NOT_FOUND';
-          errorMessage = 'Partner not found';
+          errorMessage = 'Transaction not found';
           break;
         case 400:
           errorCode = 'VALIDATION_ERROR';
@@ -132,7 +102,7 @@ export class PartnerService {
           break;
         case 409:
           errorCode = 'DUPLICATE';
-          errorMessage = error.error?.message || 'Duplicate partner';
+          errorMessage = error.error?.message || 'Duplicate transaction';
           break;
         case 500:
           errorCode = 'SERVER_ERROR';

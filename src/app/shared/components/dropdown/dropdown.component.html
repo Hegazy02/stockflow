@@ -60,7 +60,7 @@
 
     <!-- Options List -->
     @if (!loading) {
-    <div class="dropdown-options">
+    <div class="dropdown-options" #optionsList (scroll)="onOptionsScroll($event)">
       @if (getFilteredOptions().length > 0) { @for (option of getFilteredOptions(); track
       option[optionValue]; let i = $index) {
       <div

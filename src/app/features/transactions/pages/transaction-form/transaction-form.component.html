@@ -1,0 +1,163 @@
+<div>
+  <app-details-page-header [hasDelete]="false" [hasEdit]="false" (back)="onCancel()">
+  </app-details-page-header>
+  <h1>{{ isEditMode ? 'Edit Transaction' : 'Create New Transaction' }}</h1>
+
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="transaction-form">
+    <div class="form-section">
+      <h2>Transaction Details</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <app-dropdown
+            formControlName="transactionType"
+            label="Transaction Type"
+            [options]="transactionTypeOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Select transaction type"
+            [required]="true"
+            [filter]="false"
+          ></app-dropdown>
+          <p class="help-text">
+            @if (transactionForm.get('transactionType')?.value === 'addition') {
+            <span>Addition: Stock coming in from suppliers</span>
+            } @else if (transactionForm.get('transactionType')?.value === 'subtraction') {
+            <span>Subtraction: Stock going out to customers</span>
+            }
+          </p>
+        </div>
+
+        <div class="form-group">
+          <app-dropdown
+            formControlName="partnerId"
+            label="Partner"
+            [options]="partners"
+            optionLabel="name"
+            optionValue="_id"
+            [placeholder]="
+              transactionForm.get('transactionType')?.value === 'addition'
+                ? 'Select supplier'
+                : transactionForm.get('transactionType')?.value === 'subtraction'
+                ? 'Select customer'
+                : 'Select transaction type first'
+            "
+            [required]="true"
+            [filter]="true"
+            [loading]="loadingPartners"
+            [disabled]="!transactionForm.get('transactionType')?.value"
+            (onScrollEnd)="onPartnerScrollEnd()"
+            (onSearch)="onPartnerSearch($event)"
+          ></app-dropdown>
+          <p class="help-text">
+            @if (!transactionForm.get('transactionType')?.value) {
+            <span>Please select a transaction type first</span>
+            } @else if (transactionForm.get('transactionType')?.value === 'addition') {
+            <span>Suppliers will be shown. Scroll down to load more.</span>
+            } @else {
+            <span>Customers will be shown. Scroll down to load more.</span>
+            }
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <h2>Products</h2>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="addProduct(true)">
+          <lucide-icon [img]="Plus" [size]="16"></lucide-icon>
+          <span>Add Product</span>
+        </button>
+      </div>
+
+      <div formArrayName="products" class="products-list">
+        @for (product of productsArray.controls; track product; let i = $index) {
+        <div [formGroupName]="i" class="product-row">
+          <div class="product-row-number">{{ i + 1 }}</div>
+          <div class="product-row-content">
+            <div class="form-group">
+              <app-dropdown
+                #productDropdown
+                formControlName="productId"
+                label="Product"
+                [options]="products"
+                optionLabel="name"
+                optionValue="_id"
+                placeholder="Select product"
+                [required]="true"
+                [filter]="true"
+                [loading]="loadingProducts"
+                (onScrollEnd)="onProductScrollEnd()"
+                (onSearch)="onProductSearch($event)"
+              ></app-dropdown>
+            </div>
+
+            <div class="form-group">
+              <app-form-input
+                formControlName="currentQuantity"
+                label="Current Stock"
+                type="number"
+                placeholder="Select product first"
+                [disabled]="true"
+              ></app-form-input>
+            </div>
+
+            <div class="form-group">
+              <app-form-input
+                formControlName="quantity"
+                label="Transaction Qty"
+                type="number"
+                placeholder="Enter quantity"
+                [required]="true"
+                (keydown)="onQuantityKeydown($event, i)"
+              ></app-form-input>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-danger btn-icon"
+              (click)="removeProduct(i)"
+              [disabled]="productsArray.length === 1"
+              title="Remove product"
+            >
+              <lucide-icon [img]="Trash2" [size]="18"></lucide-icon>
+            </button>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty-products">
+          <p>No products added yet. Click "Add Product" to start.</p>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Additional Information</h2>
+      <div class="form-group full-width">
+        <app-form-input
+          formControlName="note"
+          label="Note"
+          type="textarea"
+          placeholder="Enter transaction note (optional)"
+          [rows]="3"
+        ></app-form-input>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="transactionForm.invalid || (loading$ | async)"
+      >
+        @if (loading$ | async) {
+        <span>Saving...</span>
+        } @else {
+        <span>{{ isEditMode ? 'Update' : 'Create' }} Transaction</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>

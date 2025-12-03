@@ -1,28 +1,27 @@
 <div>
   <app-list-page-header
-    [title]="'Products'"
-    [addContent]="'Add product'"
-    [selectedCount]="selectedProducts.length"
-    (bulkDelete)="confirmBulkDelete()"
+    [addContent]="'Add Transaction'"
+    [title]="'Transactions'"
+    [selectedCount]="selectedTransactions.length"
     (add)="navigateToCreate()"
+    (bulkDelete)="confirmBulkDelete()"
   ></app-list-page-header>
 
-  <!-- Error Message -->
-  <!-- @if (error$ | async; as error) {
+  @if (error$ | async; as error) {
   <div class="error-container">
     <div class="error-message">
       <span class="error-icon">⚠️</span>
       <span class="error-text">{{
-        error.message || 'Failed to load products. Please try again.'
+        error.message || 'Failed to load transactions. Please try again.'
       }}</span>
-      <button class="btn btn-secondary btn-retry" (click)="retryLoadProducts()">Retry</button>
+      <button class="btn btn-secondary btn-retry" (click)="retryLoadTransactions()">Retry</button>
     </div>
   </div>
-  } -->
+  }
 
-  <div class="products-table">
+  <div class="transactions-table">
     <app-data-table
-      [data]="products"
+      [data]="transactions"
       [columns]="columns"
       [actions]="actions"
       [loading]="(loading$ | async)!"
@@ -34,7 +33,7 @@
       [pageSize]="(pageSize$ | async) || 10"
       [height]="'calc(100vh - 200px)'"
       [showActions]="true"
-      [globalFilterFields]="['name', 'sku', 'category.name', 'description']"
+      [globalFilterFields]="['partner.name', 'transactionType', 'note']"
       [selectionMode]="'multiple'"
       [dataKey]="'_id'"
       [showFilters]="true"
@@ -45,37 +44,33 @@
     ></app-data-table>
   </div>
 
-  <!-- Single Product Delete Dialog -->
   <app-confirm-dialog
     [isOpen]="showDeleteDialog"
-    title="Delete Product"
-    [message]="
-      productToDelete ? 'Are you sure you want to delete ' + productToDelete.name + '?' : ''
-    "
+    title="Delete Transaction"
+    [message]="transactionToDelete ? 'Are you sure you want to delete this transaction?' : ''"
     warningMessage="This action cannot be undone."
     confirmText="Delete"
     cancelText="Cancel"
     confirmButtonClass="btn-danger"
-    (confirm)="deleteProduct()"
+    (confirm)="deleteTransaction()"
     (cancel)="cancelDelete()"
   ></app-confirm-dialog>
 
-  <!-- Bulk Delete Dialog -->
   <app-confirm-dialog
     [isOpen]="showBulkDeleteDialog"
-    title="Delete Multiple Products"
+    title="Delete Multiple Transactions"
     [message]="
       'Are you sure you want to delete ' +
-      selectedProducts.length +
-      ' product' +
-      (selectedProducts.length > 1 ? 's' : '') +
+      selectedTransactions.length +
+      ' transaction' +
+      (selectedTransactions.length > 1 ? 's' : '') +
       '?'
     "
     warningMessage="This action cannot be undone."
     confirmText="Delete All"
     cancelText="Cancel"
     confirmButtonClass="btn-danger"
-    (confirm)="bulkDeleteProducts()"
+    (confirm)="bulkDeleteTransactions()"
     (cancel)="cancelBulkDelete()"
   ></app-confirm-dialog>
 </div>
