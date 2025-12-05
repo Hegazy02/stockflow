@@ -4,6 +4,7 @@
 
   } @if (type === 'textarea') {
   <textarea
+    #inputEl
     [id]="label"
     [placeholder]="placeholder"
     [value]="value"
@@ -16,6 +17,7 @@
   ></textarea>
   } @else {
   <input
+    #inputEl
     [id]="label"
     [type]="type"
     [placeholder]="placeholder"

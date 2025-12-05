@@ -17,7 +17,7 @@ import {
   selectCategoriesLoading,
   selectCategoriesError,
 } from '../../../categories/store/categories.selectors';
-import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
+import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
 
 @Component({
   selector: 'app-product-form',
@@ -28,8 +28,8 @@ import { DetailsPageHeaderComponent } from "../../../../shared/components/detail
     LucideAngularModule,
     FormInputComponent,
     DropdownComponent,
-    DetailsPageHeaderComponent
-],
+    DetailsPageHeaderComponent,
+  ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],
 })
@@ -60,6 +60,7 @@ export class ProductFormComponent implements OnInit {
       sku: ['', [Validators.required]],
       description: [null],
       categoryId: [null, [Validators.required]],
+      sellingPrice: [null, [Validators.required]],
     });
 
     // Initialize category observables
@@ -99,11 +100,14 @@ export class ProductFormComponent implements OnInit {
           sku: product.sku,
           description: product.description,
           categoryId: product.category._id,
+          sellingPrice: product.sellingPrice,
         });
       });
   }
 
   onSubmit(): void {
+    console.log('form', this.productForm.value);
+
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
       return;
@@ -116,6 +120,7 @@ export class ProductFormComponent implements OnInit {
       sku: formValue.sku,
       description: formValue.description,
       categoryId: formValue.categoryId,
+      sellingPrice: formValue.sellingPrice,
     };
 
     if (this.isEditMode && this.productId) {

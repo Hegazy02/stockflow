@@ -1,4 +1,15 @@
-import { Component, OnInit, DestroyRef, inject, QueryList, ViewChildren } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  DestroyRef,
+  inject,
+  QueryList,
+  ViewChildren,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  Query,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +26,10 @@ import {
   selectTransactionsLoading,
 } from '../../store/transactions.selectors';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
-import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
+import {
+  DropdownComponent,
+  DropdownOption,
+} from '../../../../shared/components/dropdown/dropdown.component';
 import { Product } from '../../../products/models/product.model';
 import { Partner } from '../../../partners/models/partner.model';
 import { PartnerService } from '../../../partners/services/partner.service';
@@ -42,6 +56,8 @@ export class TransactionFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   @ViewChildren('productDropdown') productDropdowns!: QueryList<DropdownComponent>;
+  @ViewChildren('quantityInput') quantityInputs!: QueryList<FormInputComponent>;
+  @ViewChild('paidInput') paidInput!: FormInputComponent;
 
   transactionForm: FormGroup;
   isEditMode = false;
@@ -85,6 +101,9 @@ export class TransactionFormComponent implements OnInit {
       partnerId: ['', Validators.required],
       products: this.fb.array([]),
       note: [''],
+      balance: [0, [Validators.required, Validators.min(0)]],
+      paid: [0, [Validators.required, Validators.min(0)]],
+      left: [0],
     });
   }
 
@@ -132,6 +151,12 @@ export class TransactionFormComponent implements OnInit {
                 this.fb.group({
                   productId: [product.productId, Validators.required],
                   quantity: [product.quantity, [Validators.required, Validators.min(1)]],
+                  costPrice: [product.costPrice, [Validators.required, Validators.min(0)]],
+                  sellingPrice: [product.sellingPrice, [Validators.required, Validators.min(0)]],
+                  totalProductPrice: [
+                    product.sellingPrice,
+                    [Validators.required, Validators.min(0)],
+                  ],
                 })
               );
             });
@@ -140,6 +165,8 @@ export class TransactionFormComponent implements OnInit {
               transactionType: transaction.transactionType,
               partnerId: transaction.partnerId,
               note: transaction.note || '',
+              balance: transaction.balance,
+              paid: transaction.paid,
             });
 
             if (transaction.transactionType) {
@@ -153,12 +180,21 @@ export class TransactionFormComponent implements OnInit {
   get productsArray(): FormArray {
     return this.transactionForm.get('products') as FormArray;
   }
+  @HostListener('document:keydown', ['$event'])
+  handlePlusKey(event: KeyboardEvent) {
+    if (event.key === '+') {
+      event.preventDefault(); // IMPORTANT: stops browser from clearing the input
+      this.addProduct(true);
+    }
+  }
 
   addProduct(autoOpen: boolean = false): void {
     const productGroup = this.fb.group({
       productId: ['', Validators.required],
       currentQuantity: [{ value: '', disabled: true }],
       quantity: [1, [Validators.required, Validators.min(1)]],
+      sellingPrice: ['', [Validators.required, Validators.min(1)]],
+      totalProductPrice: ['', [Validators.required, Validators.min(1)]],
     });
 
     // Watch for product selection to update current quantity
@@ -171,6 +207,8 @@ export class TransactionFormComponent implements OnInit {
           if (selectedProduct) {
             productGroup.patchValue({
               currentQuantity: selectedProduct.quantity?.toString() || '0',
+              sellingPrice: selectedProduct.sellingPrice?.toString() ?? '0',
+              totalProductPrice: selectedProduct.sellingPrice?.toString() ?? '0',
             });
           }
         } else {
@@ -195,16 +233,18 @@ export class TransactionFormComponent implements OnInit {
   removeProduct(index: number): void {
     if (this.productsArray.length > 1) {
       this.productsArray.removeAt(index);
+      this.setTransactionBalance();
     }
   }
 
   onQuantityKeydown(event: KeyboardEvent, index: number): void {
     if (event.key === 'Enter') {
       event.preventDefault();
-      // Check if this is the last product row
-      if (index === this.productsArray.length - 1) {
-        this.addProduct(true); // Auto-open dropdown when adding via Enter key
-      }
+      this.paidInput.focus();
+      // // Check if this is the last product row
+      // if (index === this.productsArray.length - 1) {
+      //   this.addProduct(true); // Auto-open dropdown when adding via Enter key
+      // }
     }
   }
 
@@ -330,8 +370,12 @@ export class TransactionFormComponent implements OnInit {
         products: formValue.products.map((p: any) => ({
           productId: p.productId,
           quantity: p.quantity,
+          costPrice: p.costPrice,
+          sellingPrice: p.sellingPrice,
         })),
         note: formValue.note,
+        balance: formValue.balance,
+        paid: formValue.paid,
       };
 
       if (this.isEditMode && this.transactionId) {
@@ -347,6 +391,63 @@ export class TransactionFormComponent implements OnInit {
     } else {
       this.transactionForm.markAllAsTouched();
     }
+  }
+  onChangeQuantity(value: string, index: number) {
+    console.log('value', value);
+    console.log('index', index);
+    if (typeof value != 'string') {
+      return;
+    }
+
+    const productGroup = this.productsArray.at(index) as FormGroup;
+    const quantity = Number(value);
+
+    this.setTotalProductPrice(productGroup, quantity);
+    this.setTransactionBalance();
+  }
+
+  private setTotalProductPrice(productGroup: FormGroup<any>, quantity: number) {
+    const sellingPrice = Number(productGroup.get('sellingPrice')?.value || 0);
+
+    const totalProductPrice = sellingPrice * quantity;
+
+    // Update control
+    productGroup.get('totalProductPrice')?.setValue(totalProductPrice);
+  }
+  setTransactionBalance() {
+    let balance = 0;
+    (this.productsArray.value as Array<any>).map((product) => {
+      balance = balance + +product.totalProductPrice;
+    });
+    this.transactionForm.patchValue({ balance });
+
+    const paid = this.transactionForm.get('paid')?.value;
+    this.setLeftAmount(balance, paid);
+  }
+
+  onProductChange(product: Product, index: number) {
+    this.setTransactionBalance();
+    this.focusQuantity(index);
+  }
+  focusQuantity(index: number) {
+    const input = this.quantityInputs.toArray()[index];
+    input?.focus();
+  }
+  onPaidChange(value: string) {
+    if (typeof value != 'string') {
+      return;
+    }
+    const balance = this.transactionForm.get('balance')?.value;
+    this.setLeftAmount(balance, value);
+  }
+
+  private setLeftAmount(balance: any, paid: string) {
+    const left = +balance - +paid;
+    console.log('left', left);
+
+    this.transactionForm.patchValue({
+      left,
+    });
   }
 
   onCancel(): void {

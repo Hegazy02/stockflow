@@ -24,8 +24,7 @@
               class="type-badge"
               [class.addition]="transaction.transactionType === 'addition'"
               [class.deduction]="transaction.transactionType === 'subtraction'"
-            >
-              {{
+              >{{
                 transaction.transactionType === 'addition'
                   ? 'Addition (Stock In)'
                   : 'Subtraction (Stock Out)'
@@ -43,21 +42,19 @@
           <label>Partner Type</label>
           <p>{{ transaction.partner?.type || 'N/A' }}</p>
         </div>
-
+        <div class="info-item">
+          <label>Created At</label>
+          <p>{{ transaction.createdAt | date : 'medium' }}</p>
+        </div>
         <div class="info-item full-width">
           <label>Note</label>
           <p>{{ transaction.note || 'No note provided' }}</p>
         </div>
 
-        <div class="info-item">
-          <label>Created At</label>
-          <p>{{ transaction.createdAt | date : 'medium' }}</p>
-        </div>
-
-        <div class="info-item">
+        <!-- <div class="info-item">
           <label>Updated At</label>
           <p>{{ transaction.updatedAt | date : 'medium' }}</p>
-        </div>
+          -->
       </div>
     </div>
 

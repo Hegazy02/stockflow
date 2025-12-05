@@ -5,6 +5,7 @@ export interface Product {
   category: ProductCategory;
   description: string;
   quantity?: number;
+  sellingPrice: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,4 +19,5 @@ export interface ProductFormBody {
   sku: string;
   categoryId: string;
   description: string;
+  sellingPrice: number;
 }

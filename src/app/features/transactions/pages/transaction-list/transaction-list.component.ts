@@ -55,18 +55,18 @@ export class TransactionListComponent implements OnInit {
     {
       field: 'productsDisplay',
       header: 'Products',
-      width: '20%',
+      width: '15%',
     },
     {
       field: 'partner.name',
       header: 'Partner',
-      width: '20%',
+      width: '15%',
       filterable: true,
     },
     {
       field: 'transactionType',
       header: 'Type',
-      width: '10%',
+      width: '8%',
       filterable: true,
       filterTypes: ['dropdown'],
       dropdownConfig: {
@@ -82,18 +82,36 @@ export class TransactionListComponent implements OnInit {
     {
       field: 'totalQuantity',
       header: 'Total Qty',
+      width: '8%',
+      type: 'number',
+    },
+    {
+      field: 'totalCostPrice',
+      header: 'Total Cost',
+      width: '10%',
+      type: 'number',
+    },
+    {
+      field: 'balance',
+      header: 'Balance',
+      width: '10%',
+      type: 'number',
+    },
+    {
+      field: 'paid',
+      header: 'Paid',
       width: '10%',
       type: 'number',
     },
     {
       field: 'note',
       header: 'Note',
-      width: '20%',
+      width: '15%',
     },
     {
       field: 'createdAt',
       header: 'Created',
-      width: '20%',
+      width: '15%',
       type: 'date',
       dateFormat: 'short',
     },
@@ -138,6 +156,7 @@ export class TransactionListComponent implements OnInit {
       ...transaction,
       productsDisplay: this.getProductsDisplay(transaction),
       totalQuantity: this.getTotalQuantity(transaction),
+      totalCostPrice: this.getTotalCostPrice(transaction),
     }));
   }
 
@@ -153,6 +172,10 @@ export class TransactionListComponent implements OnInit {
 
   private getTotalQuantity(transaction: Transaction): number {
     return transaction.products?.reduce((sum, p) => sum + (p.quantity || 0), 0) || 0;
+  }
+
+  private getTotalCostPrice(transaction: Transaction): number {
+    return transaction.products?.reduce((sum, p) => sum + ((p.costPrice || 0) * (p.quantity || 0)), 0) || 0;
   }
 
   private loadTransactionsUsingURLParams() {

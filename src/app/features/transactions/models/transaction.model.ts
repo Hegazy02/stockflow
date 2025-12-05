@@ -1,6 +1,8 @@
 export interface TransactionProduct {
   productId: string;
   quantity: number;
+  costPrice: number;
+  sellingPrice: number;
   // Backend can return product details in two ways:
   // 1. Nested under 'product' (populated)
   product?: {
@@ -19,6 +21,8 @@ export interface Transaction {
   partnerId: string;
   transactionType: 'addition' | 'subtraction';
   note?: string;
+  balance: number;
+  paid: number;
   partner?: {
     _id: string;
     name: string;
@@ -33,4 +37,6 @@ export interface TransactionFormData {
   partnerId: string;
   transactionType: 'addition' | 'subtraction';
   note?: string;
+  balance: number;
+  paid: number;
 }

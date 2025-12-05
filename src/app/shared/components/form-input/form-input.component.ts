@@ -1,4 +1,14 @@
-import { Component, Input, forwardRef, Injector, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  forwardRef,
+  Injector,
+  OnInit,
+  Output,
+  EventEmitter,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
@@ -32,6 +42,8 @@ import { LabelComponent } from '../label/label';
   ],
 })
 export class FormInputComponent implements ControlValueAccessor, OnInit {
+  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement | HTMLTextAreaElement>;
+
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: 'text' | 'email' | 'password' | 'number' | 'textarea' = 'text';
@@ -42,6 +54,8 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
   @Input() maxLength?: number;
   @Input() pattern?: string;
   @Input() disabled: boolean = false;
+
+  @Output() change = new EventEmitter();
   readonly AlertCircle = AlertCircle;
 
   value: string = '';
@@ -77,10 +91,16 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = target.value;
     this.onChange(this.value);
+    this.change.emit(this.value);
   }
 
   onBlur(): void {
     this.onTouched();
+  }
+  focus() {
+    setTimeout(() => {
+      this.inputEl?.nativeElement?.focus();
+    });
   }
 
   get showError(): boolean {

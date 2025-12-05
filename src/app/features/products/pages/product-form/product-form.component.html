@@ -34,6 +34,13 @@
     @if (categoriesError$ | async; as error) {
     <small class="error-message">{{ error.message }}</small>
     }
+    <app-form-input
+      label="Selling price"
+      placeholder="Enter product Selling price"
+      type="number"
+      [required]="true"
+      formControlName="sellingPrice"
+    ></app-form-input>
 
     <app-form-input
       label="Description"

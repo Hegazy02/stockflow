@@ -89,6 +89,7 @@
                 [loading]="loadingProducts"
                 (onScrollEnd)="onProductScrollEnd()"
                 (onSearch)="onProductSearch($event)"
+                (onChange)="onProductChange($event, i)"
               ></app-dropdown>
             </div>
 
@@ -101,15 +102,35 @@
                 [disabled]="true"
               ></app-form-input>
             </div>
+            <div class="form-group">
+              <app-form-input
+                formControlName="sellingPrice"
+                label="Selling price"
+                type="number"
+                placeholder="Select product first"
+                [disabled]="true"
+              ></app-form-input>
+            </div>
+            <div class="form-group">
+              <app-form-input
+                formControlName="totalProductPrice"
+                label="Total price"
+                type="number"
+                placeholder="Select product first"
+                [disabled]="true"
+              ></app-form-input>
+            </div>
 
             <div class="form-group">
               <app-form-input
+                #quantityInput
                 formControlName="quantity"
                 label="Transaction Qty"
                 type="number"
                 placeholder="Enter quantity"
                 [required]="true"
                 (keydown)="onQuantityKeydown($event, i)"
+                (change)="onChangeQuantity($event, i)"
               ></app-form-input>
             </div>
 
@@ -134,6 +155,36 @@
 
     <div class="form-section">
       <h2>Additional Information</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <app-form-input
+            formControlName="balance"
+            label="Balance"
+            type="number"
+            placeholder="Enter balance"
+            [required]="true"
+          ></app-form-input>
+        </div>
+        <div class="form-group">
+          <app-form-input
+            #paidInput
+            formControlName="paid"
+            label="Paid"
+            type="number"
+            placeholder="Enter paid amount"
+            [required]="true"
+            (change)="onPaidChange($event)"
+          ></app-form-input>
+        </div>
+        <div class="form-group">
+          <app-form-input
+            formControlName="left"
+            label="Left"
+            type="number"
+            [disabled]="true"
+          ></app-form-input>
+        </div>
+      </div>
       <div class="form-group full-width">
         <app-form-input
           formControlName="note"
