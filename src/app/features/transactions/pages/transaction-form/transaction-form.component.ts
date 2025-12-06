@@ -108,7 +108,7 @@ export class TransactionFormComponent implements OnInit {
       products: this.fb.array([]),
       note: [''],
       balance: [0, [Validators.required, Validators.min(0)]],
-      paid: [0, [Validators.required, Validators.min(0)]],
+      paid: [null, [Validators.required, Validators.min(0)]],
       left: [0],
     });
   }
