@@ -25,12 +25,18 @@ import {
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
+import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
 
 @Component({
   selector: 'app-transaction-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DataTableComponent,
+    ConfirmDialogComponent,
+    ListPageHeaderComponent,
+  ],
   templateUrl: './transaction-list.component.html',
   styleUrls: ['./transaction-list.component.scss'],
 })
@@ -71,8 +77,8 @@ export class TransactionListComponent implements OnInit {
       filterTypes: ['dropdown'],
       dropdownConfig: {
         options: [
-          { label: 'Addition', value: 'addition' },
-          { label: 'Subtraction', value: 'subtraction' },
+          { label: 'Sales', value: 'sales' },
+          { label: 'Purchases', value: 'purchases' },
         ],
         optionLabel: 'label',
         optionValue: 'value',
@@ -83,12 +89,6 @@ export class TransactionListComponent implements OnInit {
       field: 'totalQuantity',
       header: 'Total Qty',
       width: '8%',
-      type: 'number',
-    },
-    {
-      field: 'totalCostPrice',
-      header: 'Total Cost',
-      width: '10%',
       type: 'number',
     },
     {
@@ -104,14 +104,14 @@ export class TransactionListComponent implements OnInit {
       type: 'number',
     },
     {
-      field: 'note',
-      header: 'Note',
-      width: '15%',
+      field: 'left',
+      header: 'Left',
+      width: '10%',
     },
     {
       field: 'createdAt',
       header: 'Created',
-      width: '15%',
+      width: '20%',
       type: 'date',
       dateFormat: 'short',
     },
@@ -156,7 +156,6 @@ export class TransactionListComponent implements OnInit {
       ...transaction,
       productsDisplay: this.getProductsDisplay(transaction),
       totalQuantity: this.getTotalQuantity(transaction),
-      totalCostPrice: this.getTotalCostPrice(transaction),
     }));
   }
 
@@ -172,10 +171,6 @@ export class TransactionListComponent implements OnInit {
 
   private getTotalQuantity(transaction: Transaction): number {
     return transaction.products?.reduce((sum, p) => sum + (p.quantity || 0), 0) || 0;
-  }
-
-  private getTotalCostPrice(transaction: Transaction): number {
-    return transaction.products?.reduce((sum, p) => sum + ((p.costPrice || 0) * (p.quantity || 0)), 0) || 0;
   }
 
   private loadTransactionsUsingURLParams() {

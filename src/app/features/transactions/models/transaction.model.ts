@@ -15,14 +15,19 @@ export interface TransactionProduct {
   sku?: string;
 }
 
+export enum TransactionType {
+  SALES = 'sales',
+  PURCHASES = 'purchases',
+}
 export interface Transaction {
   _id: string;
   products: TransactionProduct[];
   partnerId: string;
-  transactionType: 'addition' | 'subtraction';
+  transactionType: TransactionType;
   note?: string;
   balance: number;
   paid: number;
+  left: number;
   partner?: {
     _id: string;
     name: string;
@@ -35,7 +40,7 @@ export interface Transaction {
 export interface TransactionFormData {
   products: TransactionProduct[];
   partnerId: string;
-  transactionType: 'addition' | 'subtraction';
+  transactionType: TransactionType;
   note?: string;
   balance: number;
   paid: number;

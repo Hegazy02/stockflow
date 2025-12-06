@@ -8,14 +8,20 @@ import {
   ElementRef,
   HostListener,
   ViewChild,
-  Query,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { TransactionFormData, TransactionProduct } from '../../models/transaction.model';
+import { combineLatest, concatWith, defer, Observable, of } from 'rxjs';
+import { TransactionFormData, TransactionType } from '../../models/transaction.model';
 import {
   createTransaction,
   updateTransaction,
@@ -26,10 +32,7 @@ import {
   selectTransactionsLoading,
 } from '../../store/transactions.selectors';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
-import {
-  DropdownComponent,
-  DropdownOption,
-} from '../../../../shared/components/dropdown/dropdown.component';
+import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
 import { Product } from '../../../products/models/product.model';
 import { Partner } from '../../../partners/models/partner.model';
 import { PartnerService } from '../../../partners/services/partner.service';
@@ -56,8 +59,10 @@ export class TransactionFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   @ViewChildren('productDropdown') productDropdowns!: QueryList<DropdownComponent>;
+  @ViewChildren('costPriceInput') costPriceInputs!: QueryList<FormInputComponent>;
   @ViewChildren('quantityInput') quantityInputs!: QueryList<FormInputComponent>;
   @ViewChild('paidInput') paidInput!: FormInputComponent;
+  @ViewChildren('productRow') productRows!: QueryList<ElementRef>;
 
   transactionForm: FormGroup;
   isEditMode = false;
@@ -77,13 +82,14 @@ export class TransactionFormComponent implements OnInit {
   partnerPage = 1;
   partnerLimit = 20;
   hasMorePartners = true;
-
+  TransactionType = TransactionType;
+  transactionType = TransactionType.SALES;
   readonly Plus = Plus;
   readonly Trash2 = Trash2;
 
   transactionTypeOptions = [
-    { label: 'Addition (Stock In)', value: 'addition' },
-    { label: 'Subtraction (Stock Out)', value: 'subtraction' },
+    { label: 'Sales (Stock In)', value: 'sales' },
+    { label: 'Purchases (Stock Out)', value: 'purchases' },
   ];
 
   constructor(
@@ -132,6 +138,7 @@ export class TransactionFormComponent implements OnInit {
           if (!this.isEditMode) {
             this.transactionForm.patchValue({ partnerId: '' });
           }
+          this.setTransactionTypeValidation(type);
         }
       });
 
@@ -147,18 +154,30 @@ export class TransactionFormComponent implements OnInit {
 
             // Add products from transaction
             transaction.products.forEach((product) => {
-              this.productsArray.push(
-                this.fb.group({
-                  productId: [product.productId, Validators.required],
-                  quantity: [product.quantity, [Validators.required, Validators.min(1)]],
-                  costPrice: [product.costPrice, [Validators.required, Validators.min(0)]],
-                  sellingPrice: [product.sellingPrice, [Validators.required, Validators.min(0)]],
-                  totalProductPrice: [
-                    product.sellingPrice,
-                    [Validators.required, Validators.min(0)],
-                  ],
-                })
-              );
+              const controls: { [key: string]: any } = {
+                productId: [product.productId, Validators.required],
+                quantity: [product.quantity, [Validators.required, Validators.min(1)]],
+                totalProductPrice: [
+                  product.sellingPrice || product.costPrice || 0,
+                  [Validators.required, Validators.min(1)],
+                ],
+                sellingPrice: [
+                  {
+                    value: product.sellingPrice ?? 0,
+                    disabled: transaction.transactionType !== TransactionType.SALES,
+                  },
+                  [Validators.min(0)],
+                ],
+                costPrice: [
+                  {
+                    value: product.costPrice ?? 0,
+                    disabled: transaction.transactionType !== TransactionType.PURCHASES,
+                  },
+                  [Validators.min(0)],
+                ],
+              };
+
+              this.productsArray.push(this.fb.group(controls));
             });
 
             this.transactionForm.patchValue({
@@ -185,47 +204,67 @@ export class TransactionFormComponent implements OnInit {
     if (event.key === '+') {
       event.preventDefault(); // IMPORTANT: stops browser from clearing the input
       this.addProduct(true);
+      // wait until view updates
+      setTimeout(() => {
+        this.scrollToCenter();
+      });
     }
   }
 
   addProduct(autoOpen: boolean = false): void {
-    const productGroup = this.fb.group({
-      productId: ['', Validators.required],
-      currentQuantity: [{ value: '', disabled: true }],
-      quantity: [1, [Validators.required, Validators.min(1)]],
-      sellingPrice: ['', [Validators.required, Validators.min(1)]],
-      totalProductPrice: ['', [Validators.required, Validators.min(1)]],
-    });
+    const transactionType: TransactionType | undefined =
+      this.transactionForm.get('transactionType')?.value;
 
-    // Watch for product selection to update current quantity
-    productGroup
-      .get('productId')
-      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((productId) => {
-        if (productId) {
-          const selectedProduct = this.products.find((p) => p._id === productId);
-          if (selectedProduct) {
-            productGroup.patchValue({
-              currentQuantity: selectedProduct.quantity?.toString() || '0',
-              sellingPrice: selectedProduct.sellingPrice?.toString() ?? '0',
-              totalProductPrice: selectedProduct.sellingPrice?.toString() ?? '0',
-            });
-          }
-        } else {
-          productGroup.patchValue({ currentQuantity: '' });
+    // Base controls always present
+    const controls: { [key: string]: any } = {
+      productId: this.fb.control('', Validators.required),
+      currentQuantity: this.fb.control({ value: '', disabled: true }), // <-- add this
+      quantity: this.fb.control(1, [Validators.required, Validators.min(1)]),
+      totalProductPrice: this.fb.control(0, [Validators.required, Validators.min(0)]),
+      sellingPrice: this.fb.control(
+        { value: 0, disabled: transactionType !== TransactionType.SALES },
+        [Validators.min(0)]
+      ),
+      costPrice: this.fb.control(
+        { value: 0, disabled: transactionType !== TransactionType.PURCHASES },
+        [Validators.min(0)]
+      ),
+    };
+
+    const productGroup = this.fb.group(controls);
+
+    // Watch for product selection / transactionType to update current quantity and prices
+
+    combineLatest([
+      this.controlValue$<string>(productGroup.get('productId')!),
+      this.controlValue$<TransactionType>(this.transactionForm.get('transactionType')!),
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([productId, transactionType]) => {
+        if (!productId) return;
+
+        const product = this.products.find((p) => p._id === productId);
+        if (!product) return;
+        const patchData: any = { currentQuantity: product.quantity?.toString() || '0' };
+
+        if (transactionType === TransactionType.SALES) {
+          patchData.sellingPrice = product.sellingPrice ?? 0;
+          patchData.totalProductPrice = product.sellingPrice ?? 0;
+        } else if (transactionType === TransactionType.PURCHASES) {
+          // For purchases, costPrice is entered manually, totalProductPrice can be set to 0 or based on costPrice
+          patchData.totalProductPrice = 0;
         }
+        productGroup.patchValue(patchData);
       });
 
     this.productsArray.push(productGroup);
 
-    // Open the dropdown for the newly added product row only if autoOpen is true
+    // Open dropdown if autoOpen is true
     if (autoOpen) {
       setTimeout(() => {
         const dropdowns = this.productDropdowns.toArray();
         const lastDropdown = dropdowns[dropdowns.length - 1];
-        if (lastDropdown) {
-          lastDropdown.open();
-        }
+        if (lastDropdown) lastDropdown.open();
       }, 0);
     }
   }
@@ -247,14 +286,17 @@ export class TransactionFormComponent implements OnInit {
       // }
     }
   }
+  onPaidKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onSubmit();
+    }
+  }
 
   loadProducts(search?: string): void {
     if (this.loadingProducts || !this.hasMoreProducts) {
       return;
     }
-    if (this.products.length < 1) {
-      this.loadingProducts = true;
-    }
+
     const params = {
       page: this.productPage,
       limit: this.productLimit,
@@ -276,10 +318,10 @@ export class TransactionFormComponent implements OnInit {
           }
 
           this.hasMoreProducts = this.products.length < response.pagination.total;
-          this.loadingProducts = false;
+          // this.loadingProducts = false;
         },
         error: () => {
-          this.loadingProducts = false;
+          // this.loadingProducts = false;
         },
       });
   }
@@ -299,15 +341,15 @@ export class TransactionFormComponent implements OnInit {
     }
   }
 
-  loadPartners(transactionType: string, search?: string): void {
+  loadPartners(transactionType: TransactionType, search?: string): void {
     if (this.loadingPartners || !this.hasMorePartners) {
       return;
     }
 
-    if (this.partners.length < 1) {
-      this.loadingPartners = true;
-    }
-    const partnerType = transactionType === 'addition' ? 'Supplier' : 'Customer';
+    // if (this.partners.length < 1) {
+    //   this.loadingPartners = true;
+    // }
+    const partnerType = transactionType === TransactionType.SALES ? 'Customer' : 'Supplier';
     const data = {
       page: this.partnerPage,
       limit: this.partnerLimit,
@@ -329,10 +371,10 @@ export class TransactionFormComponent implements OnInit {
           }
 
           this.hasMorePartners = this.partners.length < response.pagination.total;
-          this.loadingPartners = false;
+          // this.loadingPartners = false;
         },
         error: () => {
-          this.loadingPartners = false;
+          // this.loadingPartners = false;
         },
       });
   }
@@ -358,7 +400,28 @@ export class TransactionFormComponent implements OnInit {
       }
     }
   }
+  setTransactionTypeValidation(type: any) {
+    this.productsArray.controls.forEach((control) => {
+      const group = control as FormGroup;
 
+      if (type === TransactionType.SALES) {
+        group.get('sellingPrice')?.setValidators([Validators.required, Validators.min(0)]);
+        group.get('sellingPrice')?.enable({ emitEvent: false });
+
+        group.get('costPrice')?.clearValidators();
+        group.get('costPrice')?.disable({ emitEvent: false });
+      } else {
+        group.get('costPrice')?.setValidators([Validators.required, Validators.min(0)]);
+        group.get('costPrice')?.enable({ emitEvent: false });
+
+        group.get('sellingPrice')?.clearValidators();
+        group.get('sellingPrice')?.disable({ emitEvent: false });
+      }
+
+      group.get('sellingPrice')?.updateValueAndValidity();
+      group.get('costPrice')?.updateValueAndValidity();
+    });
+  }
   onSubmit(): void {
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.getRawValue();
@@ -370,7 +433,7 @@ export class TransactionFormComponent implements OnInit {
         products: formValue.products.map((p: any) => ({
           productId: p.productId,
           quantity: p.quantity,
-          costPrice: p.costPrice,
+          costPrice: p.costPrice ?? 0,
           sellingPrice: p.sellingPrice,
         })),
         note: formValue.note,
@@ -393,8 +456,6 @@ export class TransactionFormComponent implements OnInit {
     }
   }
   onChangeQuantity(value: string, index: number) {
-    console.log('value', value);
-    console.log('index', index);
     if (typeof value != 'string') {
       return;
     }
@@ -407,9 +468,14 @@ export class TransactionFormComponent implements OnInit {
   }
 
   private setTotalProductPrice(productGroup: FormGroup<any>, quantity: number) {
-    const sellingPrice = Number(productGroup.get('sellingPrice')?.value || 0);
+    let price = 0;
+    if (this.transactionType == TransactionType.SALES) {
+      price = Number(productGroup.get('sellingPrice')?.value || 0);
+    } else if (this.transactionType == TransactionType.PURCHASES) {
+      price = Number(productGroup.get('costPrice')?.value || 0);
+    }
 
-    const totalProductPrice = sellingPrice * quantity;
+    const totalProductPrice = price * quantity;
 
     // Update control
     productGroup.get('totalProductPrice')?.setValue(totalProductPrice);
@@ -427,10 +493,15 @@ export class TransactionFormComponent implements OnInit {
 
   onProductChange(product: Product, index: number) {
     this.setTransactionBalance();
-    this.focusQuantity(index);
+    if (this.transactionType == TransactionType.SALES) {
+      this.focusOnInput(this.quantityInputs, index);
+    } else if (this.transactionType == TransactionType.PURCHASES) {
+      this.focusOnInput(this.costPriceInputs, index);
+    }
   }
-  focusQuantity(index: number) {
-    const input = this.quantityInputs.toArray()[index];
+
+  focusOnInput(list: QueryList<FormInputComponent>, index: number) {
+    const input = list.toArray()[index];
     input?.focus();
   }
   onPaidChange(value: string) {
@@ -443,14 +514,85 @@ export class TransactionFormComponent implements OnInit {
 
   private setLeftAmount(balance: any, paid: string) {
     const left = +balance - +paid;
-    console.log('left', left);
 
     this.transactionForm.patchValue({
       left,
     });
   }
+  scrollToCenter() {
+    setTimeout(() => {
+      const lastRow = this.productRows.last;
+      lastRow.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    });
+  }
+  onChangeTransactionType(transactionOption: { label: string; value: string }) {
+    this.setTransactionData(transactionOption);
+    this.setBalance();
+    this.updateAllTotalPrices();
+  }
+  private updateAllTotalPrices() {
+    (this.productsArray.controls as Array<FormGroup>).map((product) => {
+      const quantity = +product.get('quantity')?.value;
+      this.setTotalProductPrice(product, quantity);
+    });
+  }
 
+  setBalance() {
+    const balanceFormControl = this.transactionForm.get('balance')!;
+    let balance = 0;
+    switch (this.transactionType) {
+      case TransactionType.PURCHASES:
+        (this.productsArray.value as Array<any>).map((product) => {
+          balance = balance + (product.costPrice ?? 0) * product.quantity;
+        });
+        break;
+      case TransactionType.SALES:
+        (this.productsArray.value as Array<any>).map((product) => {
+          balance = balance + (product.sellingPrice ?? 0) * product.quantity;
+        });
+        break;
+    }
+
+    balanceFormControl.patchValue(balance);
+    const paid = this.transactionForm.get('paid')?.value;
+    this.setLeftAmount(balance, paid);
+  }
+  setTransactionData(transactionOption: { label: string; value: string }) {
+    this.transactionType = transactionOption.value as TransactionType;
+  }
   onCancel(): void {
     this.router.navigate(['/transactions']);
+  }
+  controlValue$<T>(control: AbstractControl): Observable<T> {
+    return defer(() => of(control.value).pipe(concatWith(control.valueChanges)));
+  }
+  onChangeBalance(balance: string) {
+    if (typeof balance != 'string') {
+      return;
+    }
+    const paid = this.transactionForm.get('paid')?.value;
+    const left = +balance - +paid;
+    this.transactionForm.get('left')?.patchValue(left);
+  }
+  onChangeCostPrice(value: string, index: number) {
+    if (typeof value != 'string') {
+      return;
+    }
+    const product = this.productsArray.at(index);
+    const quantity = product.get('quantity')?.value;
+
+    const totalProductPrice = +quantity * +value;
+    product.get('totalProductPrice')?.patchValue(totalProductPrice);
+    this.setBalance();
+  }
+  onCostPriceKeydown(event: KeyboardEvent, index: number) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      this.quantityInputs.get(index)?.focus();
+    }
   }
 }

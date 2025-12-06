@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Transaction } from '../../models/transaction.model';
+import { Transaction, TransactionType } from '../../models/transaction.model';
 import { getTransactionById, deleteTransactions } from '../../store/transactions.actions';
 import {
   selectTransactionById,
@@ -24,7 +24,7 @@ export class TransactionDetailComponent implements OnInit {
   loading$: Observable<boolean>;
   transactionId: string | null = null;
   showDeleteDialog = false;
-
+  TransactionType = TransactionType;
   constructor(private store: Store, private route: ActivatedRoute, private router: Router) {
     this.loading$ = this.store.select(selectTransactionsLoading);
     this.transaction$ = new Observable();

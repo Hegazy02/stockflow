@@ -22,12 +22,12 @@
           <p>
             <span
               class="type-badge"
-              [class.addition]="transaction.transactionType === 'addition'"
-              [class.deduction]="transaction.transactionType === 'subtraction'"
+              [class.sales]="transaction.transactionType === TransactionType.SALES"
+              [class.deduction]="transaction.transactionType === TransactionType.PURCHASES"
               >{{
-                transaction.transactionType === 'addition'
-                  ? 'Addition (Stock In)'
-                  : 'Subtraction (Stock Out)'
+                transaction.transactionType === TransactionType.SALES
+                  ? 'Sales (Stock In)'
+                  : 'Purchases (Stock Out)'
               }}
             </span>
           </p>

@@ -312,7 +312,7 @@ interface StockHistoryEntry {
   id: string;
   productId: string;
   warehouseId: string;
-  operationType: 'addition' | 'removal' | 'transfer_out' | 'transfer_in' | 'adjustment';
+  operationType: 'sales' | 'removal' | 'transfer_out' | 'transfer_in' | 'adjustment';
   quantityChange: number;
   previousQuantity: number;
   newQuantity: number;

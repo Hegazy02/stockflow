@@ -29,9 +29,10 @@ export class PartnersEffects {
         exhaustMap((action) => {
           const page = action.page ?? 1;
           const limit = action.limit ?? 10;
+          
 
           return this.partnerService
-            .getAll({ page, limit, type: action.type, name: action.name })
+            .getAll({ page, limit, type: action.partnerType, name: action.name })
             .pipe(
               map((response) =>
                 PartnersActions.loadPartnersSuccess({

@@ -5,7 +5,7 @@ import { Pagination } from '../../../core/models/api-response';
 // Load Partners
 export const loadPartners = createAction(
   '[Partners] Load Partners',
-  props<{ page?: number; limit?: number; type?: string; name?: string }>()
+  props<{ page?: number; limit?: number; partnerType?: string; name?: string }>()
 );
 export const loadPartnersSuccess = createAction(
   '[Partners] Load Partners Success',
