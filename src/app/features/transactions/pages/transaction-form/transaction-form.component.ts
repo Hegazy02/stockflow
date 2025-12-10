@@ -104,12 +104,20 @@ export class TransactionFormComponent implements OnInit {
 
     this.transactionForm = this.fb.group({
       transactionType: ['', Validators.required],
-      partnerId: ['', Validators.required],
+      partnerId: [
+        {
+          value: null,
+        },
+      ],
       products: this.fb.array([]),
       note: [''],
       balance: [0, [Validators.required, Validators.min(0)]],
       paid: [null, [Validators.required, Validators.min(0)]],
       left: [0],
+    });
+    // Listen to transaction type changes
+    this.transactionForm.get('transactionType')?.valueChanges.subscribe((type) => {
+      this.togglePartnerId(type);
     });
   }
 
@@ -136,7 +144,7 @@ export class TransactionFormComponent implements OnInit {
           this.loadPartners(type);
 
           if (!this.isEditMode) {
-            this.transactionForm.patchValue({ partnerId: '' });
+            this.transactionForm.patchValue({ partnerId: null});
           }
           this.setTransactionTypeValidation(type);
         }
@@ -533,6 +541,29 @@ export class TransactionFormComponent implements OnInit {
     this.setBalance();
     this.updateAllTotalPrices();
   }
+  togglePartnerId(transactionType: TransactionType) {
+    const partnerControl = this.transactionForm.get('partnerId');
+    if (!partnerControl) return;
+
+    if (transactionType === TransactionType.PURCHASES) {
+      partnerControl.setValidators([Validators.required]);
+
+      // ✅ force empty so required actually fails
+      partnerControl.setValue(null);
+    } else if (transactionType === TransactionType.SALES) {
+      partnerControl.clearValidators();
+      partnerControl.setValue(null);
+    }
+
+    partnerControl.updateValueAndValidity();
+
+    console.log({
+      value: partnerControl.value,
+      valueType: typeof partnerControl.value,
+      isNull: partnerControl.value === null,
+    });
+  }
+
   private updateAllTotalPrices() {
     (this.productsArray.controls as Array<FormGroup>).map((product) => {
       const quantity = +product.get('quantity')?.value;

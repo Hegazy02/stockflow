@@ -42,7 +42,7 @@
                 ? 'Select supplier'
                 : 'Select transaction type first'
             "
-            [required]="true"
+            [required]="transactionForm.get('transactionType')?.value === 'sales'"
             [filter]="true"
             [loading]="loadingPartners"
             [disabled]="!transactionForm.get('transactionType')?.value"

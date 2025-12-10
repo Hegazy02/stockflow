@@ -24,15 +24,23 @@
               class="type-badge"
               [class.sales]="transaction.transactionType === TransactionType.SALES"
               [class.deduction]="transaction.transactionType === TransactionType.PURCHASES"
-              >{{
-                transaction.transactionType === TransactionType.SALES
-                  ? 'Sales (Stock In)'
-                  : 'Purchases (Stock Out)'
-              }}
+              >{{ transaction.transactionType === TransactionType.SALES ? 'Sales' : 'Purchases' }}
             </span>
           </p>
         </div>
 
+        <div class="info-item">
+          <label>Balance</label>
+          <p>{{ transaction.balance }}</p>
+        </div>
+        <div class="info-item">
+          <label>Paid</label>
+          <p>{{ transaction.paid }}</p>
+        </div>
+        <div class="info-item">
+          <label>Left</label>
+          <p>{{ transaction.left }}</p>
+        </div>
         <div class="info-item">
           <label>Partner</label>
           <p>{{ transaction.partner?.name || 'N/A' }}</p>
@@ -67,7 +75,9 @@
               <th>#</th>
               <th>Product Name</th>
               <th>SKU</th>
+              <th>Price</th>
               <th>Quantity</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -76,7 +86,22 @@
               <td>{{ i + 1 }}</td>
               <td>{{ product.name || product.product?.name || product.productId }}</td>
               <td>{{ product.sku || product.product?.sku || 'N/A' }}</td>
-              <td class="quantity">{{ product.quantity }}</td>
+              <td class="price">
+                {{
+                  transaction.transactionType == TransactionType.SALES
+                    ? product.sellingPrice
+                    : product.costPrice
+                }}
+              </td>
+              <td class="">{{ product.quantity }}</td>
+              <td class="quantity">
+                {{
+                  product.quantity *
+                    (transaction.transactionType == TransactionType.SALES
+                      ? product.sellingPrice
+                      : product.costPrice)
+                }}
+              </td>
             </tr>
             }
           </tbody>

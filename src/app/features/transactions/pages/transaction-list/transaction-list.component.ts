@@ -190,6 +190,11 @@ export class TransactionListComponent implements OnInit {
     filters['partner'] = filters['partner.name'];
     delete filters['partner.name'];
 
+    const transactionType = filters['transactionType'];
+    filters['transactionType'] = transactionType?.['value' as any];
+    
+
+
     // Get current page size from store
     let currentLimit = 10; // default
     // ✔ take(1) — auto-unsubscribe after first emission
