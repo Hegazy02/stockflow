@@ -18,6 +18,8 @@ export interface TransactionProduct {
 export enum TransactionType {
   SALES = 'sales',
   PURCHASES = 'purchases',
+  DEPOSIT_SUPPLIERS = 'deposit_suppliers',
+  DEPOSIT_CUSTOMERS = 'deposit_customers',
 }
 export interface Transaction {
   _id: string;

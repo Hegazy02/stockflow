@@ -36,11 +36,16 @@
       [globalFilterFields]="['name', 'phoneNumber', 'type', 'description']"
       [selectionMode]="'multiple'"
       [dataKey]="'_id'"
-      [showFilters]="false"
+      [showFilters]="true"
       (pageChange)="onPageChange($event)"
       (rowSelect)="onRowSelect($event)"
       (rowUnselect)="onRowSelect($event)"
-    ></app-data-table>
+      (filterChange)="onFilterChange($event)"
+    >
+      <ng-template appCell="type" let-value let-rowData="rowData">
+        <app-status-badge [value]="value"></app-status-badge>
+      </ng-template>
+    </app-data-table>
   </div>
 
   <app-confirm-dialog

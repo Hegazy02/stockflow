@@ -15,21 +15,23 @@ import {
   selectPageSize,
 } from '../../store/units.selectors';
 import { loadUnits, deleteUnits, changePage } from '../../store/units.actions';
-import {
-  DataTableComponent,
-  TableColumn,
-  TableAction,
-  PageChangeEvent,
-} from '../../../../shared/components/data-table/data-table.component';
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
+import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { TableColumn, TableAction, PageChangeEvent } from '../../../../shared/models/data-table';
 
 @Component({
   selector: 'app-unit-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DataTableComponent,
+    ConfirmDialogComponent,
+    ListPageHeaderComponent,
+  ],
   templateUrl: './unit-list.component.html',
   styleUrls: ['./unit-list.component.scss'],
 })
@@ -54,7 +56,6 @@ export class UnitListComponent implements OnInit {
     { field: 'name', header: 'Unit Name', width: '25%', filterable: true },
     { field: 'abbreviation', header: 'Abbreviation', width: '15%' },
     { field: 'x', header: '', width: '50%' },
-  
   ];
 
   actions: TableAction[] = [

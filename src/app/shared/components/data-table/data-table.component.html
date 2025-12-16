@@ -106,8 +106,16 @@
         <!-- Data Columns -->
         @for (col of columns; track col.field) {
         <td>
+          @if (getCellTemplate(col.field)) {
+          <ng-container
+            [ngTemplateOutlet]="getCellTemplate(col.field)"
+            [ngTemplateOutletContext]="{ $implicit: rowData[col.field], rowData: rowData }"
+          ></ng-container>
+          } @else {
           {{ formatCellValue(rowData, col) }}
+          }
         </td>
+
         }
 
         <!-- Actions Column -->

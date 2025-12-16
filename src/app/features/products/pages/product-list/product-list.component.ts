@@ -15,24 +15,30 @@ import {
   selectPageSize,
 } from '../../store/products.selectors';
 import { loadProducts, deleteProducts } from '../../store/products.actions';
-import {
-  DataTableComponent,
-  TableColumn,
-  TableAction,
-  FilterChange,
-  PageChangeEvent,
-} from '../../../../shared/components/data-table/data-table.component';
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadCategories, selectAllCategories } from '../../../categories/store';
 import { Category } from '../../../categories/models/category.model';
-import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
+import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import {
+  TableColumn,
+  TableAction,
+  FilterChange,
+  PageChangeEvent,
+} from '../../../../shared/models/data-table';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DataTableComponent,
+    ConfirmDialogComponent,
+    ListPageHeaderComponent,
+  ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })

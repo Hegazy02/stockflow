@@ -10,20 +10,23 @@ import {
   selectCategoriesError,
 } from '../../store/categories.selectors';
 import { loadCategories, deleteCategories } from '../../store/categories.actions';
-import {
-  DataTableComponent,
-  TableColumn,
-  TableAction,
-} from '../../../../shared/components/data-table/data-table.component';
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
+import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { TableColumn, TableAction } from '../../../../shared/models/data-table';
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DataTableComponent,
+    ConfirmDialogComponent,
+    ListPageHeaderComponent,
+  ],
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss'],
 })

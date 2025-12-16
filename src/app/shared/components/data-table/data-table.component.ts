@@ -1,5 +1,13 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChildren,
+  QueryList,
+  ContentChildren,
+} from '@angular/core';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -8,46 +16,8 @@ import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { LucideAngularModule, Eye, Edit, Trash2, MoreVertical, Filter, X } from 'lucide-angular';
 import { DropdownComponent } from '../dropdown/dropdown.component';
-export interface FilterChange {
-  field: string;
-  value: string;
-  filters: {
-    [key: string]: string;
-  };
-}
-
-export interface PageChangeEvent {
-  page: number;
-  pageSize: number;
-  first: number;
-}
-
-export type ColumnType = 'text' | 'date' | 'datetime' | 'number' | 'currency' | 'boolean';
-export type FilterType = 'text' | 'dropdown';
-export interface TableColumn {
-  field: string;
-  header: string;
-  filterable?: boolean;
-  width?: string;
-  type?: ColumnType;
-  dateFormat?: string; // e.g., 'short', 'medium', 'long', 'full', or custom format like 'dd/MM/yyyy'
-  filterTypes?: FilterType[];
-  // Add filterType property
-  dropdownConfig?: DropDownConfig;
-}
-
-export interface TableAction {
-  icon: any;
-  label: string;
-  command: (rowData: any) => void;
-  styleClass?: string;
-}
-export interface DropDownConfig {
-  options: any[];
-  optionLabel: string;
-  optionValue: string;
-  selectedValue: null | string;
-}
+import { TableColumn, TableAction, FilterChange, PageChangeEvent } from '../../models/data-table';
+import { CellTemplateDirective } from '../../directives/cell-template/cell-template.directive';
 
 @Component({
   selector: 'app-data-table',
@@ -61,12 +31,13 @@ export interface DropDownConfig {
     PaginatorModule,
     LucideAngularModule,
     DropdownComponent,
+    NgTemplateOutlet,
   ],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
 })
-export class DataTableComponent {
-  @Input() data: any[] = [];
+export class DataTableComponent<T> {
+  @Input() data: T[] = [];
   @Input() columns: TableColumn[] = [];
   @Input() actions: TableAction[] = [];
   @Input() loading: boolean = false;
@@ -92,6 +63,8 @@ export class DataTableComponent {
   filterValues: { [key: string]: string } = {};
 
   @ViewChildren(Popover) popovers!: QueryList<Popover>;
+  @ContentChildren(CellTemplateDirective)
+  cellTemplates!: QueryList<CellTemplateDirective>;
 
   // Lucide icons
   readonly Eye = Eye;
@@ -162,13 +135,13 @@ export class DataTableComponent {
 
   applyFilter(table: any, field: string, value: string): void {
     this.filterValues[field] = value;
-    
+
     // Update dropdown config selectedValue if this is a dropdown filter
-    const column = this.columns.find(col => col.field === field);
+    const column = this.columns.find((col) => col.field === field);
     if (column?.dropdownConfig) {
       column.dropdownConfig.selectedValue = value;
     }
-    
+
     // Don't call table.filter() - we're doing server-side filtering
     // The parent component will handle the filtering via the filterChange event
 
@@ -182,13 +155,13 @@ export class DataTableComponent {
 
   clearFilter(table: any, field: string): void {
     this.filterValues[field] = '';
-    
+
     // Clear dropdown config selectedValue if this is a dropdown filter
-    const column = this.columns.find(col => col.field === field);
+    const column = this.columns.find((col) => col.field === field);
     if (column?.dropdownConfig) {
       column.dropdownConfig.selectedValue = null;
     }
-    
+
     // Don't call table.filter() - we're doing server-side filtering
     this.hideFilterPopover(field);
 
@@ -255,5 +228,9 @@ export class DataTableComponent {
     } catch {
       return value;
     }
+  }
+  //
+  getCellTemplate(field: string) {
+    return this.cellTemplates?.find((t) => t.field === field)?.template;
   }
 }

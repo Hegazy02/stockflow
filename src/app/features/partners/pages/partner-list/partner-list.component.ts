@@ -15,21 +15,27 @@ import {
   selectPageSize,
 } from '../../store/partners.selectors';
 import { loadPartners, deletePartners, changePage } from '../../store/partners.actions';
-import {
-  DataTableComponent,
-  TableColumn,
-  TableAction,
-  PageChangeEvent,
-} from '../../../../shared/components/data-table/data-table.component';
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ListPageHeaderComponent } from "../../../../shared/components/list-page-header/list-page-header.component";
+import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { TableColumn, TableAction, PageChangeEvent, FilterChange } from '../../../../shared/models/data-table';
+import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
+import { CellTemplateDirective } from '../../../../shared/directives/cell-template/cell-template.directive';
 
 @Component({
   selector: 'app-partner-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, DataTableComponent, ConfirmDialogComponent, ListPageHeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    DataTableComponent,
+    ConfirmDialogComponent,
+    ListPageHeaderComponent,
+    StatusBadgeComponent,
+    CellTemplateDirective,
+  ],
   templateUrl: './partner-list.component.html',
   styleUrls: ['./partner-list.component.scss'],
 })
@@ -53,7 +59,22 @@ export class PartnerListComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'name', header: 'Partner Name', width: '25%', filterable: true },
     { field: 'phoneNumber', header: 'Phone Number', width: '15%' },
-    { field: 'type', header: 'Type', width: '15%' },
+    {
+      field: 'type',
+      header: 'Type',
+      width: '15%',
+      filterable: true,
+      filterTypes: ['dropdown'],
+      dropdownConfig: {
+        options: [
+          { label: 'Supplier', value: 'Supplier' },
+          { label: 'Customer', value: 'Customer' },
+        ],
+        optionLabel: 'label',
+        optionValue: 'value',
+        selectedValue: null,
+      },
+    },
     { field: 'description', header: 'Description', width: '30%' },
     {
       field: 'createdAt',
@@ -185,5 +206,34 @@ export class PartnerListComponent implements OnInit {
     this.pageSize$.pipe(take(1)).subscribe((limit) => (currentLimit = limit));
 
     this.store.dispatch(loadPartners({ page: currentPage, limit: currentLimit }));
+  }
+  onFilterChange(filterChange: FilterChange) {
+    const filters = filterChange.filters;
+    
+    
+    const transactionType = filters['type'];
+    filters['partnerType'] = transactionType?.['value' as any];
+    
+    console.log('filter', filters);
+    // Get current page size from store
+    let currentLimit = 10; // default
+    // ✔ take(1) — auto-unsubscribe after first emission
+    this.pageSize$.pipe(take(1)).subscribe((limit) => (currentLimit = limit));
+
+    // Update URL to reset page to 1
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: 1, limit: currentLimit, ...filters },
+      queryParamsHandling: 'merge',
+    });
+
+    // Dispatch loadTransactions with page 1 and current limit
+    this.store.dispatch(
+      loadPartners({
+        page: 1,
+        limit: currentLimit,
+        ...filters,
+      })
+    );
   }
 }

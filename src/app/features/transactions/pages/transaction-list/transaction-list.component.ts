@@ -15,17 +15,19 @@ import {
   selectPageSize,
 } from '../../store/transactions.selectors';
 import { loadTransactions, deleteTransactions } from '../../store/transactions.actions';
-import {
-  DataTableComponent,
-  TableColumn,
-  TableAction,
-  PageChangeEvent,
-  FilterChange,
-} from '../../../../shared/components/data-table/data-table.component';
+import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { Eye, Edit, Trash2 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
+import {
+  TableColumn,
+  TableAction,
+  FilterChange,
+  PageChangeEvent,
+} from '../../../../shared/models/data-table';
+import { CellTemplateDirective } from '../../../../shared/directives/cell-template/cell-template.directive';
 
 @Component({
   selector: 'app-transaction-list',
@@ -36,6 +38,8 @@ import { ListPageHeaderComponent } from '../../../../shared/components/list-page
     DataTableComponent,
     ConfirmDialogComponent,
     ListPageHeaderComponent,
+    StatusBadgeComponent,
+    CellTemplateDirective,
   ],
   templateUrl: './transaction-list.component.html',
   styleUrls: ['./transaction-list.component.scss'],
@@ -59,20 +63,9 @@ export class TransactionListComponent implements OnInit {
 
   columns: TableColumn[] = [
     {
-      field: 'productsDisplay',
-      header: 'Products',
-      width: '15%',
-    },
-    {
-      field: 'partner.name',
-      header: 'Partner',
-      width: '15%',
-      filterable: true,
-    },
-    {
       field: 'transactionType',
       header: 'Type',
-      width: '8%',
+      width: '20%',
       filterable: true,
       filterTypes: ['dropdown'],
       dropdownConfig: {
@@ -85,6 +78,18 @@ export class TransactionListComponent implements OnInit {
         selectedValue: null,
       },
     },
+    {
+      field: 'partner.name',
+      header: 'Partner',
+      width: '15%',
+      filterable: true,
+    },
+    {
+      field: 'productsDisplay',
+      header: 'Products',
+      width: '10%',
+    },
+
     {
       field: 'totalQuantity',
       header: 'Total Qty',
@@ -107,6 +112,7 @@ export class TransactionListComponent implements OnInit {
       field: 'left',
       header: 'Left',
       width: '10%',
+      type: 'number',
     },
     {
       field: 'createdAt',
@@ -192,8 +198,6 @@ export class TransactionListComponent implements OnInit {
 
     const transactionType = filters['transactionType'];
     filters['transactionType'] = transactionType?.['value' as any];
-    
-
 
     // Get current page size from store
     let currentLimit = 10; // default
