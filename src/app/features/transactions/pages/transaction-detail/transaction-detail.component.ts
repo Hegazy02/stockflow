@@ -11,11 +11,12 @@ import {
 } from '../../store/transactions.selectors';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { StatusBadgeComponent } from "../../../../shared/components/status-badge/status-badge.component";
 
 @Component({
   selector: 'app-transaction-detail',
   standalone: true,
-  imports: [CommonModule, ConfirmDialogComponent, DetailsPageHeaderComponent],
+  imports: [CommonModule, ConfirmDialogComponent, DetailsPageHeaderComponent, StatusBadgeComponent],
   templateUrl: './transaction-detail.component.html',
   styleUrls: ['./transaction-detail.component.scss'],
 })

@@ -19,14 +19,7 @@
       <div class="info-grid">
         <div class="info-item">
           <label>Transaction Type</label>
-          <p>
-            <span
-              class="type-badge"
-              [class.sales]="transaction.transactionType === TransactionType.SALES"
-              [class.deduction]="transaction.transactionType === TransactionType.PURCHASES"
-              >{{ transaction.transactionType === TransactionType.SALES ? 'Sales' : 'Purchases' }}
-            </span>
-          </p>
+          <app-status-badge [value]="transaction.transactionType"></app-status-badge>
         </div>
 
         <div class="info-item">
@@ -65,7 +58,9 @@
           -->
       </div>
     </div>
-
+    @if
+    (transaction.transactionType==TransactionType.SALES||transaction.transactionType==TransactionType.PURCHASES)
+    {
     <div class="info-card">
       <h2>Products ({{ transaction.products.length }})</h2>
       <div class="products-table">
@@ -108,6 +103,7 @@
         </table>
       </div>
     </div>
+    }
   </div>
 
   <app-confirm-dialog

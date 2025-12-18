@@ -12,7 +12,7 @@
   flex-direction: column;
 
   ::ng-deep .p-datatable {
-  overflow-y: hidden;
+    overflow-y: hidden;
 
     display: flex;
     flex-direction: column;
@@ -65,6 +65,12 @@
 
   ::ng-deep .p-datatable-mask {
     display: none !important;
+  }
+  ::ng-deep .p-datatable-thead > tr > th {
+    background-color: var(--color-primary); // or any color
+    color: white;
+    font-weight: var(--font-weight-semibold);
+    // border-bottom: 1px solid var(--color-border-light);
   }
 }
 
@@ -153,7 +159,7 @@
   border-radius: var(--radius-sm);
   border: none;
   background: transparent;
-  color: var(--color-text-tertiary);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;

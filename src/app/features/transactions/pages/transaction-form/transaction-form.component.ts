@@ -88,8 +88,10 @@ export class TransactionFormComponent implements OnInit {
   readonly Trash2 = Trash2;
 
   transactionTypeOptions = [
-    { label: 'Sales (Stock In)', value: 'sales' },
-    { label: 'Purchases (Stock Out)', value: 'purchases' },
+    { label: 'Sales', value: 'sales' },
+    { label: 'Purchases', value: 'purchases' },
+    { label: 'Deposit (Suppliers)', value: 'deposit_suppliers' },
+    { label: 'Deposit (Customers)', value: 'deposit_customers' },
   ];
 
   constructor(
@@ -144,7 +146,7 @@ export class TransactionFormComponent implements OnInit {
           this.loadPartners(type);
 
           if (!this.isEditMode) {
-            this.transactionForm.patchValue({ partnerId: null});
+            this.transactionForm.patchValue({ partnerId: null });
           }
           this.setTransactionTypeValidation(type);
         }
@@ -230,11 +232,11 @@ export class TransactionFormComponent implements OnInit {
       quantity: this.fb.control(1, [Validators.required, Validators.min(1)]),
       totalProductPrice: this.fb.control(0, [Validators.required, Validators.min(0)]),
       sellingPrice: this.fb.control(
-        { value: 0, disabled: transactionType !== TransactionType.SALES },
+        { value: null, disabled: transactionType !== TransactionType.SALES },
         [Validators.min(0)]
       ),
       costPrice: this.fb.control(
-        { value: 0, disabled: transactionType !== TransactionType.PURCHASES },
+        { value: null, disabled: transactionType !== TransactionType.PURCHASES },
         [Validators.min(0)]
       ),
     };
@@ -294,8 +296,11 @@ export class TransactionFormComponent implements OnInit {
       // }
     }
   }
-  onPaidKeydown(event: KeyboardEvent) {
+  submitOnPressEnter(event: KeyboardEvent) {
+    
     if (event.key === 'Enter') {
+      event.preventDefault();
+      console.log("eve",event);
       this.onSubmit();
     }
   }
@@ -408,29 +413,62 @@ export class TransactionFormComponent implements OnInit {
       }
     }
   }
-  setTransactionTypeValidation(type: any) {
+  setTransactionTypeValidation(type: TransactionType) {
     this.productsArray.controls.forEach((control) => {
       const group = control as FormGroup;
 
-      if (type === TransactionType.SALES) {
-        group.get('sellingPrice')?.setValidators([Validators.required, Validators.min(0)]);
-        group.get('sellingPrice')?.enable({ emitEvent: false });
+      const costPrice = group.get('costPrice');
+      const sellingPrice = group.get('sellingPrice');
 
-        group.get('costPrice')?.clearValidators();
-        group.get('costPrice')?.disable({ emitEvent: false });
+      // 🔁 Reset first (VERY IMPORTANT)
+      costPrice?.clearValidators();
+      sellingPrice?.clearValidators();
+
+      if (type === TransactionType.PURCHASES) {
+        // ✅ costPrice REQUIRED
+        costPrice?.setValidators([Validators.required, Validators.min(0)]);
+        costPrice?.enable({ emitEvent: false });
+
+        // ❌ sellingPrice disabled
+        sellingPrice?.disable({ emitEvent: false });
+      } else if (type === TransactionType.SALES) {
+        // ❌ costPrice disabled
+        costPrice?.disable({ emitEvent: false });
+
+        // ✅ sellingPrice REQUIRED
+        sellingPrice?.setValidators([Validators.required, Validators.min(0)]);
+        sellingPrice?.enable({ emitEvent: false });
       } else {
-        group.get('costPrice')?.setValidators([Validators.required, Validators.min(0)]);
-        group.get('costPrice')?.enable({ emitEvent: false });
-
-        group.get('sellingPrice')?.clearValidators();
-        group.get('sellingPrice')?.disable({ emitEvent: false });
+        // 🟢 Deposit types → neither required
+        costPrice?.disable({ emitEvent: false });
+        sellingPrice?.disable({ emitEvent: false });
       }
 
-      group.get('sellingPrice')?.updateValueAndValidity();
-      group.get('costPrice')?.updateValueAndValidity();
+      // 🔄 Apply validation changes
+      costPrice?.updateValueAndValidity({ emitEvent: false });
+      sellingPrice?.updateValueAndValidity({ emitEvent: false });
     });
   }
+
+  getProducts(): [] {
+    if (
+      this.transactionType == TransactionType.PURCHASES ||
+      this.transactionType == TransactionType.SALES
+    ) {
+      return this.productsArray.value.map((p: any) => ({
+        productId: p.productId,
+        quantity: p.quantity,
+        costPrice: p.costPrice ?? 0,
+        sellingPrice: p.sellingPrice,
+      }));
+    }
+    return [];
+  }
+
   onSubmit(): void {
+    console.log('form', this.transactionForm.value);
+    console.log('valid', this.transactionForm.valid);
+
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.getRawValue();
 
@@ -438,12 +476,7 @@ export class TransactionFormComponent implements OnInit {
       const transactionData: TransactionFormData = {
         transactionType: formValue.transactionType,
         partnerId: formValue.partnerId,
-        products: formValue.products.map((p: any) => ({
-          productId: p.productId,
-          quantity: p.quantity,
-          costPrice: p.costPrice ?? 0,
-          sellingPrice: p.sellingPrice,
-        })),
+        products: this.getProducts(),
         note: formValue.note,
         balance: formValue.balance,
         paid: formValue.paid,
@@ -540,28 +573,47 @@ export class TransactionFormComponent implements OnInit {
     this.setTransactionData(transactionOption);
     this.setBalance();
     this.updateAllTotalPrices();
+    this.updateProductsValidations();
   }
+  updateProductsValidations() {
+    if (
+      this.transactionType === TransactionType.SALES ||
+      this.transactionType === TransactionType.PURCHASES
+    ) {
+      // Products ARE required
+      this.productsArray.setValidators([Validators.required, Validators.minLength(1)]);
+      this.setTransactionTypeValidation(this.transactionType);
+    } else {
+      // Products NOT required (deposit)
+      this.productsArray.clearValidators();
+
+      // 🔴 VERY IMPORTANT
+      this.productsArray.controls.forEach((control) => {
+        const group = control as FormGroup;
+
+        Object.keys(group.controls).forEach((key) => {
+          group.get(key)?.clearValidators();
+          group.get(key)?.updateValueAndValidity({ emitEvent: false });
+        });
+      });
+    }
+
+    this.productsArray.updateValueAndValidity();
+  }
+
   togglePartnerId(transactionType: TransactionType) {
     const partnerControl = this.transactionForm.get('partnerId');
     if (!partnerControl) return;
 
-    if (transactionType === TransactionType.PURCHASES) {
-      partnerControl.setValidators([Validators.required]);
-
-      // ✅ force empty so required actually fails
-      partnerControl.setValue(null);
-    } else if (transactionType === TransactionType.SALES) {
+    if (transactionType === TransactionType.SALES) {
       partnerControl.clearValidators();
       partnerControl.setValue(null);
+    } else {
+      partnerControl.setValidators([Validators.required]);
+      // ✅ force empty so required actually fails
+      partnerControl.setValue(null);
     }
-
     partnerControl.updateValueAndValidity();
-
-    console.log({
-      value: partnerControl.value,
-      valueType: typeof partnerControl.value,
-      isNull: partnerControl.value === null,
-    });
   }
 
   private updateAllTotalPrices() {
@@ -573,16 +625,18 @@ export class TransactionFormComponent implements OnInit {
 
   setBalance() {
     const balanceFormControl = this.transactionForm.get('balance')!;
-    let balance = 0;
+    let balance: number | null = null;
     switch (this.transactionType) {
       case TransactionType.PURCHASES:
+        balance = 0;
         (this.productsArray.value as Array<any>).map((product) => {
-          balance = balance + (product.costPrice ?? 0) * product.quantity;
+          balance = balance! + (product.costPrice ?? 0) * product.quantity;
         });
         break;
       case TransactionType.SALES:
+        balance = 0;
         (this.productsArray.value as Array<any>).map((product) => {
-          balance = balance + (product.sellingPrice ?? 0) * product.quantity;
+          balance = balance! + (product.sellingPrice ?? 0) * product.quantity;
         });
         break;
     }
