@@ -4,13 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Warehouse, WarehouseManager } from '../models/warehouse.model';
 import { ApiResponse } from '../../../core/models/api-response';
-import { environment } from '../../../../environments/environment';
+import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WarehouseService {
-  private readonly apiUrl = `${environment.apiUrl}/warehouses`;
+    private readonly apiUrl = `${ApiEndpoints.baseUrl}/warehouses`;
 
   constructor(private http: HttpClient) {}
 

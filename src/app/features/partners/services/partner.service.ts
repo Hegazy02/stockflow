@@ -4,13 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Partner } from '../models/partner.model';
 import { ApiResponse } from '../../../core/models/api-response';
-import { environment } from '../../../../environments/environment';
+import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PartnerService {
-  private readonly apiUrl = `${environment.apiUrl}/partners`;
+  private readonly apiUrl = `${ApiEndpoints.baseUrl}/partners`;
 
   constructor(private http: HttpClient) {}
 

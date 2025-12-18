@@ -82,7 +82,7 @@ export interface ProductCategory {
   providedIn: 'root',
 })
 export class CategoryService {
-  private readonly apiUrl = `${environment.apiUrl}/categories`;
+    private readonly apiUrl = `${ApiEndpoints.baseUrl}/categories`;
 
   constructor(private http: HttpClient) {}
 

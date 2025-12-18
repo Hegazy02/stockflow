@@ -4,13 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Unit } from '../models/unit.model';
 import { ApiResponse } from '../../../core/models/api-response';
-import { environment } from '../../../../environments/environment';
+import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UnitService {
-  private readonly apiUrl = `${environment.apiUrl}/units`;
+    private readonly apiUrl = `${ApiEndpoints.baseUrl}/units`;
 
   constructor(private http: HttpClient) {}
 

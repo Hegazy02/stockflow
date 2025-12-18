@@ -3,14 +3,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Category } from '../models/category.model';
-import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../core/models/api-response';
+import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private readonly apiUrl = `${environment.apiUrl}/categories`;
+  private readonly apiUrl = `${ApiEndpoints.baseUrl}/categories`;
 
   constructor(private http: HttpClient) {}
 
