@@ -388,7 +388,20 @@ export class TransactionFormComponent implements OnInit {
     // if (this.partners.length < 1) {
     //   this.loadingPartners = true;
     // }
-    const partnerType = transactionType === TransactionType.SALES ? 'Customer' : 'Supplier';
+    let partnerType: 'Customer' | 'Supplier' | undefined;
+    switch (transactionType) {
+      case TransactionType.SALES:
+      case TransactionType.DEPOSIT_CUSTOMERS:
+        partnerType = 'Customer';
+        break;
+      case TransactionType.PURCHASES:
+      case TransactionType.DEPOSIT_SUPPLIERS:
+        partnerType = 'Supplier';
+        break;
+
+      default:
+        break;
+    }
     const data = {
       page: this.partnerPage,
       limit: this.partnerLimit,
