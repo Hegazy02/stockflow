@@ -65,7 +65,7 @@ export class TransactionListComponent implements OnInit {
     {
       field: 'transactionType',
       header: 'Type',
-      width: '20%',
+      width: '15%',
       filterable: true,
       filterTypes: ['dropdown'],
       dropdownConfig: {
@@ -93,7 +93,7 @@ export class TransactionListComponent implements OnInit {
     {
       field: 'totalQuantity',
       header: 'Total Qty',
-      width: '8%',
+      width: '10%',
       type: 'number',
     },
     {
@@ -117,7 +117,7 @@ export class TransactionListComponent implements OnInit {
     {
       field: 'createdAt',
       header: 'Created',
-      width: '20%',
+      width: '15%',
       type: 'date',
       dateFormat: 'short',
     },
@@ -157,6 +157,9 @@ export class TransactionListComponent implements OnInit {
     });
   }
 
+  derivedTableHeight(): string {
+    return window.innerHeight - 200 + 'px';
+  }
   private transformTransactions(transactions: Transaction[]): any[] {
     return transactions.map((transaction) => ({
       ...transaction,
