@@ -209,6 +209,33 @@ export class TransactionFormComponent implements OnInit {
   get productsArray(): FormArray {
     return this.transactionForm.get('products') as FormArray;
   }
+
+  get partnersPlaceholder(): string {
+    switch (this.transactionType) {
+      case TransactionType.SALES:
+      case TransactionType.DEPOSIT_CUSTOMERS:
+        return 'Select customer';
+      case TransactionType.PURCHASES:
+      case TransactionType.DEPOSIT_SUPPLIERS:
+        return 'Select supplier';
+      default:
+        break;
+    }
+    return 'Select Transaction Type';
+  }
+  get partnersHelpText(): string {
+    switch (this.transactionType) {
+      case TransactionType.SALES:
+      case TransactionType.DEPOSIT_CUSTOMERS:
+        return 'Customers will be shown. Scroll down to load more.';
+      case TransactionType.PURCHASES:
+      case TransactionType.DEPOSIT_SUPPLIERS:
+        return 'Suppliers will be shown. Scroll down to load more.';
+      default:
+        break;
+    }
+    return 'Please select a transaction type first';
+  }
   @HostListener('document:keydown', ['$event'])
   handlePlusKey(event: KeyboardEvent) {
     if (event.key === '+') {
@@ -297,10 +324,9 @@ export class TransactionFormComponent implements OnInit {
     }
   }
   submitOnPressEnter(event: KeyboardEvent) {
-    
     if (event.key === 'Enter') {
       event.preventDefault();
-      console.log("eve",event);
+      console.log('eve', event);
       this.onSubmit();
     }
   }
@@ -575,6 +601,7 @@ export class TransactionFormComponent implements OnInit {
     this.updateAllTotalPrices();
     this.updateProductsValidations();
   }
+
   updateProductsValidations() {
     if (
       this.transactionType === TransactionType.SALES ||
