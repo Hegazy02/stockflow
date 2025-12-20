@@ -17,6 +17,7 @@ import {
   ReactiveFormsModule,
   Validators,
   AbstractControl,
+  ValidatorFn,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -113,9 +114,9 @@ export class TransactionFormComponent implements OnInit {
       ],
       products: this.fb.array([]),
       note: [''],
-      balance: [0, [Validators.required, Validators.min(0)]],
+      balance: [null],
       paid: [null, [Validators.required, Validators.min(0)]],
-      left: [0],
+      left: [null],
     });
     // Listen to transaction type changes
     this.transactionForm.get('transactionType')?.valueChanges.subscribe((type) => {
@@ -148,7 +149,6 @@ export class TransactionFormComponent implements OnInit {
           if (!this.isEditMode) {
             this.transactionForm.patchValue({ partnerId: null });
           }
-          this.setTransactionTypeValidation(type);
         }
       });
 
@@ -452,42 +452,6 @@ export class TransactionFormComponent implements OnInit {
       }
     }
   }
-  setTransactionTypeValidation(type: TransactionType) {
-    this.productsArray.controls.forEach((control) => {
-      const group = control as FormGroup;
-
-      const costPrice = group.get('costPrice');
-      const sellingPrice = group.get('sellingPrice');
-
-      // 🔁 Reset first (VERY IMPORTANT)
-      costPrice?.clearValidators();
-      sellingPrice?.clearValidators();
-
-      if (type === TransactionType.PURCHASES) {
-        // ✅ costPrice REQUIRED
-        costPrice?.setValidators([Validators.required, Validators.min(0)]);
-        costPrice?.enable({ emitEvent: false });
-
-        // ❌ sellingPrice disabled
-        sellingPrice?.disable({ emitEvent: false });
-      } else if (type === TransactionType.SALES) {
-        // ❌ costPrice disabled
-        costPrice?.disable({ emitEvent: false });
-
-        // ✅ sellingPrice REQUIRED
-        sellingPrice?.setValidators([Validators.required, Validators.min(0)]);
-        sellingPrice?.enable({ emitEvent: false });
-      } else {
-        // 🟢 Deposit types → neither required
-        costPrice?.disable({ emitEvent: false });
-        sellingPrice?.disable({ emitEvent: false });
-      }
-
-      // 🔄 Apply validation changes
-      costPrice?.updateValueAndValidity({ emitEvent: false });
-      sellingPrice?.updateValueAndValidity({ emitEvent: false });
-    });
-  }
 
   getProducts(): [] {
     if (
@@ -593,7 +557,16 @@ export class TransactionFormComponent implements OnInit {
   }
 
   private setLeftAmount(balance: any, paid: string) {
-    const left = +balance - +paid;
+    let left = null;
+    switch (this.transactionType) {
+      case TransactionType.SALES:
+      case TransactionType.PURCHASES:
+        left = +balance - +paid;
+        break;
+
+      default:
+        break;
+    }
 
     this.transactionForm.patchValue({
       left,
@@ -609,38 +582,102 @@ export class TransactionFormComponent implements OnInit {
     });
   }
   onChangeTransactionType(transactionOption: { label: string; value: string }) {
-    this.setTransactionData(transactionOption);
+    this.setTransactionType(transactionOption);
     this.setBalance();
     this.updateAllTotalPrices();
-    this.updateProductsValidations();
+    this.updateProductsValidationByTransactionType();
+    this.updateControlValidator(
+      'balance',
+      [Validators.required, Validators.min(0)],
+      this.isSalesOrPurchases()
+    );
+    this.updateControlValidator(
+      'left',
+      [Validators.required, Validators.min(0)],
+      this.isSalesOrPurchases()
+    );
   }
 
-  updateProductsValidations() {
-    if (
-      this.transactionType === TransactionType.SALES ||
-      this.transactionType === TransactionType.PURCHASES
-    ) {
-      // Products ARE required
-      this.productsArray.setValidators([Validators.required, Validators.minLength(1)]);
-      this.setTransactionTypeValidation(this.transactionType);
-    } else {
-      // Products NOT required (deposit)
-      this.productsArray.clearValidators();
+  updateProductsValidationByTransactionType(): void {
+    const isProductsRequired = this.isSalesOrPurchases();
 
-      // 🔴 VERY IMPORTANT
-      this.productsArray.controls.forEach((control) => {
-        const group = control as FormGroup;
+    this.updateProductsArrayValidators(isProductsRequired);
 
-        Object.keys(group.controls).forEach((key) => {
-          group.get(key)?.clearValidators();
-          group.get(key)?.updateValueAndValidity({ emitEvent: false });
-        });
-      });
-    }
+    this.productsArray.controls.forEach((control) => {
+      this.updateProductPriceValidators(control as FormGroup, this.transactionType);
+    });
 
     this.productsArray.updateValueAndValidity();
   }
 
+  private updateProductPriceValidators(productGroup: FormGroup, type: TransactionType): void {
+    const costPrice = productGroup.get('costPrice');
+    const sellingPrice = productGroup.get('sellingPrice');
+
+    this.resetControl(costPrice);
+    this.resetControl(sellingPrice);
+
+    switch (type) {
+      case TransactionType.PURCHASES:
+        this.enableWithValidators(costPrice, [Validators.required, Validators.min(0)]);
+        this.disableControl(sellingPrice);
+        break;
+
+      case TransactionType.SALES:
+        this.enableWithValidators(sellingPrice, [Validators.required, Validators.min(0)]);
+        this.disableControl(costPrice);
+        break;
+
+      default:
+        this.disableControl(costPrice);
+        this.disableControl(sellingPrice);
+    }
+  }
+  private updateProductsArrayValidators(required: boolean): void {
+    if (required) {
+      this.productsArray.setValidators([Validators.required, Validators.minLength(1)]);
+    } else {
+      this.productsArray.clearValidators();
+      this.productsArray.clear();
+    }
+  }
+  isSalesOrPurchases(): boolean {
+    return (
+      this.transactionType === TransactionType.SALES ||
+      this.transactionType === TransactionType.PURCHASES
+    );
+  }
+
+  private resetControl(control: AbstractControl | null): void {
+    control?.clearValidators();
+    control?.enable({ emitEvent: false });
+  }
+
+  private enableWithValidators(control: AbstractControl | null, validators: ValidatorFn[]): void {
+    control?.setValidators(validators);
+    control?.enable({ emitEvent: false });
+    control?.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private disableControl(control: AbstractControl | null): void {
+    control?.disable({ emitEvent: false });
+    control?.clearValidators();
+    control?.updateValueAndValidity({ emitEvent: false });
+  }
+  updateControlValidator(
+    controlName: string,
+    validators: ValidatorFn[],
+    isRequired: boolean | null = null
+  ) {
+    const control = this.transactionForm.get(controlName);
+    if (!control) return;
+
+    if (isRequired) {
+      this.enableWithValidators(control, validators);
+    } else {
+      this.disableControl(control);
+    }
+  }
   togglePartnerId(transactionType: TransactionType) {
     const partnerControl = this.transactionForm.get('partnerId');
     if (!partnerControl) return;
@@ -685,7 +722,7 @@ export class TransactionFormComponent implements OnInit {
     const paid = this.transactionForm.get('paid')?.value;
     this.setLeftAmount(balance, paid);
   }
-  setTransactionData(transactionOption: { label: string; value: string }) {
+  setTransactionType(transactionOption: { label: string; value: string }) {
     this.transactionType = transactionOption.value as TransactionType;
   }
   onCancel(): void {

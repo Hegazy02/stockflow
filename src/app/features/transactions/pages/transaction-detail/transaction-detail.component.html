@@ -62,7 +62,7 @@
     (transaction.transactionType==TransactionType.SALES||transaction.transactionType==TransactionType.PURCHASES)
     {
     <div class="info-card">
-      <h2>Products ({{ transaction.products.length }})</h2>
+      <h2>Products ({{ transaction.products?.length }})</h2>
       <div class="products-table">
         <table>
           <thead>
