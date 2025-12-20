@@ -81,7 +81,7 @@
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -106,6 +106,20 @@
     font-size: 1rem;
     color: var(--text-color);
     margin: 0;
+
+    &.total-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+
+      &.paid {
+        color: var(--green-600, #16a34a);
+      }
+
+      &.left {
+        color: var(--orange-600, #ea580c);
+      }
+    }
   }
 }
 

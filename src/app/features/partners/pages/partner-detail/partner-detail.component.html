@@ -25,9 +25,7 @@
         <div class="info-item">
           <label>Type</label>
           <p>
-            <span class="type-badge" [class.supplier]="partner.type === 'Supplier'">{{
-              partner.type
-            }}</span>
+            <app-status-badge [value]="partner.type"></app-status-badge>
           </p>
         </div>
 
@@ -35,17 +33,57 @@
           <label>Created At</label>
           <p>{{ partner.createdAt | date : 'medium' }}</p>
         </div>
-
-        <div class="info-item full-width">
-          <label>Description</label>
-          <p>{{ partner.description || 'No description provided' }}</p>
-        </div>
-
         <div class="info-item">
           <label>Updated At</label>
           <p>{{ partner.updatedAt | date : 'medium' }}</p>
         </div>
+        <div class="info-item full-width">
+          <label>Description</label>
+          <p>{{ partner.description || 'No description provided' }}</p>
+        </div>
       </div>
+    </div>
+
+    <!-- Totals Card -->
+    <div class="info-card">
+      <h2>Transaction Totals</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Total Balance</label>
+          <p class="total-value">{{ totals.balance | number : '1.2-2' }}</p>
+        </div>
+        <div class="info-item">
+          <label>Total Paid</label>
+          <p class="total-value paid">{{ totals.paid | number : '1.2-2' }}</p>
+        </div>
+        <div class="info-item">
+          <label>Total Left</label>
+          <p class="total-value left">{{ totals.left | number : '1.2-2' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="info-card">
+      <h2>Transactions</h2>
+      <app-data-table
+        [data]="transactions"
+        [columns]="transactionColumns"
+        [actions]="transactionActions"
+        [loading]="transactionsLoading"
+        [paginator]="true"
+        [totalRecords]="pagination.total"
+        [currentPage]="pagination.page"
+        [pageSize]="pagination.limit"
+        [rowsPerPageOptions]="[5, 10, 20, 50]"
+        [showActions]="true"
+        [scrollable]="false"
+        (pageChange)="onPageChange($event)"
+      >
+        <ng-template appCell="transactionType" let-value>
+          <app-status-badge [value]="value"></app-status-badge>
+        </ng-template>
+      </app-data-table>
     </div>
   </div>
 

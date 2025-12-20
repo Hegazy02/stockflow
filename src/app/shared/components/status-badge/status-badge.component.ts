@@ -23,7 +23,6 @@ export class StatusBadgeComponent implements OnChanges {
 
   private updateBadge() {
     this.label = this.value;
-    console.log('va', this.value);
 
     switch (this.value) {
       case TransactionType.SALES:

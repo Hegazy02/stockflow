@@ -163,7 +163,7 @@ export class TransactionFormComponent implements OnInit {
             this.productsArray.clear();
 
             // Add products from transaction
-            transaction.products.forEach((product) => {
+            transaction.products?.forEach((product) => {
               const controls: { [key: string]: any } = {
                 productId: [product.productId, Validators.required],
                 quantity: [product.quantity, [Validators.required, Validators.min(1)]],

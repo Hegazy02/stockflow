@@ -23,13 +23,15 @@ export enum TransactionType {
 }
 export interface Transaction {
   _id: string;
-  products: TransactionProduct[];
+  products?: TransactionProduct[];
   partnerId: string;
   transactionType: TransactionType;
   note?: string;
   balance: number;
   paid: number;
   left: number;
+  productDisplay?: string;
+  totalQuantity?: number;
   partner?: {
     _id: string;
     name: string;

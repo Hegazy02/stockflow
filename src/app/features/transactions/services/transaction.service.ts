@@ -38,6 +38,51 @@ export class TransactionService {
     return this.http.get<ApiResponse<Transaction>>(`${this.apiUrl}/${id}`);
   }
 
+  getPartnerTransactions(
+    partnerId: string,
+    page: number = 1,
+    limit: number = 10
+  ): Observable<{
+    success: boolean;
+    data: {
+      transactions: Transaction[];
+      totals: {
+        balance: number;
+        paid: number;
+        left: number;
+      };
+      pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        pages: number;
+      };
+    };
+  }> {
+    const params = new HttpParams()
+      .set('partnerId', partnerId)
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    return this.http.get<{
+      success: boolean;
+      data: {
+        transactions: Transaction[];
+        totals: {
+          balance: number;
+          paid: number;
+          left: number;
+        };
+        pagination: {
+          total: number;
+          page: number;
+          limit: number;
+          pages: number;
+        };
+      };
+    }>(`${this.apiUrl}/partner`, { params }).pipe(catchError(this.handleError));
+  }
+
   create(transaction: TransactionFormData): Observable<Transaction> {
     return this.http.post<Transaction>(this.apiUrl, transaction);
   }

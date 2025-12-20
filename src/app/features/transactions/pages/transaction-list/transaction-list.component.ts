@@ -85,7 +85,7 @@ export class TransactionListComponent implements OnInit {
       filterable: true,
     },
     {
-      field: 'productsDisplay',
+      field: 'productDisplay',
       header: 'Products',
       width: '10%',
     },
@@ -153,29 +153,12 @@ export class TransactionListComponent implements OnInit {
     this.loadTransactionsUsingURLParams();
 
     this.transactions$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((transactions) => {
-      this.transactions = this.transformTransactions(transactions);
+      this.transactions = transactions;
     });
   }
 
   derivedTableHeight(): string {
     return window.innerHeight - 200 + 'px';
-  }
-  private transformTransactions(transactions: Transaction[]): any[] {
-    return transactions.map((transaction) => ({
-      ...transaction,
-      productsDisplay: this.getProductsDisplay(transaction),
-      totalQuantity: this.getTotalQuantity(transaction),
-    }));
-  }
-
-  private getProductsDisplay(transaction: Transaction): string {
-    const count = transaction.products?.length || 0;
-    if (count === 0) return 'No products';
-    if (count === 1) {
-      const firstProduct = transaction.products[0];
-      return firstProduct.name || firstProduct.product?.name || 'Product';
-    }
-    return `${count} products`;
   }
 
   private getTotalQuantity(transaction: Transaction): number {
