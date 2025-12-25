@@ -11,7 +11,7 @@ import {
   Injector,
   OnInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgStyle } from '@angular/common';
 import {
   FormsModule,
   ControlValueAccessor,
@@ -30,7 +30,14 @@ export interface DropdownOption {
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, ErrorMessageComponent, LabelComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    LucideAngularModule,
+    ErrorMessageComponent,
+    LabelComponent,
+    NgStyle,
+  ],
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
   providers: [
@@ -54,6 +61,7 @@ export class DropdownComponent implements ControlValueAccessor, AfterViewChecked
   @Input() noResultsMessage: string = 'No results found';
   @Input() label: string = '';
   @Input() hasLabel: boolean = true;
+  @Input() width: number | undefined| null = null;
 
   @Output() onChange = new EventEmitter<any>();
   @Output() onScrollEnd = new EventEmitter<void>();

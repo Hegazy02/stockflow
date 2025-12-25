@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, take } from 'rxjs';
-import { Transaction } from '../../models/transaction.model';
+import { Transaction, TransactionType } from '../../models/transaction.model';
 import { Pagination } from '../../../../core/models/api-response';
 import {
   selectAllTransactions,
@@ -70,12 +70,15 @@ export class TransactionListComponent implements OnInit {
       filterTypes: ['dropdown'],
       dropdownConfig: {
         options: [
-          { label: 'Sales', value: 'sales' },
-          { label: 'Purchases', value: 'purchases' },
+          { label: 'Sales', value: TransactionType.SALES },
+          { label: 'Purchases', value: TransactionType.PURCHASES },
+          { label: 'Deposit (Customer)', value: TransactionType.DEPOSIT_CUSTOMERS },
+          { label: 'Deposit (Supplier)', value: TransactionType.DEPOSIT_SUPPLIERS },
         ],
         optionLabel: 'label',
         optionValue: 'value',
         selectedValue: null,
+        width: 180,
       },
     },
     {

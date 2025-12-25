@@ -1,4 +1,8 @@
-<div class="dropdown-container" [class.disabled]="disabled">
+<div
+  class="dropdown-container"
+  [class.disabled]="disabled"
+  [ngStyle]="{ width: width ? width + 'px' : 'auto' }"
+>
   @if (hasLabel) {
   <app-label [label]="label" [required]="required"></app-label>
 

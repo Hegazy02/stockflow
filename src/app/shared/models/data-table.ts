@@ -37,4 +37,5 @@ export interface DropDownConfig {
   optionLabel: string;
   optionValue: string;
   selectedValue: null | string;
+  width?: number;
 }

@@ -70,6 +70,7 @@
                       [optionValue]="col.dropdownConfig.optionValue"
                       [selectedValue]="col.dropdownConfig.selectedValue"
                       [placeholder]="'Select ' + col.header"
+                      [width]="col.dropdownConfig.width"
                       (onChange)="applyFilter(dt, col.field, $event)"
                     ></app-dropdown>
                     }
