@@ -31,7 +31,6 @@
       [totalRecords]="(totalRecords$ | async) || 0"
       [currentPage]="(currentPage$ | async) || 1"
       [pageSize]="(pageSize$ | async) || 10"
-      [height]="derivedTableHeight()"
       [showActions]="true"
       [globalFilterFields]="['partner.name', 'transactionType']"
       [selectionMode]="'multiple'"
