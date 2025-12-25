@@ -64,19 +64,19 @@ export class ProductListComponent implements OnInit {
 
   // Table configuration
   columns: TableColumn[] = [
-    { field: 'name', header: 'Product Name', width: '18%', filterable: true },
-    { field: 'sku', header: 'SKU', width: '8%' },
-    { field: 'quantity', header: 'Quantity', width: '10%' },
+    { field: 'name', header: 'Product Name', width: '20%', filterable: true },
+    { field: 'sku', header: 'SKU', width: '10%' },
+    { field: 'quantity', header: 'Quantity', width: '15%' },
     {
       field: 'sellingPrice',
       header: 'Selling Price',
-      width: '12%',
+      width: '15%',
       type: 'number',
     },
     {
       field: 'category.name',
       header: 'Category',
-      width: '12%',
+      width: '15%',
       filterable: true,
       filterTypes: ['dropdown'],
       dropdownConfig: {
@@ -86,7 +86,7 @@ export class ProductListComponent implements OnInit {
         selectedValue: null,
       },
     },
-    { field: 'description', header: 'Description', width: '15%' },
+    // { field: 'description', header: 'Description', width: '15%' },
     {
       field: 'createdAt',
       header: 'Created',
