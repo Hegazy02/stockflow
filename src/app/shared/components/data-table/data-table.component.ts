@@ -18,6 +18,7 @@ import { LucideAngularModule, Eye, Edit, Trash2, MoreVertical, Filter, X } from 
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { TableColumn, TableAction, FilterChange, PageChangeEvent } from '../../models/data-table';
 import { CellTemplateDirective } from '../../directives/cell-template/cell-template.directive';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-data-table',
@@ -32,6 +33,7 @@ import { CellTemplateDirective } from '../../directives/cell-template/cell-templ
     LucideAngularModule,
     DropdownComponent,
     NgTemplateOutlet,
+    TooltipModule,
   ],
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],

@@ -23,7 +23,7 @@
         <!-- Selection Column -->
         @if (selectionMode === 'multiple') {
         <th style="width: 3rem">
-          <p-tableHeaderCheckbox ></p-tableHeaderCheckbox>
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
         }
 
@@ -111,10 +111,20 @@
           @if (getCellTemplate(col.field)) {
           <ng-container
             [ngTemplateOutlet]="getCellTemplate(col.field)"
-            [ngTemplateOutletContext]="{ $implicit: rowData[col.field], rowData: rowData }"
+            [ngTemplateOutletContext]="{
+              $implicit: rowData[col.field],
+              rowData: rowData
+            }"
           ></ng-container>
           } @else {
-          {{ formatCellValue(rowData, col) }}
+          <div
+            [pTooltip]="formatCellValue(rowData, col)"
+            tooltipPosition="top"
+            [tooltipDisabled]="false"
+            class="cell-ellipsis"
+          >
+            {{ formatCellValue(rowData, col) }}
+          </div>
           }
         </td>
 
