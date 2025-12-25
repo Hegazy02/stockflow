@@ -53,7 +53,7 @@ export class DataTableComponent<T> {
   @Input() currentPage: number = 1;
   @Input() pageSize: number = 10;
   @Input() scrollable: boolean = true; // Enable fixed height with scrolling
-  @Input() height: string = 'calc(100vh - 100px)'; // Default scroll height
+  @Input() height: string = 'calc(100vh - 160px)'; // Default scroll height
 
   @Output() rowSelect = new EventEmitter<any>();
   @Output() filterChange = new EventEmitter<FilterChange>();
