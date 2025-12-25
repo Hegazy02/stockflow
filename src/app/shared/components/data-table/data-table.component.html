@@ -22,7 +22,7 @@
       <tr>
         <!-- Selection Column -->
         @if (selectionMode === 'multiple') {
-        <th style="width: 3rem">
+        <th style="width: 3rem" class="checkbox-column">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
         }
@@ -90,7 +90,7 @@
 
         <!-- Actions Column -->
         @if (showActions && actions.length > 0) {
-        <th style="width: 150px">Actions</th>
+        <th class="actions-column" >Actions</th>
         }
       </tr>
     </ng-template>
@@ -100,7 +100,7 @@
       <tr>
         <!-- Selection Column -->
         @if (selectionMode === 'multiple') {
-        <td>
+        <td class="checkbox-column">
           <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
         </td>
         }
@@ -132,7 +132,7 @@
 
         <!-- Actions Column -->
         @if (showActions && actions.length > 0) {
-        <td>
+        <td class="actions-column">
           <div class="action-buttons">
             @for (action of actions; track action.label) {
             <button

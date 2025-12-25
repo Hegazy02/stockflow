@@ -15,20 +15,31 @@
     padding-right: 8px;
     box-sizing: content-box;
   }
-
   ::ng-deep .p-datatable {
     overflow-y: hidden;
 
     display: flex;
     flex-direction: column;
     flex: 1;
-
+    table {
+      // table-layout: fixed;
+    }
     td,
     th {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 0; // IMPORTANT for table layout
+    }
+    td.actions-column,
+    th.actions-column {
+      width: 150px; // Fixed width for action buttons column
+    }
+    td.actions-column,
+    th.actions-column,
+    td.checkbox-column,
+    th.checkbox-column {
+      max-width: fit-content;
     }
     .p-checkbox {
       vertical-align: sub !important;
@@ -378,6 +389,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%;
   }
 }
