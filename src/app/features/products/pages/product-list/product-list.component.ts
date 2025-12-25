@@ -16,7 +16,7 @@ import {
 } from '../../store/products.selectors';
 import { loadProducts, deleteProducts } from '../../store/products.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 } from 'lucide-angular';
+import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadCategories, selectAllCategories } from '../../../categories/store';
@@ -98,23 +98,23 @@ export class ProductListComponent implements OnInit {
 
   actions: TableAction[] = [
     {
-      icon: Eye,
+      icon: InfoIcon,
       label: 'View',
       styleClass: 'btn-view',
       command: (rowData: Product) => this.navigateToDetail(rowData._id),
     },
-    {
-      icon: Edit,
-      label: 'Edit',
-      styleClass: 'btn-edit',
-      command: (rowData: Product) => this.navigateToEdit(rowData._id),
-    },
-    {
-      icon: Trash2,
-      label: 'Delete',
-      styleClass: 'btn-delete',
-      command: (rowData: Product) => this.confirmDeleteProduct(rowData._id),
-    },
+    // {
+    //   icon: Edit,
+    //   label: 'Edit',
+    //   styleClass: 'btn-edit',
+    //   command: (rowData: Product) => this.navigateToEdit(rowData._id),
+    // },
+    // {
+    //   icon: Trash2,
+    //   label: 'Delete',
+    //   styleClass: 'btn-delete',
+    //   command: (rowData: Product) => this.confirmDeleteProduct(rowData._id),
+    // },
   ];
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {

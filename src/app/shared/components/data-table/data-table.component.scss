@@ -7,9 +7,14 @@
   background: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-sm);
   display: flex;
   flex-direction: column;
+
+  ::ng-deep .p-datatable-table-container {
+    padding-right: 8px;
+    box-sizing: content-box;
+  }
 
   ::ng-deep .p-datatable {
     overflow-y: hidden;
@@ -17,7 +22,9 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-
+    .p-checkbox {
+      vertical-align: sub !important;
+    }
     .p-datatable-wrapper {
       flex: 1;
       overflow-y: auto; // Enable vertical scrolling
@@ -277,8 +284,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: var(--spacing-md);
+  // margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
+  padding-right: var(--spacing-sm);
+  padding-left: var(--spacing-sm);
   border-top: 1px solid var(--color-border-light);
 
   &.disabled {

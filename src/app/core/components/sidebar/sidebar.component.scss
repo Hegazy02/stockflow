@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  
+
   .logo-icon {
     width: 40px;
     height: 40px;
@@ -28,7 +28,7 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   .logo-text {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
@@ -64,7 +64,8 @@
   margin-bottom: var(--spacing-xl);
   overflow-y: auto;
   overflow-x: hidden;
-  
+  padding-right: 10px;
+
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -76,7 +77,7 @@
   &::-webkit-scrollbar-thumb {
     background: var(--color-gray-lighter);
     border-radius: var(--radius-full);
-    
+
     &:hover {
       background: var(--color-gray-light);
     }
@@ -95,6 +96,7 @@
   gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
   margin-bottom: var(--spacing-xs);
+  
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-base);
@@ -102,26 +104,31 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  
+
   &:hover {
     background: var(--color-background);
     color: var(--color-text-primary);
   }
-  
+
   &.active {
-    background: linear-gradient(90deg, 
-      rgba(99, 102, 241, 0.1) 0%, 
-      rgba(99, 102, 241, 0.05) 100%
-    );
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
     color: var(--color-primary);
     border: 1px solid rgba(99, 102, 241, 0.2);
-    
+
     .nav-icon {
       transform: scale(1.1);
     }
   }
-}
 
+  .nav-icon {
+    display: flex;
+    align-items: center;
+  }
+  .nav-arrow {
+    display: flex;
+    align-items: center;
+  }
+}
 
 // User Profile
 .user-location {
@@ -151,21 +158,21 @@
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-base);
-  
+
   &:hover {
     background: var(--color-gray-lightest);
     color: var(--color-text-primary);
   }
-  
+
   &.logout-btn {
     color: var(--color-accent-coral);
-    
+
     &:hover {
       background: var(--color-badge-danger-bg);
       color: var(--color-accent-coral-dark);
     }
   }
-  
+
   lucide-icon {
     display: flex;
   }

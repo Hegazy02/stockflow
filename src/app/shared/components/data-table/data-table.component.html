@@ -1,4 +1,4 @@
-<div class="table-container" [class.scrollable]="scrollable"[style.height]="height">
+<div class="table-container" [class.scrollable]="scrollable" [style.height]="height">
   <p-table
     #dt
     [value]="data"
@@ -15,6 +15,7 @@
     styleClass="p-datatable-sm"
     [tableStyle]="{ 'min-width': '50rem' }"
     [scrollHeight]="height"
+    [rowHover]="true"
   >
     <!-- Table Header -->
     <ng-template pTemplate="header">
@@ -22,7 +23,7 @@
         <!-- Selection Column -->
         @if (selectionMode === 'multiple') {
         <th style="width: 3rem">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          <p-tableHeaderCheckbox ></p-tableHeaderCheckbox>
         </th>
         }
 

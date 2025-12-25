@@ -1,4 +1,4 @@
-import { definePreset } from '@primeuix/themes';
+import { css, definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 
 const MyPreset = definePreset(Aura, {
@@ -120,6 +120,52 @@ const MyPreset = definePreset(Aura, {
           border-color: color-mix(in srgb, ${dt('button.accent.color')} 85%, black);
         }
       `,
+    },
+    // Table
+    datatable: {
+      colorScheme: {
+        light: {
+          row: {
+            hoverBackground: '{indigo.50}',
+          },
+        },
+        dark: {
+          row: {
+            hoverBackground: '{indigo.50}',
+          },
+        },
+      },
+
+      css: () => `
+    /* Add rounded corners to p-table rows on hover
+     Note: <tr> elements cannot have border-radius in HTML tables,
+     so the radius is applied to the first and last <td> cells instead */
+
+      .p-datatable tbody tr:hover > td:first-child {
+        border-top-left-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+      }
+
+      .p-datatable tbody tr:hover > td:last-child {
+        border-top-right-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+      }
+    /* ======================================== */
+    /* Add rounded corners to the header cells */
+
+    .p-datatable thead tr > th:first-child {
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+
+    .p-datatable thead tr > th:last-child {
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+      
+    /* ======================================== */
+
+  `,
     },
   },
 
