@@ -16,7 +16,7 @@ import {
 } from '../../store/partners.selectors';
 import { loadPartners, deletePartners, changePage } from '../../store/partners.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 } from 'lucide-angular';
+import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
@@ -58,11 +58,11 @@ export class PartnerListComponent implements OnInit {
 
   columns: TableColumn[] = [
     { field: 'name', header: 'Partner Name', width: '25%', filterable: true },
-    { field: 'phoneNumber', header: 'Phone Number', width: '15%' },
+    { field: 'phoneNumber', header: 'Phone Number', width: '20%' },
     {
       field: 'type',
       header: 'Type',
-      width: '15%',
+      width: '20%',
       filterable: true,
       filterTypes: ['dropdown'],
       dropdownConfig: {
@@ -75,11 +75,11 @@ export class PartnerListComponent implements OnInit {
         selectedValue: null,
       },
     },
-    { field: 'description', header: 'Description', width: '30%' },
+    // { field: 'description', header: 'Description', width: '30%' },
     {
       field: 'createdAt',
       header: 'Created',
-      width: '15%',
+      width: '20%',
       type: 'date',
       dateFormat: 'short',
     },
@@ -87,23 +87,23 @@ export class PartnerListComponent implements OnInit {
 
   actions: TableAction[] = [
     {
-      icon: Eye,
+      icon: InfoIcon,
       label: 'View',
       styleClass: 'btn-view',
       command: (rowData: Partner) => this.navigateToDetail(rowData._id),
     },
-    {
-      icon: Edit,
-      label: 'Edit',
-      styleClass: 'btn-edit',
-      command: (rowData: Partner) => this.navigateToEdit(rowData._id),
-    },
-    {
-      icon: Trash2,
-      label: 'Delete',
-      styleClass: 'btn-delete',
-      command: (rowData: Partner) => this.confirmDeletePartner(rowData._id),
-    },
+    // {
+    //   icon: Edit,
+    //   label: 'Edit',
+    //   styleClass: 'btn-edit',
+    //   command: (rowData: Partner) => this.navigateToEdit(rowData._id),
+    // },
+    // {
+    //   icon: Trash2,
+    //   label: 'Delete',
+    //   styleClass: 'btn-delete',
+    //   command: (rowData: Partner) => this.confirmDeletePartner(rowData._id),
+    // },
   ];
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {

@@ -16,7 +16,7 @@ import {
 } from '../../store/transactions.selectors';
 import { loadTransactions, deleteTransactions } from '../../store/transactions.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 } from 'lucide-angular';
+import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
@@ -128,18 +128,18 @@ export class TransactionListComponent implements OnInit {
 
   actions: TableAction[] = [
     {
-      icon: Eye,
+      icon: InfoIcon,
       label: 'View',
       styleClass: 'btn-view',
       command: (rowData: Transaction) => this.navigateToDetail(rowData._id),
     },
 
-    {
-      icon: Trash2,
-      label: 'Delete',
-      styleClass: 'btn-delete',
-      command: (rowData: Transaction) => this.confirmDeleteTransaction(rowData._id),
-    },
+    // {
+    //   icon: Trash2,
+    //   label: 'Delete',
+    //   styleClass: 'btn-delete',
+    //   command: (rowData: Transaction) => this.confirmDeleteTransaction(rowData._id),
+    // },
   ];
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {

@@ -11,7 +11,7 @@ import {
 } from '../../store/categories.selectors';
 import { loadCategories, deleteCategories } from '../../store/categories.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 } from 'lucide-angular';
+import { Eye, Edit, Trash2,InfoIcon } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
@@ -45,7 +45,7 @@ export class CategoryListComponent implements OnInit {
 
   columns: TableColumn[] = [
     { field: 'name', header: 'Category Name', width: '30%', filterable: true },
-    { field: 'description', header: 'Description', width: '40%' },
+    { field: 'description', header: 'Description', width: '30%' },
     { field: 'status', header: 'Status', width: '15%' },
     {
       field: 'createdAt',
@@ -58,23 +58,23 @@ export class CategoryListComponent implements OnInit {
 
   actions: TableAction[] = [
     {
-      icon: Eye,
+      icon: InfoIcon,
       label: 'View',
       styleClass: 'btn-view',
       command: (rowData: Category) => this.navigateToDetail(rowData._id),
     },
-    {
-      icon: Edit,
-      label: 'Edit',
-      styleClass: 'btn-edit',
-      command: (rowData: Category) => this.navigateToEdit(rowData._id),
-    },
-    {
-      icon: Trash2,
-      label: 'Delete',
-      styleClass: 'btn-delete',
-      command: (rowData: Category) => this.confirmDeleteCategory(rowData._id),
-    },
+    // {
+    //   icon: Edit,
+    //   label: 'Edit',
+    //   styleClass: 'btn-edit',
+    //   command: (rowData: Category) => this.navigateToEdit(rowData._id),
+    // },
+    // {
+    //   icon: Trash2,
+    //   label: 'Delete',
+    //   styleClass: 'btn-delete',
+    //   command: (rowData: Category) => this.confirmDeleteCategory(rowData._id),
+    // },
   ];
 
   constructor(private store: Store, private router: Router) {

@@ -16,7 +16,7 @@ import {
 } from '../../store/warehouses.selectors';
 import { loadWarehouses, deleteWarehouses, changePage } from '../../store/warehouses.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 } from 'lucide-angular';
+import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
@@ -61,14 +61,14 @@ export class WarehouseListComponent implements OnInit {
 
   // Table configuration
   columns: TableColumn[] = [
-    { field: 'title', header: 'Warehouse Name', width: '25%', filterable: true },
-    { field: 'location', header: 'Location', width: '25%', filterable: true },
-    { field: 'manager', header: 'Manager', width: '20%' },
-    { field: 'status', header: 'Status', width: '10%' },
+    { field: 'title', header: 'Warehouse Name', width: '20%', filterable: true },
+    { field: 'location', header: 'Location', width: '20%', filterable: true },
+    { field: 'manager', header: 'Manager', width: '15%' },
+    { field: 'status', header: 'Status', width: '15%' },
     {
       field: 'createdAt',
       header: 'Created',
-      width: '20%',
+      width: '15%',
       type: 'date',
       dateFormat: 'short',
     },
@@ -76,23 +76,23 @@ export class WarehouseListComponent implements OnInit {
 
   actions: TableAction[] = [
     {
-      icon: Eye,
+      icon: InfoIcon,
       label: 'View',
       styleClass: 'btn-view',
       command: (rowData: Warehouse) => this.navigateToDetail(rowData._id),
     },
-    {
-      icon: Edit,
-      label: 'Edit',
-      styleClass: 'btn-edit',
-      command: (rowData: Warehouse) => this.navigateToEdit(rowData._id),
-    },
-    {
-      icon: Trash2,
-      label: 'Delete',
-      styleClass: 'btn-delete',
-      command: (rowData: Warehouse) => this.confirmDeleteWarehouse(rowData._id),
-    },
+    // {
+    //   icon: Edit,
+    //   label: 'Edit',
+    //   styleClass: 'btn-edit',
+    //   command: (rowData: Warehouse) => this.navigateToEdit(rowData._id),
+    // },
+    // {
+    //   icon: Trash2,
+    //   label: 'Delete',
+    //   styleClass: 'btn-delete',
+    //   command: (rowData: Warehouse) => this.confirmDeleteWarehouse(rowData._id),
+    // },
   ];
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {

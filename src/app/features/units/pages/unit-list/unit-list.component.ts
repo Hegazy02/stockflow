@@ -16,7 +16,7 @@ import {
 } from '../../store/units.selectors';
 import { loadUnits, deleteUnits, changePage } from '../../store/units.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 } from 'lucide-angular';
+import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
@@ -55,28 +55,28 @@ export class UnitListComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'name', header: 'Unit Name', width: '25%', filterable: true },
     { field: 'abbreviation', header: 'Abbreviation', width: '15%' },
-    { field: 'x', header: '', width: '50%' },
+    { field: 'x', header: '', width: '45%' },
   ];
 
   actions: TableAction[] = [
     {
-      icon: Eye,
+      icon: InfoIcon,
       label: 'View',
       styleClass: 'btn-view',
       command: (rowData: Unit) => this.navigateToDetail(rowData._id),
     },
-    {
-      icon: Edit,
-      label: 'Edit',
-      styleClass: 'btn-edit',
-      command: (rowData: Unit) => this.navigateToEdit(rowData._id),
-    },
-    {
-      icon: Trash2,
-      label: 'Delete',
-      styleClass: 'btn-delete',
-      command: (rowData: Unit) => this.confirmDeleteUnit(rowData._id),
-    },
+    // {
+    //   icon: Edit,
+    //   label: 'Edit',
+    //   styleClass: 'btn-edit',
+    //   command: (rowData: Unit) => this.navigateToEdit(rowData._id),
+    // },
+    // {
+    //   icon: Trash2,
+    //   label: 'Delete',
+    //   styleClass: 'btn-delete',
+    //   command: (rowData: Unit) => this.confirmDeleteUnit(rowData._id),
+    // },
   ];
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {
