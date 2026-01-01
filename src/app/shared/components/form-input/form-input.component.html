@@ -26,6 +26,7 @@
     [class.invalid]="showError"
     (input)="onInput($event)"
     (blur)="onBlur()"
+    [min]="min"
     class="form-control"
   />
   } @if (helpText && !showError) {

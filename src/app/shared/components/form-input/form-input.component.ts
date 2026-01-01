@@ -54,6 +54,7 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
   @Input() maxLength?: number;
   @Input() pattern?: string;
   @Input() disabled: boolean = false;
+  @Input() min?: number;
 
   @Output() change = new EventEmitter();
   readonly AlertCircle = AlertCircle;

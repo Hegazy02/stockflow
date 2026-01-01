@@ -100,6 +100,7 @@
                 placeholder="Select product first"
                 [disabled]="transactionType == TransactionType.SALES"
                 [hidden]="transactionType !== TransactionType.SALES"
+                [min]="0"
               ></app-form-input>
 
               <app-form-input
@@ -113,6 +114,7 @@
                 [required]="transactionType === TransactionType.PURCHASES"
                 (change)="onChangeCostPrice($event, i)"
                 (keydown)="onCostPriceKeydown($event, i)"
+                [min]="0"
               ></app-form-input>
             </div>
 
@@ -123,6 +125,7 @@
                 type="number"
                 placeholder="Select product first"
                 [disabled]="true"
+                [min]="0"
               ></app-form-input>
             </div>
 
@@ -136,6 +139,7 @@
                 [required]="true"
                 (keydown)="onQuantityKeydown($event, i)"
                 (change)="onChangeQuantity($event, i)"
+                [min]="1"
               ></app-form-input>
             </div>
 
@@ -171,6 +175,7 @@
             placeholder="Enter balance"
             [required]="isSalesOrPurchases()"
             (change)="onChangeBalance($event)"
+            [min]="0"
           ></app-form-input>
         </div>
         }
@@ -183,6 +188,7 @@
             placeholder="Enter paid amount"
             [required]="true"
             (change)="onPaidChange($event)"
+            [min]="0"
           ></app-form-input>
         </div>
         @if (isSalesOrPurchases()) {
