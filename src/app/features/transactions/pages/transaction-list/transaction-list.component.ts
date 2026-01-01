@@ -87,12 +87,7 @@ export class TransactionListComponent implements OnInit {
       width: '15%',
       filterable: true,
     },
-    {
-      field: 'serialNumber',
-      header: 'Serial Number',
-      width: '15%',
-      filterable: true,
-    },
+
     // {
     //   field: 'productDisplay',
     //   header: 'Products',
@@ -122,6 +117,12 @@ export class TransactionListComponent implements OnInit {
       header: 'Left',
       width: '10%',
       type: 'number',
+    },
+    {
+      field: 'serialNumber',
+      header: 'Serial Number',
+      width: '15%',
+      filterable: true,
     },
     {
       field: 'createdAt',
