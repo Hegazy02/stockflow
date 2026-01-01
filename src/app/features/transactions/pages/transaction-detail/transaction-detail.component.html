@@ -47,6 +47,10 @@
           <label>Created At</label>
           <p>{{ transaction.createdAt | date : 'medium' }}</p>
         </div>
+        <div class="info-item">
+          <label>SERIAL NUMBER</label>
+          <p>{{ transaction?.serialNumber || 'N/A' }}</p>
+        </div>
         <div class="info-item full-width">
           <label>Note</label>
           <p>{{ transaction.note || 'No note provided' }}</p>

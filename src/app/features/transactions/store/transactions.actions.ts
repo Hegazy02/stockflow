@@ -10,6 +10,7 @@ export const loadTransactions = createAction(
     limit?: number;
     partner?: string;
     transactionType?: string;
+    serialNumber?: string;
   }>()
 );
 export const loadTransactionsSuccess = createAction(

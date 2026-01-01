@@ -16,7 +16,7 @@ import {
 } from '../../store/transactions.selectors';
 import { loadTransactions, deleteTransactions } from '../../store/transactions.actions';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
-import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
+import { Eye, Edit, Trash2, InfoIcon } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
@@ -88,17 +88,23 @@ export class TransactionListComponent implements OnInit {
       filterable: true,
     },
     {
-      field: 'productDisplay',
-      header: 'Products',
-      width: '10%',
+      field: 'serialNumber',
+      header: 'Serial Number',
+      width: '15%',
+      filterable: true,
     },
+    // {
+    //   field: 'productDisplay',
+    //   header: 'Products',
+    //   width: '10%',
+    // },
 
-    {
-      field: 'totalQuantity',
-      header: 'Total Qty',
-      width: '10%',
-      type: 'number',
-    },
+    // {
+    //   field: 'totalQuantity',
+    //   header: 'Total Qty',
+    //   width: '10%',
+    //   type: 'number',
+    // },
     {
       field: 'balance',
       header: 'Balance',

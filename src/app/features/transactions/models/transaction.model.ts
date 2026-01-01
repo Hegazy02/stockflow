@@ -32,6 +32,7 @@ export interface Transaction {
   paid: number;
   left: number;
   productDisplay?: string;
+  serialNumber?: string | null;
   totalQuantity?: number;
   partner?: {
     _id: string;

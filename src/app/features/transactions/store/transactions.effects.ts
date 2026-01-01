@@ -27,8 +27,8 @@ export class TransactionsEffects {
       this.actions$.pipe(
         ofType(TransactionsActions.loadTransactions),
         exhaustMap((action) => {
-          const { page, limit, partner, transactionType } = action;
-          const params = { page, limit, partner, transactionType };
+          const { page, limit, partner, transactionType, serialNumber } = action;
+          const params = { page, limit, partner, transactionType, serialNumber };
 
           return this.transactionsService.getAll(params).pipe(
             map((response) =>

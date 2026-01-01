@@ -10,7 +10,7 @@ import { ApiEndpoints } from '../../../core/constants/api-endpoints';
   providedIn: 'root',
 })
 export class TransactionService {
-    private readonly apiUrl = `${ApiEndpoints.baseUrl}/transactions`;
+  private readonly apiUrl = `${ApiEndpoints.baseUrl}/transactions`;
 
   constructor(private http: HttpClient) {}
 
@@ -19,6 +19,7 @@ export class TransactionService {
     limit: number | undefined;
     partner?: string | undefined;
     transactionType?: string | undefined;
+    serialNumber?: string | undefined;
   }): Observable<ApiResponse<Transaction>> {
     let params = new HttpParams()
       .set('page', requestParams.page?.toString() ?? '1')
@@ -29,6 +30,9 @@ export class TransactionService {
     }
     if (requestParams.transactionType) {
       params = params.set('transactionType', requestParams.transactionType);
+    }
+    if (requestParams.serialNumber) {
+      params = params.set('serialNumber', requestParams.serialNumber);
     }
 
     return this.http.get<ApiResponse<Transaction>>(this.apiUrl, { params });
@@ -64,23 +68,25 @@ export class TransactionService {
       .set('page', page.toString())
       .set('limit', limit.toString());
 
-    return this.http.get<{
-      success: boolean;
-      data: {
-        transactions: Transaction[];
-        totals: {
-          balance: number;
-          paid: number;
-          left: number;
+    return this.http
+      .get<{
+        success: boolean;
+        data: {
+          transactions: Transaction[];
+          totals: {
+            balance: number;
+            paid: number;
+            left: number;
+          };
+          pagination: {
+            total: number;
+            page: number;
+            limit: number;
+            pages: number;
+          };
         };
-        pagination: {
-          total: number;
-          page: number;
-          limit: number;
-          pages: number;
-        };
-      };
-    }>(`${this.apiUrl}/partner`, { params }).pipe(catchError(this.handleError));
+      }>(`${this.apiUrl}/partner`, { params })
+      .pipe(catchError(this.handleError));
   }
 
   create(transaction: TransactionFormData): Observable<Transaction> {
