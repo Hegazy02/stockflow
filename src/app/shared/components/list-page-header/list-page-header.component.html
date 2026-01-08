@@ -2,6 +2,7 @@
   <h1>{{ title }}</h1>
 
   <div class="header-actions">
+    <ng-content select="[extra-actions]"></ng-content>
     <button class="btn btn-danger" (click)="onBulkDelete()" [disabled]="selectedCount === 0">
       <span> Delete selected @if (selectedCount > 0) { ({{ selectedCount }}) } </span>
     </button>

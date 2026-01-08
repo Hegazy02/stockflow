@@ -1,0 +1,59 @@
+<div class="stats-container">
+  <app-details-page-header [hasDelete]="false" [hasEdit]="false" (back)="onBack()">
+  </app-details-page-header>
+  <h1>Expense Statistics</h1>
+
+  <div *ngIf="stats$ | async as stats" class="stats-content">
+    <!-- Overall Cards -->
+    <div class="overall-grid">
+      <div class="stat-card">
+        <div class="stat-icon amount">
+          <lucide-icon [img]="DollarSign" [size]="24"></lucide-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Spends</span>
+          <h3 class="stat-value">{{ stats.overall.totalAmount | currency }}</h3>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon count">
+          <lucide-icon [img]="List" [size]="24"></lucide-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Transactions</span>
+          <h3 class="stat-value">{{ stats.overall.count }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Breakdown -->
+    <div class="category-section">
+      <div class="section-header">
+        <lucide-icon [img]="TrendingUp" [size]="20"></lucide-icon>
+        <h2>Breakdown by Category</h2>
+      </div>
+
+      <div class="category-grid">
+        <div *ngFor="let cat of stats.byCategory" class="category-card">
+          <div class="category-header">
+            <span class="category-name">{{ cat._id }}</span>
+            <span class="category-count">{{ cat.count }} transactions</span>
+          </div>
+          <div class="category-value">{{ cat.totalAmount | currency }}</div>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              [style.width.%]="(cat.totalAmount / stats.overall.totalAmount) * 100"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading$ | async" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading stats...</p>
+  </div>
+</div>

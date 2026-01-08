@@ -46,7 +46,7 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
 
   @Input() label: string = '';
   @Input() placeholder: string = '';
-  @Input() type: 'text' | 'email' | 'password' | 'number' | 'textarea' = 'text';
+  @Input() type: 'text' | 'email' | 'password' | 'number' | 'textarea' | 'date' = 'text';
   @Input() helpText: string = '';
   @Input() required: boolean = false;
   @Input() rows: number = 4;

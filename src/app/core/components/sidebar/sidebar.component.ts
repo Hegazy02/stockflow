@@ -20,6 +20,7 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Banknote,
 } from 'lucide-angular';
 
 interface MenuItem {
@@ -59,6 +60,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly Settings = Settings;
   readonly LogOut = LogOut;
   readonly ChevronRight = ChevronRight;
+  readonly Banknote = Banknote;
 
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: LayoutDashboard, route: '/dashboard', active: false },
@@ -71,6 +73,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Categories', icon: Shapes, route: '/categories', active: false },
     { label: 'Units', icon: Ruler, route: '/units', active: false },
     { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
+    { label: 'Expenses', icon: Banknote, route: '/expenses', active: false },
   ];
 
   constructor(private router: Router) {}

@@ -31,6 +31,8 @@ import { PartnersEffects } from './features/partners/store/partners.effects';
 import { UnitsEffects } from './features/units/store/units.effects';
 import { TransactionsEffects } from './features/transactions/store/transactions.effects';
 import MyPreset from '../styles/primeng/my-preset';
+import { expensesReducer } from './features/expenses/store/expenses.reducer';
+import { ExpensesEffects } from './features/expenses/store/expenses.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -57,6 +59,7 @@ export const appConfig: ApplicationConfig = {
       partners: partnersReducer,
       units: unitsReducer,
       transactions: transactionsReducer,
+      expenses: expensesReducer,
     }),
     provideEffects([
       ProductsEffects,
@@ -65,6 +68,7 @@ export const appConfig: ApplicationConfig = {
       PartnersEffects,
       UnitsEffects,
       TransactionsEffects,
+      ExpensesEffects,
     ]),
     provideStoreDevtools({
       maxAge: 25,

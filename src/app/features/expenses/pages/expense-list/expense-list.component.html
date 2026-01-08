@@ -1,0 +1,80 @@
+<div class="expenses-page">
+  <div class="header-actions">
+    <app-list-page-header
+      [title]="'Expenses'"
+      [addContent]="'Add Expense'"
+      [selectedCount]="selectedExpenses.length"
+      (bulkDelete)="confirmBulkDelete()"
+      (add)="navigateToCreate()"
+    >
+      <div extra-actions>
+        <app-custom-button
+          [btnClass]="'btn-secondary'"
+          [label]="'View Statistics'"
+          [icon]="BarChart3"
+          (onClick)="navigateToStats()"
+          class="stats-btn"
+        >
+        </app-custom-button>
+      </div>
+    </app-list-page-header>
+  </div>
+
+  <div class="expenses-table">
+    <app-data-table
+      [data]="expenses"
+      [columns]="columns"
+      [actions]="actions"
+      [loading]="(loading$ | async)!"
+      [paginator]="true"
+      [rows]="(pageSize$ | async) || 10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [totalRecords]="(totalRecords$ | async) || 0"
+      [currentPage]="(currentPage$ | async) || 1"
+      [pageSize]="(pageSize$ | async) || 10"
+      [showActions]="true"
+      [globalFilterFields]="['title', 'category', 'note']"
+      [selectionMode]="'multiple'"
+      [dataKey]="'_id'"
+      [showFilters]="true"
+      (filterChange)="onFilterChange($event)"
+      (pageChange)="onPageChange($event)"
+      (rowSelect)="onRowSelect($event)"
+      (rowUnselect)="onRowSelect($event)"
+    ></app-data-table>
+  </div>
+
+  <!-- Single Expense Delete Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showDeleteDialog"
+    title="Delete Expense"
+    [message]="
+      expenseToDelete ? 'Are you sure you want to delete ' + expenseToDelete.title + '?' : ''
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteExpense()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+
+  <!-- Bulk Delete Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showBulkDeleteDialog"
+    title="Delete Multiple Expenses"
+    [message]="
+      'Are you sure you want to delete ' +
+      selectedExpenses.length +
+      ' expense' +
+      (selectedExpenses.length > 1 ? 's' : '') +
+      '?'
+    "
+    warningMessage="This action cannot be undone."
+    confirmText="Delete All"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="bulkDeleteExpenses()"
+    (cancel)="cancelBulkDelete()"
+  ></app-confirm-dialog>
+</div>

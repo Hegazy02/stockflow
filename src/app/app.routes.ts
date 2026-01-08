@@ -212,6 +212,47 @@ export const routes: Routes = [
         (m) => m.PartnerFormComponent
       ),
   },
+
+  {
+    path: 'expenses',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/expenses/pages/expense-list/expense-list.component').then(
+        (m) => m.ExpenseListComponent
+      ),
+  },
+  {
+    path: 'expenses/new',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/expenses/pages/expense-form/expense-form.component').then(
+        (m) => m.ExpenseFormComponent
+      ),
+  },
+  {
+    path: 'expenses/stats',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/expenses/pages/expense-stats/expense-stats.component').then(
+        (m) => m.ExpenseStatsComponent
+      ),
+  },
+  {
+    path: 'expenses/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/expenses/pages/expense-form/expense-form.component').then(
+        (m) => m.ExpenseFormComponent
+      ),
+  },
+  {
+    path: 'expenses/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/expenses/pages/expense-detail/expense-detail.component').then(
+        (m) => m.ExpenseDetailComponent
+      ),
+  },
   //   {
   //     path: 'stock',
   //     canActivate: [authGuard],
