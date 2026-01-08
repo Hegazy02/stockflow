@@ -41,6 +41,7 @@ import { ProductService } from '../../../products/services/product.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
 import { LucideAngularModule, Plus, Trash2 } from 'lucide-angular';
+import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
 
 @Component({
   selector: 'app-transaction-form',
@@ -52,6 +53,7 @@ import { LucideAngularModule, Plus, Trash2 } from 'lucide-angular';
     DropdownComponent,
     DetailsPageHeaderComponent,
     LucideAngularModule,
+    FormActionsComponent,
   ],
   templateUrl: './transaction-form.component.html',
   styleUrls: ['./transaction-form.component.scss'],

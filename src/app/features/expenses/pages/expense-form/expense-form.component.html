@@ -45,15 +45,10 @@
       </div>
     </div>
 
-    <div class="form-actions">
-      <button type="button" class="btn-secondary" (click)="onCancel()">
-        <lucide-icon [img]="X" [size]="18"></lucide-icon>
-        <span>Cancel</span>
-      </button>
-      <button type="submit" class="btn-primary" [disabled]="expenseForm.invalid">
-        <lucide-icon [img]="Save" [size]="18"></lucide-icon>
-        <span>{{ isEditMode ? 'Update Expense' : 'Create Expense' }}</span>
-      </button>
-    </div>
+    <app-form-actions
+      [disabled]="expenseForm.invalid"
+      [submitText]="isEditMode ? 'Update Expense' : 'Create Expense'"
+      (cancel)="onCancel()"
+    />
   </form>
 </div>

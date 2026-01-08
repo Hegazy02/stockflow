@@ -68,12 +68,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Transactions', icon: Receipt, route: '/transactions', active: false },
     // { label: 'Stock Transfer', icon: ArrowLeftRight, route: '/Stock-transfer', active: false },
     { label: 'Products', icon: Package, route: '/products', active: false },
-    { label: 'Reports', icon: FileText, route: '/reports', active: false },
     { label: 'Partners', icon: UsersRound, route: '/partners', active: false },
+    { label: 'Expenses', icon: Banknote, route: '/expenses', active: false },
+    { label: 'Reports', icon: FileText, route: '/reports', active: false },
     { label: 'Categories', icon: Shapes, route: '/categories', active: false },
     { label: 'Units', icon: Ruler, route: '/units', active: false },
     { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
-    { label: 'Expenses', icon: Banknote, route: '/expenses', active: false },
   ];
 
   constructor(private router: Router) {}

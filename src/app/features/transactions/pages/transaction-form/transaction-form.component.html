@@ -214,15 +214,11 @@
       </div>
     </div>
 
-    <div class="form-actions">
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-      <button type="submit" class="btn btn-primary">
-        @if (loading$ | async) {
-        <span>Saving...</span>
-        } @else {
-        <span>{{ isEditMode ? 'Update' : 'Create' }} Transaction</span>
-        }
-      </button>
-    </div>
+    <app-form-actions
+      [disabled]="transactionForm.invalid"
+      [loading]="loading$ | async"
+      [submitText]="isEditMode ? 'Update Transaction' : 'Create Transaction'"
+      (cancel)="onCancel()"
+    />
   </form>
 </div>

@@ -18,6 +18,7 @@ import {
   selectCategoriesError,
 } from '../../../categories/store/categories.selectors';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
 
 @Component({
   selector: 'app-product-form',
@@ -29,6 +30,7 @@ import { DetailsPageHeaderComponent } from '../../../../shared/components/detail
     FormInputComponent,
     DropdownComponent,
     DetailsPageHeaderComponent,
+    FormActionsComponent,
   ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],

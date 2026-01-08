@@ -1,0 +1,11 @@
+<div class="form-actions">
+  <button type="button" class="btn btn-secondary" (click)="cancel.emit()">Cancel</button>
+
+  <button type="submit" class="btn btn-primary" [disabled]="disabled() || loading()">
+    @if (loading()) {
+    <span>Saving...</span>
+    } @else {
+    <span>{{ submitText() }}</span>
+    }
+  </button>
+</div>

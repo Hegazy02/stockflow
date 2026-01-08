@@ -37,19 +37,11 @@
       </div>
     </div>
 
-    <div class="form-actions">
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="categoryForm.invalid || (loading$ | async)"
-      >
-        @if (loading$ | async) {
-        <span>Saving...</span>
-        } @else {
-        <span>{{ isEditMode ? 'Update' : 'Create' }} Category</span>
-        }
-      </button>
-    </div>
+    <app-form-actions
+      [disabled]="categoryForm.invalid"
+      [loading]="loading$ | async"
+      [submitText]="isEditMode ? 'Update Category' : 'Create Category'"
+      (cancel)="onCancel()"
+    />
   </form>
 </div>

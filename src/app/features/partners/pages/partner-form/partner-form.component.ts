@@ -9,12 +9,20 @@ import { createPartner, updatePartner, getPartnerById } from '../../store/partne
 import { selectPartnerById, selectPartnersLoading } from '../../store/partners.selectors';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
-import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
+import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
 
 @Component({
   selector: 'app-partner-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormInputComponent, DropdownComponent, DetailsPageHeaderComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormInputComponent,
+    DropdownComponent,
+    DetailsPageHeaderComponent,
+    FormActionsComponent,
+  ],
   templateUrl: './partner-form.component.html',
   styleUrls: ['./partner-form.component.scss'],
 })

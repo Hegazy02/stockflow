@@ -50,15 +50,10 @@
       [rows]="4"
     ></app-form-input>
 
-    <div class="form-actions">
-      <button type="button" class="btn-secondary" (click)="onCancel()">
-        <lucide-icon [img]="X" [size]="18"></lucide-icon>
-        <span>Cancel</span>
-      </button>
-      <button type="submit" class="btn-primary" [disabled]="productForm.invalid">
-        <lucide-icon [img]="Save" [size]="18"></lucide-icon>
-        <span>{{ isEditMode ? 'Update Product' : 'Create Product' }}</span>
-      </button>
-    </div>
+    <app-form-actions
+      [disabled]="productForm.invalid"
+      [submitText]="isEditMode ? 'Update Product' : 'Create Product'"
+      (cancel)="onCancel()"
+    />
   </form>
 </div>

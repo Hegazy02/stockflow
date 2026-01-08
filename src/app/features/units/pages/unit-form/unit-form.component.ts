@@ -10,6 +10,7 @@ import { selectUnitById, selectUnitsLoading } from '../../store/units.selectors'
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
 
 @Component({
   selector: 'app-unit-form',
@@ -20,6 +21,7 @@ import { DetailsPageHeaderComponent } from '../../../../shared/components/detail
     FormInputComponent,
     DropdownComponent,
     DetailsPageHeaderComponent,
+    FormActionsComponent,
   ],
   templateUrl: './unit-form.component.html',
   styleUrls: ['./unit-form.component.scss'],

@@ -45,10 +45,6 @@
   lucide-icon {
     display: flex;
   }
-
-  &:hover {
-    box-shadow: var(--shadow-md);
-  }
 }
 .btn-secondary {
   background-color: var(--color-background);
@@ -56,7 +52,7 @@
   border: 1px solid var(--color-border-medium);
 
   &:hover {
-    background-color: var(--color-gray-lightest);
+    background: transparent;
     border-color: var(--color-primary);
   }
 }

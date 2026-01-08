@@ -26,20 +26,11 @@
         ></app-form-input>
       </div>
     </div>
-
-    <div class="form-actions">
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="unitForm.invalid || (loading$ | async)"
-      >
-        @if (loading$ | async) {
-        <span>Saving...</span>
-        } @else {
-        <span>{{ isEditMode ? 'Update' : 'Create' }} Unit</span>
-        }
-      </button>
-    </div>
+    <app-form-actions
+      [disabled]="unitForm.invalid"
+      [loading]="loading$ | async"
+      [submitText]="isEditMode ? 'Update Unit' : 'Create Unit'"
+      (cancel)="onCancel()"
+    />
   </form>
 </div>

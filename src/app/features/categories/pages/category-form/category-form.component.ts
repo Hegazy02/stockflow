@@ -5,20 +5,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Category } from '../../models/category.model';
-import {
-  createCategory,
-  updateCategory,
-  getCategoryById,
-} from '../../store/categories.actions';
+import { createCategory, updateCategory, getCategoryById } from '../../store/categories.actions';
 import { selectCategoryById, selectCategoriesLoading } from '../../store/categories.selectors';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
-import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
+import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
 
 @Component({
   selector: 'app-category-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormInputComponent, DropdownComponent, DetailsPageHeaderComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormInputComponent,
+    DropdownComponent,
+    DetailsPageHeaderComponent,
+    FormActionsComponent,
+  ],
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.scss'],
 })

@@ -10,16 +10,17 @@ import { createExpense, getExpenseById, updateExpense } from '../../store/expens
 import { LucideAngularModule, ArrowLeft, Save, X } from 'lucide-angular';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
 
 @Component({
   selector: 'app-expense-form',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     LucideAngularModule,
     FormInputComponent,
     DetailsPageHeaderComponent,
+    FormActionsComponent,
   ],
   templateUrl: './expense-form.component.html',
   styleUrls: ['./expense-form.component.scss'],

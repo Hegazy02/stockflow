@@ -1,14 +1,10 @@
 .expense-form-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0;
-
   .form-content {
-    background: var(--bg-card);
+    background: white;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    margin-top: 2rem;
+    box-shadow: var(--shadow-card);
+    margin-top: 1rem;
   }
 
   .form-grid {
@@ -21,33 +17,9 @@
     }
   }
 
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border-color);
-
-    button {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.2s;
-
-      lucide-icon {
-        width: 18px;
-        height: 18px;
-      }
+  @media (max-width: 768px) {
+    .expense-form-container .form-grid {
+      grid-template-columns: 1fr;
     }
-  }
-}
-
-@media (max-width: 768px) {
-  .expense-form-container .form-grid {
-    grid-template-columns: 1fr;
   }
 }
