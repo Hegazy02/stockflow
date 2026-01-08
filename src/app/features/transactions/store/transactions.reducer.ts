@@ -120,5 +120,24 @@ export const transactionsReducer = createReducer(
     ...state,
     loading: false,
     error,
+  })),
+
+  // Return Transaction
+  on(TransactionsActions.returnTransaction, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+  on(TransactionsActions.returnTransactionSuccess, (state, { transaction }) =>
+    transactionsAdapter.upsertOne(transaction, {
+      ...state,
+      loading: false,
+      error: null,
+    })
+  ),
+  on(TransactionsActions.returnTransactionFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
   }))
 );

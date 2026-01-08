@@ -55,6 +55,7 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
   @Input() pattern?: string;
   @Input() disabled: boolean = false;
   @Input() min?: number;
+  @Input() max?: number;
 
   @Output() change = new EventEmitter();
   readonly AlertCircle = AlertCircle;
@@ -151,6 +152,10 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
 
     if (errors['max']) {
       return `${fieldLabel} must not exceed ${errors['max'].max}`;
+    }
+
+    if (errors['quantityExceeded']) {
+      return 'Quantity cannot exceed bought quantity';
     }
 
     // Return first error key if no specific message

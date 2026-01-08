@@ -1,0 +1,55 @@
+<div class="returns-container">
+  @if (loading$ | async) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading transaction...</p>
+  </div>
+  } @else if (transaction$ | async; as transaction) {
+  <app-details-page-header (back)="onBack()" [hasEdit]="false" [hasDelete]="false">
+  </app-details-page-header>
+
+  <div class="products-section">
+    <form [formGroup]="returnedProductsForm" class="info-card">
+      <h2>Products to Return</h2>
+      <p>Enter the quantity of products you wish to return.</p>
+
+      <div formArrayName="products">
+        <app-data-table
+          [data]="stableProducts"
+          [columns]="productsColumns"
+          [paginator]="false"
+          [showActions]="false"
+          [scrollable]="false"
+          dataKey="productId"
+        >
+          <ng-template appCell="quantity" let-rowData="rowData" let-index="index">
+            <div [formGroupName]="index">
+              <app-form-input
+                formControlName="quantity"
+                type="number"
+                [min]="0"
+                [max]="rowData.originalQuantity"
+              />
+            </div>
+          </ng-template>
+        </app-data-table>
+      </div>
+
+      <div class="submit-container">
+        <app-custom-button
+          label="Submit Returns"
+          btnClass="btn-primary"
+          (click)="onSubmit()"
+          [disabled]="productsFormArray.length === 0 || returnedProductsForm.invalid"
+        ></app-custom-button>
+      </div>
+    </form>
+  </div>
+  } @else {
+  <div class="not-found">
+    <h2>Transaction Not Found</h2>
+    <p>The transaction you're looking for doesn't exist.</p>
+    <button class="btn btn-primary" (click)="onBack()">Back to Transactions</button>
+  </div>
+  }
+</div>

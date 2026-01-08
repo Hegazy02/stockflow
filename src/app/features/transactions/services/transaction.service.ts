@@ -130,6 +130,12 @@ export class TransactionService {
     }
   }
 
+  returnProducts(id: string, products: any[]): Observable<Transaction> {
+    return this.http
+      .post<Transaction>(`${this.apiUrl}/${id}/returns`, { products })
+      .pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred';
     let errorCode = 'UNKNOWN_ERROR';

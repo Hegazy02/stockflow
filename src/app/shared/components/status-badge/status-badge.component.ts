@@ -26,11 +26,11 @@ export class StatusBadgeComponent implements OnChanges {
 
     switch (this.value) {
       case TransactionType.SALES:
-      case "Customer":
+      case 'Customer':
         this.severity = 'success';
         break;
       case TransactionType.PURCHASES:
-      case "Supplier":
+      case 'Supplier':
         this.severity = 'danger';
         break;
       case TransactionType.DEPOSIT_CUSTOMERS:
@@ -40,6 +40,14 @@ export class StatusBadgeComponent implements OnChanges {
       case TransactionType.DEPOSIT_SUPPLIERS:
         this.severity = 'warn';
         this.label = 'Deposit (Supplier)';
+        break;
+      case TransactionType.RETURN_PURCHASES:
+        this.severity = 'info';
+        this.label = 'Return (Purchase)';
+        break;
+      case TransactionType.RETURN_SALES:
+        this.severity = 'info';
+        this.label = 'Return (Sales)';
         break;
       default:
         this.severity = 'info';

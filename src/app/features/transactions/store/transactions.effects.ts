@@ -15,6 +15,7 @@ export class TransactionsEffects {
   CreateTransaction$;
   UpdateTransaction$;
   DeleteTransactions$;
+  ReturnTransaction$;
   navigateAfterSave$;
 
   constructor(
@@ -109,14 +110,28 @@ export class TransactionsEffects {
       )
     );
 
-    // Navigate after Create/Update Transaction
+    // Return Transaction
+    this.ReturnTransaction$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(TransactionsActions.returnTransaction),
+        exhaustMap((action) =>
+          this.transactionsService.returnProducts(action.id, action.products).pipe(
+            map((transaction) => TransactionsActions.returnTransactionSuccess({ transaction })),
+            catchError((error) => of(TransactionsActions.returnTransactionFailure({ error })))
+          )
+        )
+      )
+    );
+
+    // Navigate after Create/Update/Delete/Return Transaction
     this.navigateAfterSave$ = createEffect(
       () =>
         this.actions$.pipe(
           ofType(
             TransactionsActions.updateTransactionSuccess,
             TransactionsActions.createTransactionSuccess,
-            TransactionsActions.deleteTransactionsSuccess
+            TransactionsActions.deleteTransactionsSuccess,
+            TransactionsActions.returnTransactionSuccess
           ),
           tap(() => this.router.navigate(['/transactions']))
         ),

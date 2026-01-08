@@ -90,13 +90,13 @@
 
         <!-- Actions Column -->
         @if (showActions && actions.length > 0) {
-        <th class="actions-column" >Actions</th>
+        <th class="actions-column">Actions</th>
         }
       </tr>
     </ng-template>
 
     <!-- Table Body -->
-    <ng-template pTemplate="body" let-rowData>
+    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
       <tr>
         <!-- Selection Column -->
         @if (selectionMode === 'multiple') {
@@ -113,7 +113,8 @@
             [ngTemplateOutlet]="getCellTemplate(col.field)"
             [ngTemplateOutletContext]="{
               $implicit: rowData[col.field],
-              rowData: rowData
+              rowData: rowData,
+              index: rowIndex
             }"
           ></ng-container>
           } @else {

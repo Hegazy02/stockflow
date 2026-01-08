@@ -8,8 +8,8 @@ import { Partner } from '../../models/partner.model';
 import { getPartnerById, deletePartners } from '../../store/partners.actions';
 import { selectPartnerById, selectPartnersLoading } from '../../store/partners.selectors';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
-import { StatusBadgeComponent } from "../../../../shared/components/status-badge/status-badge.component";
+import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { TransactionService } from '../../../transactions/services/transaction.service';
 import { Transaction } from '../../../transactions/models/transaction.model';
@@ -33,7 +33,7 @@ import { CellTemplateDirective } from '../../../../shared/directives/cell-templa
 })
 export class PartnerDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
-  
+
   partner$: Observable<Partner | undefined>;
   loading$: Observable<boolean>;
   partnerId: string | null = null;
@@ -147,30 +147,6 @@ export class PartnerDetailComponent implements OnInit {
           this.transactionsLoading = false;
         },
       });
-  }
-
-  private transformTransactions(transactions: Transaction[]): any[] {
-  console.log("trans",transactions);
-  
-    return transactions.map((transaction) => ({
-      ...transaction,
-      productsDisplay: this.getProductsDisplay(transaction),
-    }));
-  }
-
-  private getProductsDisplay(transaction: Transaction): string {
-    if (!transaction.products || transaction.products.length === 0) {
-      return 'No products';
-    }
-
-    return transaction.products
-      .map((p) => {
-        const name = p.name || p.product?.name || 'Product';
-        const sku = p.sku || p.product?.sku || '';
-        const quantity = p.quantity || 0;
-        return `${name}${sku ? ` (${sku})` : ''} x${quantity}`;
-      })
-      .join(', ');
   }
 
   onPageChange(event: PageChangeEvent): void {

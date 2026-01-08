@@ -83,3 +83,23 @@ export const deleteTransactionsFailure = createAction(
   '[Transactions] Delete Transactions Failure',
   props<{ error: any }>()
 );
+
+// Return Transaction
+export const returnTransaction = createAction(
+  '[Transactions] Return Transaction',
+  props<{
+    id: string;
+    products: {
+      productId: string;
+      quantity: number;
+    }[];
+  }>()
+);
+export const returnTransactionSuccess = createAction(
+  '[Transactions] Return Transaction Success',
+  props<{ transaction: Transaction }>()
+);
+export const returnTransactionFailure = createAction(
+  '[Transactions] Return Transaction Failure',
+  props<{ error: any }>()
+);

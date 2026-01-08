@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DetailsPageHeader } from './details-page-header';
+import { CustomButton } from './custom-button';
 
-describe('DetailsPageHeader', () => {
-  let component: DetailsPageHeader;
-  let fixture: ComponentFixture<DetailsPageHeader>;
+describe('CustomButton', () => {
+  let component: CustomButton;
+  let fixture: ComponentFixture<CustomButton>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DetailsPageHeader]
+      imports: [CustomButton]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DetailsPageHeader);
+    fixture = TestBed.createComponent(CustomButton);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

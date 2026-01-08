@@ -65,46 +65,24 @@
     @if
     (transaction.transactionType==TransactionType.SALES||transaction.transactionType==TransactionType.PURCHASES)
     {
-    <div class="info-card">
-      <h2>Products ({{ transaction.products?.length }})</h2>
-      <div class="products-table">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Product Name</th>
-              <th>SKU</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (product of transaction.products; track product.productId; let i = $index) {
-            <tr>
-              <td>{{ i + 1 }}</td>
-              <td>{{ product.name || product.product?.name || product.productId }}</td>
-              <td>{{ product.sku || product.product?.sku || 'N/A' }}</td>
-              <td class="price">
-                {{
-                  transaction.transactionType == TransactionType.SALES
-                    ? product.sellingPrice
-                    : product.costPrice
-                }}
-              </td>
-              <td class="">{{ product.quantity }}</td>
-              <td class="quantity">
-                {{
-                  product.quantity *
-                    (transaction.transactionType == TransactionType.SALES
-                      ? product.sellingPrice
-                      : product.costPrice)
-                }}
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
+    <div class="products-section">
+      <div class="products-section-header">
+        <app-custom-button
+          btnClass="btn-warning"
+          label="Returns"
+          (click)="onReturns()"
+        ></app-custom-button>
+      </div>
+      <div class="info-card">
+        <h2>Products ({{ transaction.products?.length }})</h2>
+        <app-data-table
+          [data]="transaction.products || []"
+          [columns]="productsColumns"
+          [paginator]="false"
+          [showActions]="false"
+          [scrollable]="false"
+        >
+        </app-data-table>
       </div>
     </div>
     }

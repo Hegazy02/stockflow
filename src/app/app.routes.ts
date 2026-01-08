@@ -163,6 +163,14 @@ export const routes: Routes = [
         (m) => m.TransactionDetailComponent
       ),
   },
+  {
+    path: 'transactions/:id/returns',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/transactions/pages/transaction-returns/transaction-returns').then(
+        (m) => m.TransactionReturnsComponent
+      ),
+  },
   // {
   //   path: 'transactions/:id/edit',
   //   canActivate: [authGuard],
