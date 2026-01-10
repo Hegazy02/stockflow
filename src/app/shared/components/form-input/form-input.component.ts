@@ -157,6 +157,9 @@ export class FormInputComponent implements ControlValueAccessor, OnInit {
     if (errors['quantityExceeded']) {
       return 'Quantity cannot exceed bought quantity';
     }
+    if (errors['stockExceeded']) {
+      return 'Quantity cannot exceed current stock';
+    }
 
     // Return first error key if no specific message
     return `${fieldLabel} is invalid`;

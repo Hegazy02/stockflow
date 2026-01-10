@@ -28,7 +28,7 @@
                 formControlName="quantity"
                 type="number"
                 [min]="0"
-                [max]="rowData.originalQuantity"
+                [max]="getMaxReturnable(rowData)"
               />
             </div>
           </ng-template>

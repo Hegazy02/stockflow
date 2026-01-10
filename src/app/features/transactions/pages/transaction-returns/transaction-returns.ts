@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Transaction, TransactionProduct } from '../../models/transaction.model';
+import { Transaction, TransactionProduct, TransactionType } from '../../models/transaction.model';
 import { getTransactionById, returnTransaction } from '../../store/transactions.actions';
 import {
   selectTransactionById,
@@ -48,16 +48,25 @@ export class TransactionReturnsComponent implements OnInit {
   transaction$: Observable<Transaction | undefined>;
   loading$: Observable<boolean>;
   transactionId: string | null = null;
+  transactionType: TransactionType | undefined;
+  TransactionType = TransactionType;
   returnedProductsForm: FormGroup;
   stableProducts: any[] = [];
 
   productsColumns: TableColumn[] = [
-    { field: 'name', header: 'Name', width: '15%' },
-    { field: 'sku', header: 'SKU', width: '15%' },
-    { field: 'price', header: 'Price', width: '15%', type: 'number' },
-    { field: 'originalQuantity', header: 'Bought Quantity', width: '15%', type: 'number' },
-    { field: 'total', header: 'Total', width: '15%', type: 'number' },
-    { field: 'quantity', header: 'Return Quantity', width: '15%' },
+    { field: 'name', header: 'Name', width: '10%' },
+    { field: 'sku', header: 'SKU', width: '10%' },
+    { field: 'price', header: 'Price', width: '10%', type: 'number' },
+    { field: 'originalQuantity', header: 'Bought Qty', width: '10%', type: 'number' },
+    { field: 'total', header: 'Total', width: '10%', type: 'number' },
+    {
+      field: 'alreadyReturnedQuantity',
+      header: 'Returned Qty',
+      width: '10%',
+      type: 'number',
+    },
+    { field: 'currentStock', header: 'Current Stock', width: '10%', type: 'number' },
+    { field: 'quantity', header: 'Return Qty', width: '10%' },
   ];
 
   constructor(
@@ -86,7 +95,8 @@ export class TransactionReturnsComponent implements OnInit {
         )
         .subscribe((transaction) => {
           if (transaction && transaction.products) {
-            this.setProductsData(transaction.products);
+            this.transactionType = transaction.transactionType;
+            this.setProductsData(transaction.products, transaction.transactionType);
           }
         });
     }
@@ -96,7 +106,7 @@ export class TransactionReturnsComponent implements OnInit {
     return this.returnedProductsForm.get('products') as FormArray;
   }
 
-  private setProductsData(products: TransactionProduct[]) {
+  private setProductsData(products: TransactionProduct[], transactionType: TransactionType) {
     this.productsFormArray.clear();
     this.stableProducts =
       products?.map((p) => ({
@@ -112,9 +122,11 @@ export class TransactionReturnsComponent implements OnInit {
             name: [p.name],
             sku: [p.sku],
             originalQuantity: [p.quantity],
+            alreadyReturnedQuantity: [p.alreadyReturnedQuantity || 0],
+            currentStock: [p.currentStock || 0],
             quantity: [null, [Validators.required, Validators.min(0)]],
           },
-          { validators: [this.quantityExceededValidator()] }
+          { validators: [this.quantityExceededValidator(transactionType)] }
         )
       );
     });
@@ -125,27 +137,50 @@ export class TransactionReturnsComponent implements OnInit {
     return group ? group.get('quantity') : null;
   }
 
-  quantityExceededValidator(): ValidatorFn {
+  quantityExceededValidator(transactionType: TransactionType): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const quantityCtrl = group.get('quantity');
-      const originalQuantity = group.get('originalQuantity')?.value;
-      const quantity = quantityCtrl?.value;
+      const originalQuantity = group.get('originalQuantity')?.value || 0;
+      const alreadyReturnedQuantity = group.get('alreadyReturnedQuantity')?.value || 0;
+      const currentStock = group.get('currentStock')?.value || 0;
+      const quantity = quantityCtrl?.value || 0;
 
-      if (quantity !== null && originalQuantity !== null && quantity > originalQuantity) {
-        const error = { quantityExceeded: true };
-        if (!quantityCtrl?.hasError('quantityExceeded')) {
+      const remainingToReturn = originalQuantity - alreadyReturnedQuantity;
+      console.log('remainingToReturn', remainingToReturn);
+      console.log('quantity', quantity);
+
+      let error: ValidationErrors | null = null;
+
+      if (quantity > remainingToReturn) {
+        error = { quantityExceeded: true, max: { max: remainingToReturn } };
+      } else if (transactionType === TransactionType.PURCHASES && quantity > currentStock) {
+        error = { stockExceeded: true, max: { max: currentStock } };
+      }
+
+      if (error) {
+        if (!quantityCtrl?.hasError(Object.keys(error)[0])) {
           quantityCtrl?.setErrors({ ...quantityCtrl?.errors, ...error });
+          console.log(error);
         }
         return error;
       } else {
-        if (quantityCtrl?.hasError('quantityExceeded')) {
+        if (quantityCtrl?.hasError('quantityExceeded') || quantityCtrl?.hasError('stockExceeded')) {
           const errors = { ...quantityCtrl?.errors };
           delete errors['quantityExceeded'];
+          delete errors['stockExceeded'];
           quantityCtrl?.setErrors(Object.keys(errors).length ? errors : null);
         }
       }
       return null;
     };
+  }
+
+  getMaxReturnable(rowData: any): number {
+    const remaining = rowData.originalQuantity - (rowData.alreadyReturnedQuantity || 0);
+    if (this.transactionType === TransactionType.PURCHASES) {
+      return Math.min(remaining, rowData.currentStock || 0);
+    }
+    return remaining;
   }
 
   onSubmit(): void {

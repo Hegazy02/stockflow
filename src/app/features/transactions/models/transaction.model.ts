@@ -8,6 +8,8 @@ export interface TransactionProduct {
   sellingPrice?: number;
   price?: number;
   total?: number;
+  alreadyReturnedQuantity?: number;
+  currentStock?: number;
 }
 
 export enum TransactionType {
