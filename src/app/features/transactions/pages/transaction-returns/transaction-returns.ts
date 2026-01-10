@@ -112,7 +112,7 @@ export class TransactionReturnsComponent implements OnInit {
             name: [p.name],
             sku: [p.sku],
             originalQuantity: [p.quantity],
-            quantity: [0, [Validators.required, Validators.min(0)]],
+            quantity: [null, [Validators.required, Validators.min(0)]],
           },
           { validators: [this.quantityExceededValidator()] }
         )
@@ -157,16 +157,14 @@ export class TransactionReturnsComponent implements OnInit {
           quantity: p.quantity,
         }));
 
-      if (productsToReturn.length === 0) {
-        return;
-      }
-
       this.store.dispatch(
         returnTransaction({
           id: this.transactionId,
           products: productsToReturn,
         })
       );
+    } else {
+      this.returnedProductsForm.markAllAsTouched();
     }
   }
 

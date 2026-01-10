@@ -1,33 +1,9 @@
-.returns-container {
-  padding: 1.5rem;
-}
 .submit-container {
   margin-top: 1.5rem;
   display: flex;
   justify-content: flex-end;
 }
-.quantity-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 0.875rem;
-}
-.quantity-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-}
-.quantity-input.error {
-  border-color: #ef4444;
-  background-color: #fef2f2;
-}
-.error-text {
-  color: #ef4444;
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-  display: block;
-}
+
 .products-section {
   margin-top: 1rem;
 }

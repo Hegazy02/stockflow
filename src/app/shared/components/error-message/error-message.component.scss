@@ -6,7 +6,9 @@
   font-size: var(--font-size-sm);
   color: var(--color-accent-coral);
   font-weight: var(--font-weight-medium);
-
+  .error-text {
+    white-space: normal;
+  }
   lucide-icon {
     display: flex;
     flex-shrink: 0;
