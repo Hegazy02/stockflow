@@ -18,7 +18,7 @@ import { DataTableComponent } from '../../../../shared/components/data-table/dat
 import { TableColumn } from '../../../../shared/models/data-table';
 import { BreadcrumbComponent } from "../../../../shared/components/breadcrumb/breadcrumb.component";
 import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
-import { DollarSign, User, Calendar, Hash } from 'lucide-angular';
+import { DollarSign, User, Calendar, Hash, Tag, Users } from 'lucide-angular';
 import { CopyTextComponent } from "../../../../shared/components/copy-text/copy-text.component";
 
 @Component({
@@ -50,6 +50,8 @@ export class TransactionDetailComponent implements OnInit {
   User = User;
   Calendar = Calendar;
   Hash = Hash;
+  Tag = Tag;
+  Users = Users;
   productsColumns: TableColumn[] = [
     { field: 'name', header: 'Name', width: '20%' },
     { field: 'sku', header: 'SKU', width: '20%' },

@@ -60,34 +60,56 @@
       </div>
 
       <!-- Transaction Details Card -->
-      <div class="info-card">
-        <h2>Transaction Information</h2>
-        <div class="info-grid">
-          <div class="info-item">
-            <label>Transaction Type</label>
-            <app-status-badge [value]="transaction.transactionType"></app-status-badge>
-          </div>
+      <div class="transaction-info-section">
+        <h2 class="section-title">Transaction Information</h2>
+        <div class="info-cards-grid">
+          <app-info-card
+            title="Transaction Type"
+            [icon]="Tag"
+            backgroundColor="#fff7ed"
+            iconColor="#f97316"
+          >
+            <div subtitle>
+              <app-status-badge [value]="transaction.transactionType"></app-status-badge>
+            </div>
+          </app-info-card>
 
-          <div class="info-item">
-            <label>Partner</label>
-            <p>{{ transaction.partner?.name || 'N/A' }}</p>
-          </div>
+          <app-info-card
+            title="Partner"
+            [value]="transaction.partner?.name || 'N/A'"
+            [icon]="User"
+            backgroundColor="#f0fdf4"
+            iconColor="#22c55e"
+          >
+          </app-info-card>
 
-          <div class="info-item">
-            <label>Partner Type</label>
-            <p>{{ transaction.partner?.type || 'N/A' }}</p>
-          </div>
+          <app-info-card
+            title="Partner Type"
+            [value]="transaction.partner?.type || 'N/A'"
+            [icon]="Users"
+            backgroundColor="#eff6ff"
+            iconColor="#3b82f6"
+          >
+          </app-info-card>
 
-          <div class="info-item">
-            <label>Created At</label>
-            <p>{{ transaction.createdAt | date: 'medium' }}</p>
-          </div>
-
-          <div class="info-item full-width">
-            <label>Note</label>
-            <p>{{ transaction.note || 'No note provided' }}</p>
-          </div>
+          <app-info-card
+            title="Created At"
+            [value]="(transaction.createdAt | date: 'medium') ?? ''"
+            [icon]="Calendar"
+            backgroundColor="#faf5ff"
+            iconColor="#a855f7"
+          >
+          </app-info-card>
         </div>
+
+        @if (transaction.note) {
+          <div class="note-card">
+            <div class="info-card">
+              <h3>Note</h3>
+              <p>{{ transaction.note }}</p>
+            </div>
+          </div>
+        }
       </div>
       @if (
         transaction.transactionType == TransactionType.SALES ||

@@ -38,6 +38,42 @@
   gap: 1rem;
 }
 
+.transaction-info-section {
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 1rem 0;
+  }
+}
+
+.note-card {
+  margin-top: 1rem;
+
+  .info-card {
+    background: var(--color-white);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--color-text-primary);
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+}
+
 .info-card {
   background: white;
   padding: 1rem;
