@@ -11,9 +11,6 @@ h1 {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   padding: var(--spacing-xl);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
 }
 
 .form-field,

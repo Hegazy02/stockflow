@@ -3,7 +3,7 @@
 // Import color palette and variables
 @use 'styles/variables.scss';
 
-
+@import "tailwindcss";
 // Global Reset
 * {
   margin: 0;

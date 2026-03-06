@@ -6,56 +6,68 @@
   <h1>{{ isEditMode ? 'Edit Product' : 'Create New Product' }}</h1>
 
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
-    <app-form-input
-      label="Product Name"
-      placeholder="Enter product name"
-      formControlName="name"
-      [required]="true"
-      [minLength]="2"
-    ></app-form-input>
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <app-form-input
+          label="Product Name"
+          placeholder="Enter product name"
+          formControlName="name"
+          [required]="true"
+          [minLength]="2"
+        ></app-form-input>
+      </div>
+      <div class="flex-1">
+        <app-form-input
+          label="SKU"
+          placeholder="e.g., PROD-001"
+          formControlName="sku"
+          [required]="true"
+          helpText="Use uppercase letters, numbers, and hyphens only"
+        ></app-form-input>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <app-dropdown
+          label="Category"
+          formControlName="categoryId"
+          [options]="(categories$ | async) || []"
+          optionLabel="name"
+          optionValue="_id"
+          placeholder="Select a category"
+          [filter]="true"
+          [loading]="(categoriesLoading$ | async) || false"
+        ></app-dropdown>
+      </div>
 
-    <app-form-input
-      label="SKU"
-      placeholder="e.g., PROD-001"
-      formControlName="sku"
-      [required]="true"
-      helpText="Use uppercase letters, numbers, and hyphens only"
-    ></app-form-input>
+      @if (categoriesError$ | async; as error) {
+        <small class="error-message">{{ error.message }}</small>
+      }
+      <div class="flex-1">
+        <app-form-input
+          label="Selling price"
+          placeholder="Enter product Selling price"
+          type="number"
+          [required]="true"
+          formControlName="sellingPrice"
+        ></app-form-input>
+      </div>
+    </div>
 
-    <app-dropdown
-      label="Category"
-      formControlName="categoryId"
-      [options]="(categories$ | async) || []"
-      optionLabel="name"
-      optionValue="_id"
-      placeholder="Select a category"
-      [filter]="true"
-      [loading]="(categoriesLoading$ | async) || false"
-    ></app-dropdown>
+    <div class="!mb-4">
+      <app-form-input
+        label="Description"
+        placeholder="Enter product description"
+        type="textarea"
+        formControlName="description"
+        [rows]="4"
+      ></app-form-input>
+    </div>
 
-    @if (categoriesError$ | async; as error) {
-      <small class="error-message">{{ error.message }}</small>
-    }
-    <app-form-input
-      label="Selling price"
-      placeholder="Enter product Selling price"
-      type="number"
-      [required]="true"
-      formControlName="sellingPrice"
-    ></app-form-input>
-
-    <app-form-input
-      label="Description"
-      placeholder="Enter product description"
-      type="textarea"
-      formControlName="description"
-      [rows]="4"
-    ></app-form-input>
-
-    <app-form-actions
-      [disabled]="productForm.invalid"
-      [submitText]="isEditMode ? 'Update Product' : 'Create Product'"
-      (cancel)="onCancel()"
-    />
+      <app-form-actions
+        [disabled]="productForm.invalid"
+        [submitText]="isEditMode ? 'Update Product' : 'Create Product'"
+        (cancel)="onCancel()"
+      />
   </form>
 </div>
