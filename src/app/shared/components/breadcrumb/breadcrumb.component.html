@@ -1,26 +1,14 @@
 <nav class="breadcrumb" aria-label="Breadcrumb">
-  <!-- <div class="breadcrumb-item">
-    <a [routerLink]="['/']">
-      <lucide-icon [img]="Home" [size]="16"></lucide-icon>
-      <span>Home</span>
-    </a>
-    @if (breadcrumbs.length > 0) {
-    <span class="separator">
-      <lucide-icon [img]="ChevronRight" [size]="16"></lucide-icon>
-    </span>
-    }
-  </div> -->
-
   @for (breadcrumb of breadcrumbs; track breadcrumb.url; let isLast = $last) {
-  <div class="breadcrumb-item" [class.active]="isLast">
-    @if (!isLast) {
-    <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
-    <span class="separator">
-      <lucide-icon [img]="ChevronRight" [size]="16"></lucide-icon>
-    </span>
-    } @else {
-    <span>{{ breadcrumb.label }}</span>
-    }
-  </div>
+    <div class="breadcrumb-item" [class.active]="isLast">
+      @if (!isLast) {
+        <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+        <span class="separator">
+          <lucide-icon [img]="ChevronRight" [size]="16"></lucide-icon>
+        </span>
+      } @else {
+        <span>{{ breadcrumb.label }}</span>
+      }
+    </div>
   }
 </nav>

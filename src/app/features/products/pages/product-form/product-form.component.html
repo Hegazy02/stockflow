@@ -64,10 +64,10 @@
       ></app-form-input>
     </div>
 
-      <app-form-actions
-        [disabled]="productForm.invalid"
-        [submitText]="isEditMode ? 'Update Product' : 'Create Product'"
-        (cancel)="onCancel()"
-      />
+    <app-form-actions
+      [disabled]="productForm.invalid"
+      [submitText]="isEditMode ? 'Update Product' : 'Create Product'"
+      (cancel)="onCancel()"
+    />
   </form>
 </div>

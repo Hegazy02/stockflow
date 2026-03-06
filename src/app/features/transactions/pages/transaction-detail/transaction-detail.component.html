@@ -15,6 +15,51 @@
     </app-details-page-header>
 
     <div class="detail-content">
+      <!-- Info Cards Grid -->
+      <div class="info-cards-grid">
+        <app-info-card
+          title="Balance"
+          [value]="(transaction.balance | currency) ?? 0"
+          [icon]="DollarSign"
+          backgroundColor="#f0f9ff"
+          iconColor="#0ea5e9"
+        >
+        </app-info-card>
+
+        <app-info-card
+          title="Paid"
+          [value]="(transaction.paid | currency) ?? 0"
+          [icon]="DollarSign"
+          backgroundColor="#f0fdf4"
+          iconColor="#22c55e"
+        >
+        </app-info-card>
+
+        <app-info-card
+          title="Left"
+          [value]="(transaction.left | currency) ?? 0"
+          [icon]="DollarSign"
+          backgroundColor="#fef2f2"
+          iconColor="#ef4444"
+        >
+        </app-info-card>
+
+        <app-info-card
+          title="Serial number"
+          [value]="transaction?.serialNumber || 'N/A'"
+          [icon]="Hash"
+          backgroundColor="#faf5ff"
+          iconColor="#a855f7"
+        >
+          <app-copy-text
+            subtitle
+            [text]="transaction.serialNumber ?? ''"
+            label="Copy Serial number"
+          ></app-copy-text>
+        </app-info-card>
+      </div>
+
+      <!-- Transaction Details Card -->
       <div class="info-card">
         <h2>Transaction Information</h2>
         <div class="info-grid">
@@ -24,18 +69,6 @@
           </div>
 
           <div class="info-item">
-            <label>Balance</label>
-            <p>{{ transaction.balance }}</p>
-          </div>
-          <div class="info-item">
-            <label>Paid</label>
-            <p>{{ transaction.paid }}</p>
-          </div>
-          <div class="info-item">
-            <label>Left</label>
-            <p>{{ transaction.left }}</p>
-          </div>
-          <div class="info-item">
             <label>Partner</label>
             <p>{{ transaction.partner?.name || 'N/A' }}</p>
           </div>
@@ -44,23 +77,16 @@
             <label>Partner Type</label>
             <p>{{ transaction.partner?.type || 'N/A' }}</p>
           </div>
+
           <div class="info-item">
             <label>Created At</label>
             <p>{{ transaction.createdAt | date: 'medium' }}</p>
           </div>
-          <div class="info-item">
-            <label>SERIAL NUMBER</label>
-            <p>{{ transaction?.serialNumber || 'N/A' }}</p>
-          </div>
+
           <div class="info-item full-width">
             <label>Note</label>
             <p>{{ transaction.note || 'No note provided' }}</p>
           </div>
-
-          <!-- <div class="info-item">
-          <label>Updated At</label>
-          <p>{{ transaction.updatedAt | date : 'medium' }}</p>
-          -->
         </div>
       </div>
       @if (

@@ -17,6 +17,9 @@ import { CustomButtonComponent } from '../../../../shared/components/custom-butt
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { TableColumn } from '../../../../shared/models/data-table';
 import { BreadcrumbComponent } from "../../../../shared/components/breadcrumb/breadcrumb.component";
+import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
+import { DollarSign, User, Calendar, Hash } from 'lucide-angular';
+import { CopyTextComponent } from "../../../../shared/components/copy-text/copy-text.component";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -29,7 +32,9 @@ import { BreadcrumbComponent } from "../../../../shared/components/breadcrumb/br
     LucideAngularModule,
     CustomButtonComponent,
     DataTableComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    InfoCardComponent,
+    CopyTextComponent
 ],
   templateUrl: './transaction-detail.component.html',
   styleUrls: ['./transaction-detail.component.scss'],
@@ -41,6 +46,10 @@ export class TransactionDetailComponent implements OnInit {
   showDeleteDialog = false;
   TransactionType = TransactionType;
   Undo2 = Undo2;
+  DollarSign = DollarSign;
+  User = User;
+  Calendar = Calendar;
+  Hash = Hash;
   productsColumns: TableColumn[] = [
     { field: 'name', header: 'Name', width: '20%' },
     { field: 'sku', header: 'SKU', width: '20%' },
