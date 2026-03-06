@@ -29,10 +29,6 @@
 }
 
 .product-card {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
   margin-top: 12px;
 }
 
@@ -63,9 +59,7 @@
   }
 }
 
-.product-details {
-  padding: var(--spacing-xl);
-}
+
 
 .detail-section {
   margin-bottom: var(--spacing-xl);
@@ -94,6 +88,17 @@
   color: var(--color-text-secondary);
   line-height: 1.6;
   margin: 0;
+}
+
+.description-card {
+  background: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+
+  .description {
+    color: var(--color-text-primary);
+  }
 }
 
 .stock-container {

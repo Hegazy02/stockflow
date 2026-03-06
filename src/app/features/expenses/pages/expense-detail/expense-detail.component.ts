@@ -20,6 +20,8 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
+import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
+import { DollarSign } from 'lucide-angular';
 
 @Component({
   selector: 'app-expense-detail',
@@ -31,6 +33,7 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
     ConfirmDialogComponent,
     DetailsPageHeaderComponent,
     BreadcrumbComponent,
+    InfoCardComponent,
   ],
   templateUrl: './expense-detail.component.html',
   styleUrls: ['./expense-detail.component.scss'],
@@ -52,6 +55,7 @@ export class ExpenseDetailComponent implements OnInit {
   readonly Calendar = Calendar;
   readonly Tag = Tag;
   readonly FileText = FileText;
+  readonly DollarSign = DollarSign;
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {}
 

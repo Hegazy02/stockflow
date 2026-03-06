@@ -27,43 +27,14 @@
   }
 }
 
-.category-card {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-  margin-top: 12px;
-}
+
+
 .category-header {
-  background: var(--color-white);
   padding: var(--spacing-xl);
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--color-border-light);
-
-  h1 {
-    margin: 0;
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-  }
-
-  .status-badge {
-    background: var(--color-background);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-md);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border-medium);
-
-    &.active {
-      background: var(--color-accent-green);
-      color: var(--color-white);
-      border-color: var(--color-accent-green);
-    }
-  }
 }
 .detail-header {
   display: flex;
@@ -96,7 +67,49 @@
 
 .detail-content {
   display: grid;
+  gap: 1.5rem;
+}
+
+.category-info-section {
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 1rem 0;
+  }
+}
+
+.info-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+}
+
+.description-card {
+  margin-top: 1rem;
+
+  .info-card {
+    background: var(--color-white);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 0.5rem 0;
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--color-text-primary);
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
 }
 
 .info-card {
@@ -142,21 +155,6 @@
     font-size: 1rem;
     color: var(--text-color);
     margin: 0;
-  }
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  background-color: var(--red-100);
-  color: var(--red-700);
-
-  &.active {
-    background-color: var(--green-100);
-    color: var(--green-700);
   }
 }
 

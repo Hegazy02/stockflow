@@ -1,110 +1,137 @@
 <div>
   @if (loading$ | async) {
-  <div class="loading-state">
-    <div class="spinner"></div>
-    <p>Loading partner...</p>
-  </div>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading partner...</p>
+    </div>
   } @else if (partner$ | async; as partner) {
-  <app-breadcrumb></app-breadcrumb>
-  
-  <app-details-page-header (back)="onBack()" (edit)="onEdit()" (delete)="confirmDelete()">
-  </app-details-page-header>
+    <app-breadcrumb></app-breadcrumb>
 
-  <div class="detail-content">
-    <div class="info-card">
-      <h2>Partner Information</h2>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>Name</label>
-          <p>{{ partner.name }}</p>
+    <app-details-page-header (back)="onBack()" (edit)="onEdit()" (delete)="confirmDelete()">
+    </app-details-page-header>
+
+    <div class="detail-content">
+      <!-- Partner Information -->
+      <div class="partner-info-section">
+        <h2 class="section-title">Partner Information</h2>
+        <div class="info-cards-grid">
+          <app-info-card
+            title="Name"
+            [value]="partner.name"
+            [icon]="User"
+            backgroundColor="#f0f9ff"
+            iconColor="#0ea5e9"
+          >
+          </app-info-card>
+
+          <app-info-card
+            title="Phone Number"
+            [value]="partner.phoneNumber"
+            [icon]="Phone"
+            backgroundColor="#f0fdf4"
+            iconColor="#22c55e"
+          >
+          </app-info-card>
+
+          <app-info-card title="Type" [icon]="Tag" backgroundColor="#fff7ed" iconColor="#f97316">
+            <div subtitle>
+              <app-status-badge [value]="partner.type"></app-status-badge>
+            </div>
+          </app-info-card>
+
+          <app-info-card
+            title="Created At"
+            [value]="(partner.createdAt | date: 'medium') ?? ''"
+            [icon]="Calendar"
+            backgroundColor="#faf5ff"
+            iconColor="#a855f7"
+          >
+          </app-info-card>
         </div>
 
-        <div class="info-item">
-          <label>Phone Number</label>
-          <p>{{ partner.phoneNumber }}</p>
-        </div>
+        @if (partner.description) {
+          <div class="description-card">
+            <div class="info-card">
+              <h3>Description</h3>
+              <p>{{ partner.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
 
-        <div class="info-item">
-          <label>Type</label>
-          <p>
-            <app-status-badge [value]="partner.type"></app-status-badge>
-          </p>
-        </div>
+      <!-- Transaction Totals -->
+      <div class="totals-section">
+        <h2 class="section-title">Transaction Totals</h2>
+        <div class="info-cards-grid">
+          <app-info-card
+            title="Total Balance"
+            [value]="(totals.balance | currency) ?? 0"
+            [icon]="DollarSign"
+            backgroundColor="#eff6ff"
+            iconColor="#3b82f6"
+          >
+          </app-info-card>
 
-        <div class="info-item">
-          <label>Created At</label>
-          <p>{{ partner.createdAt | date : 'medium' }}</p>
+          <app-info-card
+            title="Total Paid"
+            [value]="(totals.paid | currency) ?? 0"
+            [icon]="DollarSign"
+            backgroundColor="#f0fdf4"
+            iconColor="#22c55e"
+          >
+          </app-info-card>
+
+          <app-info-card
+            title="Total Left"
+            [value]="(totals.left | currency) ?? 0"
+            [icon]="DollarSign"
+            backgroundColor="#fef2f2"
+            iconColor="#ef4444"
+          >
+          </app-info-card>
         </div>
-        <div class="info-item">
-          <label>Updated At</label>
-          <p>{{ partner.updatedAt | date : 'medium' }}</p>
-        </div>
-        <div class="info-item full-width">
-          <label>Description</label>
-          <p>{{ partner.description || 'No description provided' }}</p>
-        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div>
+        <h2 class="section-title">Transactions</h2>
+         <app-data-table
+            [data]="transactions"
+            [columns]="transactionColumns"
+            [actions]="transactionActions"
+            [loading]="transactionsLoading"
+            [paginator]="true"
+            [totalRecords]="pagination.total"
+            [currentPage]="pagination.page"
+            [pageSize]="pagination.limit"
+            [rowsPerPageOptions]="[5, 10, 20, 50]"
+            [showActions]="true"
+            [scrollable]="false"
+            (pageChange)="onPageChange($event)"
+          >
+            <ng-template appCell="transactionType" let-value>
+              <app-status-badge [value]="value"></app-status-badge>
+            </ng-template>
+          </app-data-table>
       </div>
     </div>
 
-    <!-- Totals Card -->
-    <div class="info-card">
-      <h2>Transaction Totals</h2>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>Total Balance</label>
-          <p class="total-value">{{ totals.balance | number : '1.2-2' }}</p>
-        </div>
-        <div class="info-item">
-          <label>Total Paid</label>
-          <p class="total-value paid">{{ totals.paid | number : '1.2-2' }}</p>
-        </div>
-        <div class="info-item">
-          <label>Total Left</label>
-          <p class="total-value left">{{ totals.left | number : '1.2-2' }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Transactions Table -->
-    <div class="info-card">
-      <h2>Transactions</h2>
-      <app-data-table
-        [data]="transactions"
-        [columns]="transactionColumns"
-        [actions]="transactionActions"
-        [loading]="transactionsLoading"
-        [paginator]="true"
-        [totalRecords]="pagination.total"
-        [currentPage]="pagination.page"
-        [pageSize]="pagination.limit"
-        [rowsPerPageOptions]="[5, 10, 20, 50]"
-        [showActions]="true"
-        [scrollable]="false"
-        (pageChange)="onPageChange($event)"
-      >
-        <ng-template appCell="transactionType" let-value>
-          <app-status-badge [value]="value"></app-status-badge>
-        </ng-template>
-      </app-data-table>
-    </div>
-  </div>
-
-  <app-confirm-dialog
-    [isOpen]="showDeleteDialog"
-    title="Delete Partner"
-    [message]="'Are you sure you want to delete ' + partner.name + '?'"
-    warningMessage="This action cannot be undone."
-    confirmText="Delete"
-    cancelText="Cancel"
-    confirmButtonClass="btn-danger"
-    (confirm)="onDelete()"
-    (cancel)="cancelDelete()"
-  ></app-confirm-dialog>
+    <app-confirm-dialog
+      [isOpen]="showDeleteDialog"
+      title="Delete Partner"
+      [message]="'Are you sure you want to delete ' + partner.name + '?'"
+      warningMessage="This action cannot be undone."
+      confirmText="Delete"
+      cancelText="Cancel"
+      confirmButtonClass="btn-danger"
+      (confirm)="onDelete()"
+      (cancel)="cancelDelete()"
+    ></app-confirm-dialog>
   } @else {
-  <div class="not-found">
-    <h2>Partner Not Found</h2>
-    <p>The partner you're looking for doesn't exist.</p>
-    <button class="btn btn-primary" (click)="onBack()">Back to Partners</button>
-  </div>
+    <div class="not-found">
+      <h2>Partner Not Found</h2>
+      <p>The partner you're looking for doesn't exist.</p>
+      <button class="btn btn-primary" (click)="onBack()">Back to Partners</button>
+    </div>
   }
 </div>

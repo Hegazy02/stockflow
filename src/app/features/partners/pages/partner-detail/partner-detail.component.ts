@@ -17,6 +17,8 @@ import { TableColumn, PageChangeEvent } from '../../../../shared/models/data-tab
 import { Eye } from 'lucide-angular';
 import { CellTemplateDirective } from '../../../../shared/directives/cell-template/cell-template.directive';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
+import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
+import { User, Phone, Tag, Calendar, DollarSign, FileText } from 'lucide-angular';
 
 @Component({
   selector: 'app-partner-detail',
@@ -29,6 +31,7 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
     DataTableComponent,
     CellTemplateDirective,
     BreadcrumbComponent,
+    InfoCardComponent,
   ],
   templateUrl: './partner-detail.component.html',
   styleUrls: ['./partner-detail.component.scss'],
@@ -40,6 +43,14 @@ export class PartnerDetailComponent implements OnInit {
   loading$: Observable<boolean>;
   partnerId: string | null = null;
   showDeleteDialog = false;
+
+  // Icons
+  User = User;
+  Phone = Phone;
+  Tag = Tag;
+  Calendar = Calendar;
+  DollarSign = DollarSign;
+  FileText = FileText;
 
   // Transactions data
   transactions: Transaction[] = [];

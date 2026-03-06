@@ -22,9 +22,9 @@
       <span class="sku-badge">{{ product.sku }}</span>
     </div> -->
 
-    <div class="product-details">
+    <div>
       <div class="detail-section">
-        <h2>Product Information</h2>
+        <!-- <h2>Product Information</h2> -->
         <div class="info-cards-grid">
           <app-info-card
             title="Total Stock"
@@ -32,6 +32,14 @@
             [icon]="PackageOpen"
             backgroundColor="#e0f2fe"
             iconColor="#0ea5e9"
+          ></app-info-card>
+
+          <app-info-card
+            title="Selling Price"
+            [value]="(product.sellingPrice | currency) ?? 0"
+            [icon]="DollarSign"
+            backgroundColor="#f0fdf4"
+            iconColor="#22c55e"
           ></app-info-card>
 
           <app-info-card
@@ -63,64 +71,14 @@
         </div>
       </div>
 
-      <div class="detail-section">
-        <h2>Description</h2>
-        <p class="description">{{ product.description }}</p>
-      </div>
-
-      <!-- <div class="detail-section">
-      <h2>Stock Levels</h2>
-
-      @if (stockLevels$ | async; as stockLevels) { @if (stockLevels.length > 0) {
-      <div class="stock-container">
-        <div class="total-stock">
-          <span class="total-label">Total Stock:</span>
-          <span class="total-value">{{ totalStock$ | async }} units</span>
+      @if (product.description) {
+        <div class="detail-section">
+          <h2>Description</h2>
+          <div class="description-card">
+            <p class="description">{{ product.description }}</p>
+          </div>
         </div>
-
-        <div class="stock-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Warehouse</th>
-                <th>Location</th>
-                <th>Quantity</th>
-                <th>Last Updated</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (stock of stockLevels; track stock.warehouseId) {
-              <tr [class.low-stock]="stock.quantity < 10">
-                <td class="warehouse-name">
-                  {{ stock.warehouse?.title || 'Unknown Warehouse' }}
-                </td>
-                <td class="warehouse-location">
-                  {{ stock.warehouse?.location || 'N/A' }}
-                </td>
-                <td class="quantity">
-                  <span class="quantity-badge" [class.low]="stock.quantity < 10">
-                    {{ stock.quantity }}
-                  </span>
-                </td>
-                <td class="last-updated">
-                  {{ stock.lastUpdated | date : 'short' }}
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-      } @else {
-      <div class="stock-info empty">
-        <div class="empty-icon">
-          <lucide-icon [img]="Package" [size]="48"></lucide-icon>
-        </div>
-        <p class="info-message">No stock available for this product yet.</p>
-        <p class="placeholder-text">Add stock to warehouses to see inventory levels here.</p>
-      </div>
-      } }
-    </div> -->
+      }
     </div>
   </div>
 

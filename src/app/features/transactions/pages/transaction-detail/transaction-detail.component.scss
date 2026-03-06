@@ -38,14 +38,12 @@
   gap: 1rem;
 }
 
-.transaction-info-section {
   .section-title {
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--color-text-primary);
     margin: 0 0 1rem 0;
   }
-}
 
 .note-card {
   margin-top: 1rem;
@@ -240,7 +238,4 @@
     margin: 0;
   }
 }
-.products-section-header {
-  display: flex;
-  justify-content: end;
-}
+

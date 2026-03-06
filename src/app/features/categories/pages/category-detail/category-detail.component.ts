@@ -9,11 +9,14 @@ import { selectCategoryById, selectCategoriesLoading } from '../../store/categor
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
+import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
+import { Tag, FileText, Calendar, CheckCircle } from 'lucide-angular';
+import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-category-detail',
   standalone: true,
-  imports: [CommonModule, ConfirmDialogComponent, DetailsPageHeaderComponent, BreadcrumbComponent],
+  imports: [CommonModule, ConfirmDialogComponent, DetailsPageHeaderComponent, BreadcrumbComponent, InfoCardComponent, StatusBadgeComponent],
   templateUrl: './category-detail.component.html',
   styleUrls: ['./category-detail.component.scss'],
 })
@@ -22,6 +25,12 @@ export class CategoryDetailComponent implements OnInit {
   loading$: Observable<boolean>;
   categoryId: string | null = null;
   showDeleteDialog = false;
+
+  // Icons
+  Tag = Tag;
+  FileText = FileText;
+  Calendar = Calendar;
+  CheckCircle = CheckCircle;
 
   constructor(private store: Store, private route: ActivatedRoute, private router: Router) {
     this.loading$ = this.store.select(selectCategoriesLoading);

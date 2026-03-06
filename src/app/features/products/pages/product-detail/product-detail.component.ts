@@ -11,7 +11,7 @@ import { StockLevel } from '../../../stock/models/stock-level.model';
 import { Warehouse } from '../../../warehouses/models/warehouse.model';
 import { selectStockByProduct } from '../../../stock/store/stock.selectors';
 import { selectAllWarehouses } from '../../../warehouses/store/warehouses.selectors';
-import { LucideAngularModule, ArrowLeft, Edit, Trash2, Package, PackageOpen, Tag, CalendarDays } from 'lucide-angular';
+import { LucideAngularModule, ArrowLeft, Edit, Trash2, Package, PackageOpen, Tag, CalendarDays, DollarSign, FileText } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
@@ -49,6 +49,8 @@ export class ProductDetailComponent implements OnInit {
   readonly PackageOpen = PackageOpen;
   readonly Tag = Tag;
   readonly CalendarDays = CalendarDays;
+  readonly DollarSign = DollarSign;
+  readonly FileText = FileText;
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {}
 
