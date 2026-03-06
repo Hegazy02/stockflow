@@ -1,0 +1,9 @@
+<button class="copy-button" (click)="!copied() && copyToClipboard()" [class.copied]="copied">
+  @if (copied()) {
+    <lucide-icon [img]="Check" [size]="14"></lucide-icon>
+    <span>Copied!</span>
+  } @else {
+    <lucide-icon [img]="Copy" [size]="14"></lucide-icon>
+    <span>{{ label }}</span>
+  }
+</button>

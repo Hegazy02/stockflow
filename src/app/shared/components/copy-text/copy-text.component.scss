@@ -1,0 +1,40 @@
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: inherit;
+  opacity: 0.8;
+
+  &:hover:not(:disabled) {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &.copied {
+    opacity: 1;
+  }
+
+  lucide-icon {
+    display: flex;
+  }
+
+  span {
+    font-weight: 500;
+  }
+}

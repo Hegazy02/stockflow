@@ -1,0 +1,18 @@
+<div class="info-card" [style.background-color]="backgroundColor">
+  @if (icon) {
+  <div class="icon-container">
+    <lucide-icon [img]="icon" [size]="80" [strokeWidth]="1.5" [style.color]="iconColor"></lucide-icon>
+  </div>
+  }
+  
+  <div class="content">
+    <div class="title" [style.color]="getDarkerColor(iconColor, 40)">{{ title }}</div>
+    <div class="value" [style.color]="getDarkerColor(iconColor, 50)">{{ value }}</div>
+    <div class="subtitle" [style.color]="getDarkerColor(iconColor, 30)">
+      <ng-content select="[subtitle]"></ng-content>
+      @if (!hasProjectedContent && subtitle) {
+        {{ subtitle }}
+      }
+    </div>
+  </div>
+</div>

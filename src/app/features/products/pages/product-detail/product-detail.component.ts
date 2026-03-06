@@ -11,10 +11,12 @@ import { StockLevel } from '../../../stock/models/stock-level.model';
 import { Warehouse } from '../../../warehouses/models/warehouse.model';
 import { selectStockByProduct } from '../../../stock/store/stock.selectors';
 import { selectAllWarehouses } from '../../../warehouses/store/warehouses.selectors';
-import { LucideAngularModule, ArrowLeft, Edit, Trash2, Package } from 'lucide-angular';
+import { LucideAngularModule, ArrowLeft, Edit, Trash2, Package, PackageOpen, Tag, CalendarDays } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
+import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
+import { CopyTextComponent } from '../../../../shared/components/copy-text/copy-text.component';
 
 export interface StockLevelWithWarehouse extends StockLevel {
   warehouse?: Warehouse;
@@ -23,7 +25,7 @@ export interface StockLevelWithWarehouse extends StockLevel {
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent, DetailsPageHeaderComponent],
+  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent, DetailsPageHeaderComponent, InfoCardComponent, CopyTextComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,6 +45,9 @@ export class ProductDetailComponent implements OnInit {
   readonly Edit = Edit;
   readonly Trash2 = Trash2;
   readonly Package = Package;
+  readonly PackageOpen = PackageOpen;
+  readonly Tag = Tag;
+  readonly CalendarDays = CalendarDays;
 
   constructor(private store: Store, private router: Router, private route: ActivatedRoute) {}
 
