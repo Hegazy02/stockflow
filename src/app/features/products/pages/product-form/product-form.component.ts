@@ -19,6 +19,7 @@ import {
 } from '../../../categories/store/categories.selectors';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
 import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
+import { BreadcrumbComponent } from "../../../../shared/components/breadcrumb/breadcrumb.component";
 
 @Component({
   selector: 'app-product-form',
@@ -31,7 +32,8 @@ import { FormActionsComponent } from '../../../../shared/components/form-actions
     DropdownComponent,
     DetailsPageHeaderComponent,
     FormActionsComponent,
-  ],
+    BreadcrumbComponent
+],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],
 })

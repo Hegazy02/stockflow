@@ -5,6 +5,8 @@
     <p>Loading partner...</p>
   </div>
   } @else if (partner$ | async; as partner) {
+  <app-breadcrumb></app-breadcrumb>
+  
   <app-details-page-header (back)="onBack()" (edit)="onEdit()" (delete)="confirmDelete()">
   </app-details-page-header>
 

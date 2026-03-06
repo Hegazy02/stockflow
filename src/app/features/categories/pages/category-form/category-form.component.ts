@@ -11,6 +11,7 @@ import { FormInputComponent } from '../../../../shared/components/form-input/for
 import { DropdownComponent } from '../../../../shared/components/dropdown/dropdown.component';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
 import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-category-form',
@@ -22,6 +23,7 @@ import { FormActionsComponent } from '../../../../shared/components/form-actions
     DropdownComponent,
     DetailsPageHeaderComponent,
     FormActionsComponent,
+    BreadcrumbComponent,
   ],
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.scss'],

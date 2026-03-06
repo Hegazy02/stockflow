@@ -1,4 +1,6 @@
 <div>
+  <app-breadcrumb></app-breadcrumb>
+
   <app-details-page-header [hasDelete]="false" [hasEdit]="false" (back)="onCancel()">
   </app-details-page-header>
   <h1>{{ isEditMode ? 'Edit Product' : 'Create New Product' }}</h1>
@@ -32,7 +34,7 @@
     ></app-dropdown>
 
     @if (categoriesError$ | async; as error) {
-    <small class="error-message">{{ error.message }}</small>
+      <small class="error-message">{{ error.message }}</small>
     }
     <app-form-input
       label="Selling price"

@@ -8,11 +8,12 @@ import { loadExpenseStats } from '../../store/expenses.actions';
 import { LucideAngularModule, ArrowLeft, TrendingUp, DollarSign, List } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-expense-stats',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, DetailsPageHeaderComponent],
+  imports: [CommonModule, LucideAngularModule, DetailsPageHeaderComponent, BreadcrumbComponent],
   templateUrl: './expense-stats.component.html',
   styleUrls: ['./expense-stats.component.scss'],
 })

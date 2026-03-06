@@ -1,71 +1,74 @@
+<app-breadcrumb></app-breadcrumb>
 <!-- Loading State -->
 @if (loading$ | async) {
-<div class="loading-container">
-  <div class="loading-spinner"></div>
-  <p>Loading product details...</p>
-</div>
-} @else if (product$ | async; as product) {
-<!-- Product Content -->
-<app-details-page-header
-  (back)="navigateToList()"
-  (edit)="navigateToEdit()"
-  (delete)="confirmDelete()"
->
-</app-details-page-header>
-
-<div class="product-card">
-  <div class="product-header">
-    <h1>{{ product.name }}</h1>
-    <span class="sku-badge">{{ product.sku }}</span>
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading product details...</p>
   </div>
+} @else if (product$ | async; as product) {
+  <!-- Product Content -->
+  
+  <app-details-page-header
+    [title]="product.name"
+    (back)="navigateToList()"
+    (edit)="navigateToEdit()"
+    (delete)="confirmDelete()"
+  >
+  </app-details-page-header>
 
-  <div class="product-details">
-    <div class="detail-section">
-      <h2>Product Information</h2>
-      <div class="info-cards-grid">
-        <app-info-card
-          title="Total Stock"
-          [value]="(totalStock$ | async) + ' units'"
-          [icon]="PackageOpen"
-          backgroundColor="#e0f2fe"
-          iconColor="#0ea5e9"
-        ></app-info-card>
+  <div class="product-card">
+    <!-- <div class="product-header">
+      <h1>{{ product.name }}</h1>
+      <span class="sku-badge">{{ product.sku }}</span>
+    </div> -->
 
-        <app-info-card
-          title="Category"
-          [value]="product.category.name"
-          [icon]="Tag"
-          backgroundColor="#f3e8ff"
-          iconColor="#a855f7"
-        ></app-info-card>
+    <div class="product-details">
+      <div class="detail-section">
+        <h2>Product Information</h2>
+        <div class="info-cards-grid">
+          <app-info-card
+            title="Total Stock"
+            [value]="(totalStock$ | async) + ' units'"
+            [icon]="PackageOpen"
+            backgroundColor="#e0f2fe"
+            iconColor="#0ea5e9"
+          ></app-info-card>
 
-        <app-info-card
-          title="Stock Keeping Unit"
-          [value]="product.sku"
-          [icon]="Package"
-          backgroundColor="#dbeafe"
-          iconColor="#3b82f6"
-        >
-          <app-copy-text subtitle [text]="product.sku" label="Copy SKU"></app-copy-text>
-        </app-info-card>
+          <app-info-card
+            title="Category"
+            [value]="product.category.name"
+            [icon]="Tag"
+            backgroundColor="#f3e8ff"
+            iconColor="#a855f7"
+          ></app-info-card>
 
-        <app-info-card
-          title="Created On"
-          [value]="(product.createdAt | date : 'd') || ''"
-          [subtitle]="(product.createdAt | date : 'MMM yyyy') + ' • Added by Admin'"
-          [icon]="CalendarDays"
-          backgroundColor="#ffe4e6"
-          iconColor="#f43f5e"
-        ></app-info-card>
+          <app-info-card
+            title="Stock Keeping Unit"
+            [value]="product.sku"
+            [icon]="Package"
+            backgroundColor="#dbeafe"
+            iconColor="#3b82f6"
+          >
+            <app-copy-text subtitle [text]="product.sku" label="Copy SKU"></app-copy-text>
+          </app-info-card>
+
+          <app-info-card
+            title="Created On"
+            [value]="(product.createdAt | date: 'd') || ''"
+            [subtitle]="(product.createdAt | date: 'MMM yyyy') + ' • Added by Admin'"
+            [icon]="CalendarDays"
+            backgroundColor="#ffe4e6"
+            iconColor="#f43f5e"
+          ></app-info-card>
+        </div>
       </div>
-    </div>
 
-    <div class="detail-section">
-      <h2>Description</h2>
-      <p class="description">{{ product.description }}</p>
-    </div>
+      <div class="detail-section">
+        <h2>Description</h2>
+        <p class="description">{{ product.description }}</p>
+      </div>
 
-    <!-- <div class="detail-section">
+      <!-- <div class="detail-section">
       <h2>Stock Levels</h2>
 
       @if (stockLevels$ | async; as stockLevels) { @if (stockLevels.length > 0) {
@@ -118,26 +121,26 @@
       </div>
       } }
     </div> -->
+    </div>
   </div>
-</div>
 
-<!-- Delete Confirmation Dialog -->
-<app-confirm-dialog
-  [isOpen]="showDeleteConfirm"
-  title="Delete Product"
-  [message]="'Are you sure you want to delete ' + productName + '?'"
-  warningMessage="This action cannot be undone."
-  confirmText="Delete"
-  cancelText="Cancel"
-  confirmButtonClass="btn-danger"
-  (confirm)="deleteProduct()"
-  (cancel)="cancelDelete()"
-></app-confirm-dialog>
+  <!-- Delete Confirmation Dialog -->
+  <app-confirm-dialog
+    [isOpen]="showDeleteConfirm"
+    title="Delete Product"
+    [message]="'Are you sure you want to delete ' + productName + '?'"
+    warningMessage="This action cannot be undone."
+    confirmText="Delete"
+    cancelText="Cancel"
+    confirmButtonClass="btn-danger"
+    (confirm)="deleteProduct()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
 } @else {
-<!-- Not Found State -->
-<div class="not-found">
-  <h2>Product Not Found</h2>
-  <p>The product you're looking for doesn't exist.</p>
-  <button class="btn-primary" (click)="navigateToList()">Back to Products</button>
-</div>
+  <!-- Not Found State -->
+  <div class="not-found">
+    <h2>Product Not Found</h2>
+    <p>The product you're looking for doesn't exist.</p>
+    <button class="btn-primary" (click)="navigateToList()">Back to Products</button>
+  </div>
 }

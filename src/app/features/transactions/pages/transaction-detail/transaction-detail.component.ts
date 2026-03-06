@@ -16,6 +16,7 @@ import { LucideAngularModule, Undo2 } from 'lucide-angular';
 import { CustomButtonComponent } from '../../../../shared/components/custom-button/custom-button';
 import { DataTableComponent } from '../../../../shared/components/data-table/data-table.component';
 import { TableColumn } from '../../../../shared/models/data-table';
+import { BreadcrumbComponent } from "../../../../shared/components/breadcrumb/breadcrumb.component";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -28,7 +29,8 @@ import { TableColumn } from '../../../../shared/models/data-table';
     LucideAngularModule,
     CustomButtonComponent,
     DataTableComponent,
-  ],
+    BreadcrumbComponent
+],
   templateUrl: './transaction-detail.component.html',
   styleUrls: ['./transaction-detail.component.scss'],
 })

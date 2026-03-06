@@ -6,6 +6,8 @@
 </div>
 } @else if (expense$ | async; as expense) {
 <!-- Expense Content -->
+<app-breadcrumb></app-breadcrumb>
+
 <app-details-page-header
   (back)="navigateToList()"
   (edit)="navigateToEdit()"

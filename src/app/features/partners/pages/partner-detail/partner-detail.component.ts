@@ -16,6 +16,7 @@ import { Transaction } from '../../../transactions/models/transaction.model';
 import { TableColumn, PageChangeEvent } from '../../../../shared/models/data-table';
 import { Eye } from 'lucide-angular';
 import { CellTemplateDirective } from '../../../../shared/directives/cell-template/cell-template.directive';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-partner-detail',
@@ -27,6 +28,7 @@ import { CellTemplateDirective } from '../../../../shared/directives/cell-templa
     StatusBadgeComponent,
     DataTableComponent,
     CellTemplateDirective,
+    BreadcrumbComponent,
   ],
   templateUrl: './partner-detail.component.html',
   styleUrls: ['./partner-detail.component.scss'],

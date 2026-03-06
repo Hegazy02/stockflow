@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
 import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
 import { CopyTextComponent } from '../../../../shared/components/copy-text/copy-text.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 export interface StockLevelWithWarehouse extends StockLevel {
   warehouse?: Warehouse;
@@ -25,7 +26,7 @@ export interface StockLevelWithWarehouse extends StockLevel {
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent, DetailsPageHeaderComponent, InfoCardComponent, CopyTextComponent],
+  imports: [CommonModule, RouterModule, LucideAngularModule, ConfirmDialogComponent, DetailsPageHeaderComponent, InfoCardComponent, CopyTextComponent, BreadcrumbComponent],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

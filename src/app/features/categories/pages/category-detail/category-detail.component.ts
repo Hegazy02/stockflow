@@ -8,11 +8,12 @@ import { getCategoryById, deleteCategories } from '../../store/categories.action
 import { selectCategoryById, selectCategoriesLoading } from '../../store/categories.selectors';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DetailsPageHeaderComponent } from "../../../../shared/components/details-page-header/details-page-header.component";
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-category-detail',
   standalone: true,
-  imports: [CommonModule, ConfirmDialogComponent, DetailsPageHeaderComponent],
+  imports: [CommonModule, ConfirmDialogComponent, DetailsPageHeaderComponent, BreadcrumbComponent],
   templateUrl: './category-detail.component.html',
   styleUrls: ['./category-detail.component.scss'],
 })

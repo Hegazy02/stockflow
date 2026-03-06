@@ -1,4 +1,6 @@
 <div class="expense-form-container">
+  <app-breadcrumb></app-breadcrumb>
+  
   <app-details-page-header [hasDelete]="false" [hasEdit]="false" (back)="onCancel()">
   </app-details-page-header>
   <h1>{{ isEditMode ? 'Edit Expense' : 'Add New Expense' }}</h1>

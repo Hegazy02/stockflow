@@ -19,6 +19,7 @@ import {
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-expense-detail',
@@ -29,6 +30,7 @@ import { DetailsPageHeaderComponent } from '../../../../shared/components/detail
     LucideAngularModule,
     ConfirmDialogComponent,
     DetailsPageHeaderComponent,
+    BreadcrumbComponent,
   ],
   templateUrl: './expense-detail.component.html',
   styleUrls: ['./expense-detail.component.scss'],

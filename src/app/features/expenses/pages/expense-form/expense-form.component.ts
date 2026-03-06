@@ -11,6 +11,7 @@ import { LucideAngularModule, ArrowLeft, Save, X } from 'lucide-angular';
 import { FormInputComponent } from '../../../../shared/components/form-input/form-input.component';
 import { DetailsPageHeaderComponent } from '../../../../shared/components/details-page-header/details-page-header.component';
 import { FormActionsComponent } from '../../../../shared/components/form-actions/form-actions.component';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-expense-form',
@@ -21,6 +22,7 @@ import { FormActionsComponent } from '../../../../shared/components/form-actions
     FormInputComponent,
     DetailsPageHeaderComponent,
     FormActionsComponent,
+    BreadcrumbComponent,
   ],
   templateUrl: './expense-form.component.html',
   styleUrls: ['./expense-form.component.scss'],

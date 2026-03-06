@@ -5,6 +5,8 @@
     <p>Loading category...</p>
   </div>
   } @else if (category$ | async; as category) {
+  <app-breadcrumb></app-breadcrumb>
+  
   <app-details-page-header (back)="onBack()" (edit)="onEdit()" (delete)="confirmDelete()">
   </app-details-page-header>
   <div class="category-card">

@@ -10,6 +10,7 @@ import { ArrowLeft, Edit, Trash2, LucideAngularModule } from 'lucide-angular';
 export class DetailsPageHeaderComponent {
   @Input() hasEdit = true;
   @Input() hasDelete = true;
+  @Input() title = '';
 
   @Output() back = new EventEmitter<void>();
   @Output() edit = new EventEmitter<void>();
