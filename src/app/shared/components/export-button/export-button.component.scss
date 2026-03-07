@@ -1,0 +1,30 @@
+.export-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background:var(--color-accent-green);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+
+  lucide-icon {
+    display: flex;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-green-dark);
+  }
+
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--color-gray-light);
+  }
+}

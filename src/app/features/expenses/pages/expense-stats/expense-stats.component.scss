@@ -15,56 +15,12 @@
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
   }
-
-  .stat-card {
-    background-color: white;
-
-    padding: 1.5rem;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 1rem 0;
   }
-
-  .stat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &.amount {
-      background: #ecfdf5;
-      color: #059669;
-    }
-
-    &.count {
-      background: #eff6ff;
-      color: #2563eb;
-    }
-  }
-
-  .stat-info {
-    display: flex;
-    flex-direction: column;
-
-    .stat-label {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .stat-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin: 0;
-    }
-  }
-
   .category-section {
     .section-header {
       display: flex;
@@ -83,57 +39,34 @@
 
   .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
   }
 
-  .category-card {
-    background-color: white;
+  .category-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
 
-    padding: 1.25rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    transition: transform 0.2s;
-    box-shadow: var(--shadow-md);
-
-    &:hover {
-      transform: translateY(-2px);
-    }
-
-    .category-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-
-      .category-name {
-        font-weight: 600;
-        color: var(--text-primary);
-      }
-
-      .category-count {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-      }
-    }
-
-    .category-value {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: 0.75rem;
+    .category-count {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      font-weight: 500;
     }
 
     .progress-bar {
       height: 6px;
-      background: var(--gray-100);
+      background: rgba(168, 85, 247, 0.1);
       border-radius: 3px;
       overflow: hidden;
+      margin-top: 0.25rem;
 
       .progress-fill {
         height: 100%;
-        background: var(--primary-color);
+        background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);
         border-radius: 3px;
+        transition: width 0.3s ease;
       }
     }
   }

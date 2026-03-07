@@ -20,6 +20,7 @@ import { Edit, Trash2, InfoIcon, BarChart3 } from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { ExportButtonComponent } from '../../../../shared/components/export-button/export-button.component';
 import {
   TableColumn,
   TableAction,
@@ -40,6 +41,7 @@ import { LucideAngularModule } from 'lucide-angular';
     ListPageHeaderComponent,
     CustomButtonComponent,
     LucideAngularModule,
+    ExportButtonComponent,
   ],
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.scss'],
@@ -58,6 +60,7 @@ export class ExpenseListComponent implements OnInit {
 
   expenses: Expense[] = [];
   selectedExpenses: Expense[] = [];
+  exportData: any[] = [];
 
   // Dialog state
   showDeleteDialog = false;
@@ -109,6 +112,15 @@ export class ExpenseListComponent implements OnInit {
 
     this.expenses$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((expenses) => {
       this.expenses = expenses;
+      // Prepare export data
+      this.exportData = expenses.map(e => ({
+        'Title': e.title,
+        'Amount': e.amount,
+        'Category': e.category,
+        'Date': new Date(e.date).toLocaleDateString(),
+        'Note': e.note || '',
+        'Created At': new Date(e.createdAt || '').toLocaleDateString()
+      }));
     });
   }
 

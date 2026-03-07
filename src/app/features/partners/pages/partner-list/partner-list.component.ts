@@ -20,6 +20,7 @@ import { Eye, Edit, Trash2 ,InfoIcon} from 'lucide-angular';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { ExportButtonComponent } from '../../../../shared/components/export-button/export-button.component';
 import { TableColumn, TableAction, PageChangeEvent, FilterChange } from '../../../../shared/models/data-table';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { CellTemplateDirective } from '../../../../shared/directives/cell-template/cell-template.directive';
@@ -35,6 +36,7 @@ import { CellTemplateDirective } from '../../../../shared/directives/cell-templa
     ListPageHeaderComponent,
     StatusBadgeComponent,
     CellTemplateDirective,
+    ExportButtonComponent,
   ],
   templateUrl: './partner-list.component.html',
   styleUrls: ['./partner-list.component.scss'],
@@ -51,6 +53,7 @@ export class PartnerListComponent implements OnInit {
   pageSize$: Observable<number>;
   partners: Partner[] = [];
   selectedPartners: Partner[] = [];
+  exportData: any[] = [];
 
   showDeleteDialog = false;
   showBulkDeleteDialog = false;
@@ -121,6 +124,14 @@ export class PartnerListComponent implements OnInit {
 
     this.partners$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((partners) => {
       this.partners = partners;
+      // Prepare export data
+      this.exportData = partners.map(p => ({
+        'Partner Name': p.name,
+        'Phone Number': p.phoneNumber,
+        'Type': p.type,
+        'Description': p.description || '',
+        'Created At': new Date(p.createdAt || '').toLocaleDateString()
+      }));
     });
   }
 

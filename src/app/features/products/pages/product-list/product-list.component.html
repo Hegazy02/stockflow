@@ -5,7 +5,14 @@
     [selectedCount]="selectedProducts.length"
     (bulkDelete)="confirmBulkDelete()"
     (add)="navigateToCreate()"
-  ></app-list-page-header>
+  >
+    <app-export-button 
+      extra-actions
+      [data]="exportData"
+      fileName="products"
+      label="Export to Excel"
+    ></app-export-button>
+  </app-list-page-header>
 
   <!-- Error Message -->
   <!-- @if (error$ | async; as error) {

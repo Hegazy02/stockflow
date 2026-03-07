@@ -1,0 +1,9 @@
+<button 
+  class="export-button" 
+  (click)="exportToExcel()"
+  [disabled]="disabled || !data || data.length === 0"
+  [title]="label"
+>
+  <lucide-icon [img]="Download" [size]="18"></lucide-icon>
+  <span>{{ label }}</span>
+</button>

@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
+import { ExportButtonComponent } from '../../../../shared/components/export-button/export-button.component';
 import {
   TableColumn,
   TableAction,
@@ -40,6 +41,7 @@ import { CellTemplateDirective } from '../../../../shared/directives/cell-templa
     ListPageHeaderComponent,
     StatusBadgeComponent,
     CellTemplateDirective,
+    ExportButtonComponent,
   ],
   templateUrl: './transaction-list.component.html',
   styleUrls: ['./transaction-list.component.scss'],
@@ -56,6 +58,7 @@ export class TransactionListComponent implements OnInit {
   pageSize$: Observable<number>;
   transactions: Transaction[] = [];
   selectedTransactions: Transaction[] = [];
+  exportData: any[] = [];
 
   showDeleteDialog = false;
   showBulkDeleteDialog = false;
@@ -164,6 +167,17 @@ export class TransactionListComponent implements OnInit {
 
     this.transactions$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((transactions) => {
       this.transactions = transactions;
+      // Prepare export data
+      this.exportData = transactions.map(t => ({
+        'Transaction Type': t.transactionType,
+        'Partner': t.partner?.name || 'N/A',
+        'Serial Number': t.serialNumber || 'N/A',
+        'Balance': t.balance,
+        'Paid': t.paid,
+        'Left': t.left,
+        'Note': t.note || '',
+        'Created At': new Date(t.createdAt || '').toLocaleDateString()
+      }));
     });
   }
 

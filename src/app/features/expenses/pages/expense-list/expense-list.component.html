@@ -7,7 +7,13 @@
       (bulkDelete)="confirmBulkDelete()"
       (add)="navigateToCreate()"
     >
-      <div extra-actions>
+      <div extra-actions class="flex gap-3">
+        <app-export-button 
+          [data]="exportData"
+          fileName="expenses"
+          label="Export to Excel"
+        ></app-export-button>
+        
         <app-custom-button
           [btnClass]="'btn-secondary'"
           [label]="'View Statistics'"

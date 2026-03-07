@@ -5,7 +5,14 @@
     [selectedCount]="selectedPartners.length"
     (bulkDelete)="confirmBulkDelete()"
     (add)="navigateToCreate()"
-  ></app-list-page-header>
+  >
+    <app-export-button 
+      extra-actions
+      [data]="exportData"
+      fileName="partners"
+      label="Export to Excel"
+    ></app-export-button>
+  </app-list-page-header>
 
   @if (error$ | async; as error) {
   <div class="error-container">

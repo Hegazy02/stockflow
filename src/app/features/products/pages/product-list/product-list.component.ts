@@ -22,6 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { loadCategories, selectAllCategories } from '../../../categories/store';
 import { Category } from '../../../categories/models/category.model';
 import { ListPageHeaderComponent } from '../../../../shared/components/list-page-header/list-page-header.component';
+import { ExportButtonComponent } from '../../../../shared/components/export-button/export-button.component';
 import {
   TableColumn,
   TableAction,
@@ -38,6 +39,7 @@ import {
     DataTableComponent,
     ConfirmDialogComponent,
     ListPageHeaderComponent,
+    ExportButtonComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
@@ -56,6 +58,7 @@ export class ProductListComponent implements OnInit {
   categories$: Observable<Category[]>;
   products: Product[] = [];
   selectedProducts: Product[] = [];
+  exportData: any[] = [];
 
   // Dialog state
   showDeleteDialog = false;
@@ -137,6 +140,15 @@ export class ProductListComponent implements OnInit {
     this.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((products) => {
       console.log('products', products);
       this.products = products;
+      // Prepare export data
+      this.exportData = products.map(p => ({
+        'Product Name': p.name,
+        'SKU': p.sku,
+        'Category': p.category?.name || 'N/A',
+        'Selling Price': p.sellingPrice,
+        'Description': p.description || '',
+        'Created At': new Date(p.createdAt || '').toLocaleDateString()
+      }));
     });
   }
   private loadProductsUsingURLParams() {
