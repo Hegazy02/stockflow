@@ -1,4 +1,4 @@
-<button class="copy-button" (click)="!copied() && copyToClipboard()" [class.copied]="copied">
+<button class="copy-button" (click)="!copied() && copyToClipboard()" [class.copied]="copied()">
   @if (copied()) {
     <lucide-icon [img]="Check" [size]="14"></lucide-icon>
     <span>Copied!</span>
