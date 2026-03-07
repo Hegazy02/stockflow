@@ -96,6 +96,9 @@
     background-color: var(--color-primary); // or any color
     color: white;
     font-weight: var(--font-weight-semibold);
+    position: sticky;
+    top: 0;
+    z-index: 10;
     // border-bottom: 1px solid var(--color-border-light);
   }
 }
