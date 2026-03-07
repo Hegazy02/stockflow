@@ -64,62 +64,62 @@ export const routes: Routes = [
     ],
   },
 
-  {
-    path: 'warehouses',
-    canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        data: { breadcrumb: 'Warehouses' },
-        loadComponent: () =>
-          import('./features/warehouses/pages/warehouse-list/warehouse-list.component').then(
-            (m) => m.WarehouseListComponent
-          ),
-      },
-      {
-        path: 'new',
-        data: { breadcrumb: 'Warehouses', breadcrumbUrl: '/warehouses' },
-        children: [
-          {
-            path: '',
-            data: { breadcrumb: 'New Warehouse' },
-            loadComponent: () =>
-              import('./features/warehouses/pages/warehouse-form/warehouse-form.component').then(
-                (m) => m.WarehouseFormComponent
-              ),
-          },
-        ],
-      },
-      {
-        path: ':id',
-        data: { breadcrumb: 'Warehouses', breadcrumbUrl: '/warehouses' },
-        children: [
-          {
-            path: '',
-            data: { breadcrumb: 'Details' },
-            loadComponent: () =>
-              import('./features/warehouses/pages/warehouse-detail/warehouse-detail.component').then(
-                (m) => m.WarehouseDetailComponent
-              ),
-          },
-          {
-            path: 'edit',
-            data: { breadcrumb: 'Details', breadcrumbUrl: '../' },
-            children: [
-              {
-                path: '',
-                data: { breadcrumb: 'Edit' },
-                loadComponent: () =>
-                  import('./features/warehouses/pages/warehouse-form/warehouse-form.component').then(
-                    (m) => m.WarehouseFormComponent
-                  ),
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   path: 'warehouses',
+  //   canActivate: [authGuard],
+  //   children: [
+  //     {
+  //       path: '',
+  //       data: { breadcrumb: 'Warehouses' },
+  //       loadComponent: () =>
+  //         import('./features/warehouses/pages/warehouse-list/warehouse-list.component').then(
+  //           (m) => m.WarehouseListComponent
+  //         ),
+  //     },
+  //     {
+  //       path: 'new',
+  //       data: { breadcrumb: 'Warehouses', breadcrumbUrl: '/warehouses' },
+  //       children: [
+  //         {
+  //           path: '',
+  //           data: { breadcrumb: 'New Warehouse' },
+  //           loadComponent: () =>
+  //             import('./features/warehouses/pages/warehouse-form/warehouse-form.component').then(
+  //               (m) => m.WarehouseFormComponent
+  //             ),
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       path: ':id',
+  //       data: { breadcrumb: 'Warehouses', breadcrumbUrl: '/warehouses' },
+  //       children: [
+  //         {
+  //           path: '',
+  //           data: { breadcrumb: 'Details' },
+  //           loadComponent: () =>
+  //             import('./features/warehouses/pages/warehouse-detail/warehouse-detail.component').then(
+  //               (m) => m.WarehouseDetailComponent
+  //             ),
+  //         },
+  //         {
+  //           path: 'edit',
+  //           data: { breadcrumb: 'Details', breadcrumbUrl: '../' },
+  //           children: [
+  //             {
+  //               path: '',
+  //               data: { breadcrumb: 'Edit' },
+  //               loadComponent: () =>
+  //                 import('./features/warehouses/pages/warehouse-form/warehouse-form.component').then(
+  //                   (m) => m.WarehouseFormComponent
+  //                 ),
+  //             },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 
   {
     path: 'categories',

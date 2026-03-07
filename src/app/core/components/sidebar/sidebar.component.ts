@@ -73,7 +73,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { label: 'Reports', icon: FileText, route: '/reports', active: false },
     { label: 'Categories', icon: Shapes, route: '/categories', active: false },
     { label: 'Units', icon: Ruler, route: '/units', active: false },
-    { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
+    // { label: 'Warehouses', icon: Warehouse, route: '/warehouses', active: false },
   ];
 
   constructor(private router: Router) {}
